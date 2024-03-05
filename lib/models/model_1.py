@@ -1,4 +1,4 @@
-from __init__ import CURSOR, CONN
+from models.__init__ import CURSOR, CONN
 
 class Exercise:
 
@@ -6,7 +6,7 @@ class Exercise:
 
     def __init__(self, title, description, id = None):
         self.id = id
-        self._title = title
+        self.title = title
         self.description = description
         self._workout_routine = None
         
@@ -16,8 +16,11 @@ class Exercise:
 
     @title.setter
     def title(self, title):
-        if 5 < len(title) < 15:
+        if len(title) > 20:
+            raise TypeError("Exercise must not be longer than 20 characters.")
+        else:
             self._title = title
+
 
     @property
     def description(self):
@@ -83,18 +86,32 @@ class Exercise:
         type(self).all[self.id] = self
 
     @classmethod
-    def instance_from_db(cls, row):
-        """Return an Exercise object having the attribute values from the table row."""
+    def create(cls, title, description):
+        """ Initialize a new Exercise instance and save to db as long as doesn't already exist """
+        for exercise in cls.all.values():
+            if exercise.title == title:
+                print(f'{title} already listed in database. Please enter a new title.')
+                return None
+        new_exercise = cls(title, description)
+        new_exercise.save()
+        return new_exercise
 
-        exercise = cls.all.get(row[0])
-        if exercise:
-            exercise.title = row[1]
-            exercise.description = row[2]
-        else:
-            exercise = cls(row[1], row[2])
-            exercise.id = row[0]
-            cls.all[exercise.id] = exercise
-        return exercise
+    
+
+
+    # @classmethod
+    # def instance_from_db(cls, row):
+    #     """Return an Exercise object having the attribute values from the table row."""
+
+    #     exercise = cls.all.get(row[0])
+    #     if exercise:
+    #         exercise.title = row[1]
+    #         exercise.description = row[2]
+    #     else:
+    #         exercise = cls(row[1], row[2])
+    #         exercise.id = row[0]
+    #         cls.all[exercise.id] = exercise
+    #     return exercise
 
 
 class WorkoutRoutine:
