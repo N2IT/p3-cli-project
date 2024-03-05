@@ -96,7 +96,24 @@ class Exercise:
         new_exercise.save()
         return new_exercise
 
-    
+    def update(self):
+        """Update the table row related to the current Exercise instance"""
+        sql = """
+            UPDATE exercises
+            SET title = ?, descriptions = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.title, self.description, self.id))
+        CONN.commit()
+
+    def delete(self):
+        """Delete the table row corresponding to the current Exercise instance"""
+        sql = """
+            DELETE FROM exercises
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
 
 
     # @classmethod
