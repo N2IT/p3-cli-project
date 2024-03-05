@@ -100,7 +100,7 @@ class Exercise:
         """Update the table row related to the current Exercise instance"""
         sql = """
             UPDATE exercises
-            SET title = ?, descriptions = ?
+            SET title = ?, description = ?
             WHERE id = ?
         """
         CURSOR.execute(sql, (self.title, self.description, self.id))
@@ -112,23 +112,22 @@ class Exercise:
             DELETE FROM exercises
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return an Exercise object having the attribute values from the table row."""
 
-    # @classmethod
-    # def instance_from_db(cls, row):
-    #     """Return an Exercise object having the attribute values from the table row."""
-
-    #     exercise = cls.all.get(row[0])
-    #     if exercise:
-    #         exercise.title = row[1]
-    #         exercise.description = row[2]
-    #     else:
-    #         exercise = cls(row[1], row[2])
-    #         exercise.id = row[0]
-    #         cls.all[exercise.id] = exercise
-    #     return exercise
+        exercise = cls.all.get(row[0])
+        if exercise:
+            exercise.title = row[1]
+            exercise.description = row[2]
+        else:
+            exercise = cls(row[1], row[2])
+            exercise.id = row[0]
+            cls.all[exercise.id] = exercise
+        return exercise
 
 
 class WorkoutRoutine:
