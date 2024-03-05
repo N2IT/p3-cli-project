@@ -1,12 +1,14 @@
+from __init__ import CURSOR, CONN
+
 class Exercise:
 
-    all = []
+    all = {}
 
     def __init__(self, title, description):
         self._title = title
         self._description = description
         self._workout_routine = None
-        Exercise.all.append(self)
+        
         
     @property
     def title(self):
@@ -39,7 +41,29 @@ class Exercise:
         self._workout_routine = value
 
     def get_all():
-        return Exercise.all
+        return [exercise for exercise in Exercise.all]
+
+    @classmethod
+    def create_table(cls):
+        """ Create a new table to persist the attributes of Exercise instances """
+        sql = """
+            CREATE TABLE IF NOT EXISTS exercises (
+                id INTEGER PRIMARY KEY,
+                title TEXT,
+                description TEXT,
+            )
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        """ Drop the table that persists Exercise instances """
+        sql = """
+            DROP TABLE IF EXISITS exercsises;
+        """
+        CURSOR.execute(cls)
+        CONN.commit()
 
     def __repr__(self):
         return f'Title: {self.title}\nDescription: {self.description}'
@@ -58,10 +82,7 @@ class WorkoutRoutine:
         exercise.workout_routine = self
 
     def __repr__(self):
-        return f'Title: {self.title}\nExercises: {exercises(self)}'
-
-
-
+        return f'Title: {self.title}\n'
 
 
 
