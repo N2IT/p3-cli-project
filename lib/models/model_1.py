@@ -2,9 +2,11 @@ from __init__ import CURSOR, CONN
 
 class Exercise:
 
+    all = {}
+
     def __init__(self, title, description, id = None):
         self.id = id
-        self.title = title
+        self._title = title
         self.description = description
         self._workout_routine = None
         
@@ -26,7 +28,7 @@ class Exercise:
         if 10 < len(description):
             self._description = description
         else:
-            raise TypeError("Description must be a certain character count")
+            raise TypeError("Description must be more than 10 characters.")
 
     @property
     def workout_routine(self):
@@ -78,6 +80,21 @@ class Exercise:
         CONN.commit()
 
         self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return an Exercise object having the attribute values from the table row."""
+
+        exercise = cls.all.get(row[0])
+        if exercise:
+            exercise.title = row[1]
+            exercise.description = row[2]
+        else:
+            exercise = cls(row[1], row[2])
+            exercise.id = row[0]
+            cls.all[exercise.id] = exercise
+        return exercise
 
 
 class WorkoutRoutine:
@@ -94,7 +111,7 @@ class WorkoutRoutine:
         exercise.workout_routine = self
 
     def __repr__(self):
-        return f'Title: {self.title}\n'
+        return f'Title: {self.title}'
 
 
 
