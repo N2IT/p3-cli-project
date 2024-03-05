@@ -2,13 +2,11 @@ from __init__ import CURSOR, CONN
 
 class Exercise:
 
-    all = {}
-
-    def __init__(self, title, description):
-        self._title = title
-        self._description = description
+    def __init__(self, title, description, id = None):
+        self.id = id
+        self.title = title
+        self.description = description
         self._workout_routine = None
-        
         
     @property
     def title(self):
@@ -25,7 +23,7 @@ class Exercise:
 
     @description.setter
     def description(self, description):
-        if 10 < len(description) < 35:
+        if 10 < len(description):
             self._description = description
         else:
             raise TypeError("Description must be a certain character count")
@@ -43,14 +41,17 @@ class Exercise:
     def get_all():
         return [exercise for exercise in Exercise.all]
 
+    def __repr__(self):
+        return f'Exercise {self.id}: {self.title}, {self.description}'
+    
     @classmethod
     def create_table(cls):
         """ Create a new table to persist the attributes of Exercise instances """
         sql = """
             CREATE TABLE IF NOT EXISTS exercises (
-                id INTEGER PRIMARY KEY,
-                title TEXT,
-                description TEXT,
+            id INTEGER PRIMARY KEY,
+            title TEXT,
+            description TEXT
             )
         """
         CURSOR.execute(sql)
@@ -60,14 +61,25 @@ class Exercise:
     def drop_table(cls):
         """ Drop the table that persists Exercise instances """
         sql = """
-            DROP TABLE IF EXISITS exercsises;
+            DROP TABLE IF EXISTS exercises;
         """
-        CURSOR.execute(cls)
+        CURSOR.execute(sql)
         CONN.commit()
 
-    def __repr__(self):
-        return f'Title: {self.title}\nDescription: {self.description}'
-    
+    def save(self):
+        """ Insert a new row with the title and description of the current Exercise instance. Update object id attribute using the primary key value of new row.
+        """
+        sql = """
+            INSERT INTO exercises (title, description)
+            VALUES (?, ?)
+        """
+
+        CURSOR.execute(sql, (self.title, self.description))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+
+
 class WorkoutRoutine:
     
     def __init__(self, title):
