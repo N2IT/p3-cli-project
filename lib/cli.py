@@ -6,9 +6,7 @@ from helpers import (
 )
 
 def login():
-    print("**************************")
     username = input("Please enter your username: ")
-    print("**************************")
     if username != "":
             password(username)
     else:
@@ -16,9 +14,7 @@ def login():
         login()
 
 def password(username):
-    print("**************************")
     password = input("Please enter your password: ")
-    print("**************************")
     if password != "":
         main(username)
     else:
@@ -27,6 +23,7 @@ def password(username):
 
 
 def main(username):
+    print("")
     print(f"Welcome {username}!")
     while True:
         menu()
@@ -36,9 +33,10 @@ def main(username):
         elif choice == "1":
             helper_1()
         else:
-            print("Invalid choice")
+            print(f'{choice} is not valid. Please choose from the options below.')
 
 def menu():
+    print("")
     print("**************************")
     print("Please select an option:")
     print("0. Exit the program")
