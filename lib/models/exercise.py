@@ -129,25 +129,6 @@ class Exercise:
             cls.all[exercise.id] = exercise
         return exercise
 
-
-class WorkoutRoutine:
-    
-    def __init__(self, title):
-        self.title = title
-
-    def exercises(self):
-        return [ exercise for exercise in Exercise.all if exercise.workout_routine == self]
-
-    def add_exercise(self, exercise):
-        if not isinstance(exercise, Exercise):
-            raise TypeError("Exercise must be of Exercise class.")
-        exercise.workout_routine = self
-
-    def __repr__(self):
-        return f'Title: {self.title}'
-
-
-
 class WorkoutLog:
     pass
 

@@ -11,7 +11,8 @@ class WorkoutRoutine:
     def title(self):
         return self._title
 
-    @title.setter(self, title):
+    @title.setter
+    def title(self, title):
         if len(title) > 20:
             raise TypeError("Title must not exceed 20 characters.")
         else:
@@ -29,6 +30,7 @@ class WorkoutRoutine:
             self._equipment = equipment
 
     def exercises(self):
+        pass
         # update here to pull from exercises table
 
     def add_exercise(self, exercise):
@@ -45,14 +47,14 @@ class WorkoutRoutine:
         sql = """
             CREATE TABLE IF NOT EXISTS workout_routines (
                 id INTEGER PRIMARY KEY,
-                name TEXT,
-                location TEXT)
+                title TEXT,
+                equipment TEXT)
         """
         CURSOR.execute(sql)
         CONN.commit()
 
     @classmethod
-    def drop_table(cls)
+    def drop_table(cls):
         """ Remove table if workout_routines table alreadye exists"""
         sql = """
             DROP TABLE IF EXISTS workout_routines;
