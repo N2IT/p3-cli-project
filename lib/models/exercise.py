@@ -84,7 +84,23 @@ class Exercise:
         exercise.save()
         return exercise
 
-    
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return an Exercise objec having the attribute values from the table row."""
+
+        exercise = cls.all.get(row[0])
+        if exercise:
+            exercise.title = row[1]
+            exercise.description = row[2]
+            exercise.reps = row[3]
+            exercise.sets = row[4]
+            exercise.w_routine_id = row[5]
+        else:
+            exercise = cls(row[1], row[2], row[3], row[4], row[5])
+            exercise.id = row[0]
+            cls.all[exercise.id] = exercise
+        return exercise
+
 
 
 

@@ -32,16 +32,21 @@ class WorkoutRoutine:
             self._equipment = equipment
 
     def exercises(self):
-        pass
-        # update here to pull from exercises table
+        """Returns list of exercises associated with the current workout routine"""
+        from exercise import Exercise
+        sql = """
+            SELECT * FROM exercises
+            WHERE w_routine_id = ?
+        """
+        CURSOR.execute(sql, (self.id,),)
 
-    def add_exercise(self, exercise):
-        if not isinstance(exercise, Exercise):
-            raise TypeError("Exercise must be of Exercise class.")
-        exercise.workout_routine = self
+        rows = CURSOR.fetchall()
+        return [
+            Employee.instance_from_db(row) for row in rows
+        ]
 
     def __repr__(self):
-        
+
         return f'<Workout Routine {self.id}: Title: {self.title}, Equipment Needed: {self.equipment}'
 
     @classmethod
