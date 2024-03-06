@@ -1,26 +1,26 @@
 from models.__init__ import CURSOR, CONN
+from models.workout_routine import WorkoutRoutine
 
 class Exercise:
 
     all = {}
 
-    def __init__(self, title, description, id = None):
+    def __init__(self, title, description, reps, sets, id = None):
         self.id = id
         self.title = title
         self.description = description
-        self._workout_routine = None
-        
+        self.w_routine_id = w_routine_id
+
     @property
     def title(self):
         return self._title
 
     @title.setter
     def title(self, title):
-        if len(title) > 20:
-            raise TypeError("Exercise must not be longer than 20 characters.")
+        if len(title) > 25:
+            raise AttributeError("Title not to exceed 25 characters in length.")
         else:
             self._title = title
-
 
     @property
     def description(self):
@@ -28,109 +28,63 @@ class Exercise:
 
     @description.setter
     def description(self, description):
-        if 10 < len(description):
-            self._description = description
+        if len(description) < 10:
+            raise AttributeError("Description should exceed 10 characters in length.")
         else:
-            raise TypeError("Description must be more than 10 characters.")
-
-    @property
-    def workout_routine(self):
-        return self._workout_routine
-
-    @workout_routine.setter
-    def workout_routine(self, value):
-        if not isinstance(value, WorkoutRoutine):
-            raise TypeError("WorkoutRoutine must be instance of WorkoutRoutine class.")
-        self._workout_routine = value
-
-    def get_all():
-        return [exercise for exercise in Exercise.all]
-
+            self._description = description
+        
     def __repr__(self):
-        return f'Exercise {self.id}: {self.title}, {self.description}'
-    
+        return (
+            f"<Exercise {self.id}: {self.title}, {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}" +
+            f"Workout Routine ID: {self.w_routine_id}>"
+        )
+
     @classmethod
     def create_table(cls):
-        """ Create a new table to persist the attributes of Exercise instances """
+        """Creating a new table to persist the attributes of the Exercise instances """
         sql = """
             CREATE TABLE IF NOT EXISTS exercises (
-            id INTEGER PRIMARY KEY,
-            title TEXT,
-            description TEXT
-            )
+                id INTEGER PRIMARY KEY,
+                title TEXT,
+                description TEXT,
+                reps INTEGER,
+                sets INTEGER,
+                w_routine_id INTEGER,
+                FOREIGN KEY (w_routine_id) REFERENCES workout_routines(id))
         """
         CURSOR.execute(sql)
         CONN.commit()
-
-    @classmethod
-    def drop_table(cls):
-        """ Drop the table that persists Exercise instances """
-        sql = """
-            DROP TABLE IF EXISTS exercises;
-        """
-        CURSOR.execute(sql)
-        CONN.commit()
-
+    
     def save(self):
-        """ Insert a new row with the title and description of the current Exercise instance. Update object id attribute using the primary key value of new row.
-        """
+        """Insert a new row with title, description, reps, sets, and id values of the current exercise instance. Update object id attribute using the primary key value of the new row. Ave the object in local dictionary using table row's PK as dict key."""
         sql = """
-            INSERT INTO exercises (title, description)
-            VALUES (?, ?)
+            INSERT INTO exercises (title, description, reps, sets, w_routine_id)
+            VALUES (?, ?, ?, ?, ?)
         """
-
-        CURSOR.execute(sql, (self.title, self.description))
+        CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
-    @classmethod
-    def create(cls, title, description):
-        """ Initialize a new Exercise instance and save to db as long as doesn't already exist """
-        for exercise in cls.all.values():
-            if exercise.title == title:
-                print(f'{title} already listed in database. Please enter a new title.')
-                return None
-        new_exercise = cls(title, description)
-        new_exercise.save()
-        return new_exercise
-
     def update(self):
-        """Update the table row related to the current Exercise instance"""
+        """Update the table row corresponding to the current Exercise instance."""
         sql = """
-            UPDATE exercises
-            SET title = ?, description = ?
+            UPDATE exercise
+            SET title = ?, description = ?, reps = ?, sets = ?, w_routine_id = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.title, self.description, self.id))
-        CONN.commit()
-
-    def delete(self):
-        """Delete the table row corresponding to the current Exercise instance"""
-        sql = """
-            DELETE FROM exercises
-            WHERE id = ?
-        """
-        CURSOR.execute(sql, (self.id,))
+        CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id))
         CONN.commit()
 
     @classmethod
-    def instance_from_db(cls, row):
-        """Return an Exercise object having the attribute values from the table row."""
-
-        exercise = cls.all.get(row[0])
-        if exercise:
-            exercise.title = row[1]
-            exercise.description = row[2]
-        else:
-            exercise = cls(row[1], row[2])
-            exercise.id = row[0]
-            cls.all[exercise.id] = exercise
+    def create(cls, title, description, reps, sets, w_routine_id):
+        """ Initialize a new exercise object and save the object to the database. """
+        exercise = cls(title, description, reps, sets, w_routine_id)
+        exercise.save()
         return exercise
 
-class WorkoutLog:
-    pass
+    
 
 
 
