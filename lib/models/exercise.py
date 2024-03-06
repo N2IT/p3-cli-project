@@ -5,10 +5,12 @@ class Exercise:
 
     all = {}
 
-    def __init__(self, title, description, reps, sets, id = None):
+    def __init__(self, title, description, reps, sets, w_routine_id, id = None):
         self.id = id
         self.title = title
         self.description = description
+        self.reps = reps
+        self.sets = sets
         self.w_routine_id = w_routine_id
 
     @property
@@ -32,7 +34,40 @@ class Exercise:
             raise AttributeError("Description should exceed 10 characters in length.")
         else:
             self._description = description
-        
+
+    @property
+    def reps(self):
+        return self._reps
+
+    @reps.setter
+    def reps(self, reps):
+        if not isinstance(reps, int):
+            raise AttributeError("Reps should be of type Integer.")
+        else:
+            self._reps = reps
+
+    @property
+    def sets(self):
+        return self._sets
+
+    @sets.setter
+    def sets(self, sets):
+        if not isinstance(sets, int):
+            raise AttributeError("Sets should be of type Integer.")
+        else:
+            self._sets = sets
+
+    @property
+    def w_routine_id(self):
+        return self._w_routine_id
+
+    @w_routine_id.setter
+    def w_routine_id(self, w_routine_id):
+        if not isinstance(w_routine_id, int):
+            raise AttributeError("The workout routine id should be of type integer")
+        else:
+            self._w_routine_id = w_routine_id
+
     def __repr__(self):
         return (
             f"<Exercise {self.id}: {self.title}, {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}" +
@@ -51,6 +86,15 @@ class Exercise:
                 sets INTEGER,
                 w_routine_id INTEGER,
                 FOREIGN KEY (w_routine_id) REFERENCES workout_routines(id))
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        """ Drop the table that persists exercise instances """
+        sql = """
+            DROP TABLE IF EXISTS exercises;
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -101,7 +145,38 @@ class Exercise:
             cls.all[exercise.id] = exercise
         return exercise
 
+    @classmethod
+    def get_all(cls):
+        """Return a list containing a Exercise object per row in the table"""
+        sql = """
+            SELECT *
+            FROM exercises
+        """
 
+        rows = CURSOR.execute(sql).fetchall()
 
+        return [cls.instance_from_db(row) for row in rows]
 
+    @classmethod
+    def find_by_id(cls, id):
+        """Return a Exercise object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM exercise
+            WHERE id = ?
+        """
 
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_title(cls, title):
+        """Return a Exercise object corresponding to first table row matching specified name"""
+        sql = """
+            SELECT *
+            FROM exercises
+            WHERE title is ?
+        """
+
+        row = CURSOR.execute(sql, (title,)).fetchone()
+        return cls.instance_from_db(row) if row else None
