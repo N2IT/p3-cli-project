@@ -74,7 +74,7 @@ class WorkoutRoutine:
         CONN.commit()
 
         self.id = CURSOR.lastrowid
-        type(self)all.[self.id] = self
+        type(self).all[self.id] = self
 
     @classmethod
     def create(cls, title, equipment):
@@ -102,6 +102,9 @@ class WorkoutRoutine:
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
+        del type(self).all[self.id]
+        self.id = None
+
     @classmethod 
     def instance_from_db(cls, row):
         """Return a WorkoutRoutine object having the attribute values from the table row."""
@@ -114,6 +117,40 @@ class WorkoutRoutine:
             workout_routine.id = row[0]
             cls.all[workout_routine.id] = workout_routine
         return workout_routine
+
+    @classmethod
+    def get_all(cls):
+        """Return a list containing a WorkoutRoutine object per row in the table"""
+        sql = """
+            SELECT *
+            FROM workout_routines
+        """
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
+    def find_by_id(cls, id):
+        """Return WorkoutRoutine object corresponding to the table row mathcing the specific id number"""
+        sql = """
+            SELECT *
+            FROM workout_routines
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql,(id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_title(cls, title):
+        """Return WorkoutRoutine object corresponding to the table row matching a speicific name"""
+        sql = """
+            SELECT *
+            FROM workout_routines
+            WHERE title = ?
+        """
+
+        row = CURSOR.execute(sql,(title,)).fetchone()
+        return cls.instance_from_db(row) if row else None
 
     
     
