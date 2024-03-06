@@ -1,6 +1,8 @@
 from models.__init__ import CURSOR, CONN
 
 class WorkoutRoutine:
+
+    all = {}
     
     def __init__(self, title, equipment, id = None):
         self.id = id
@@ -72,19 +74,20 @@ class WorkoutRoutine:
         CONN.commit()
 
         self.id = CURSOR.lastrowid
+        type(self)all.[self.id] = self
 
     @classmethod
-    def create(cls):
+    def create(cls, title, equipment):
         """Check the new WorkoutRoutine does not already exist. Then initialize a new WorkoutRoutine instance and save the object to the database."""
-        new_workout_routine = cls(title, equipment)
-        new_workout_routine.save()
-        return new_workout_routine
+        workout_routine = cls(title, equipment)
+        workout_routine.save()
+        return workout_routine
 
     def update(self):
         """Update table row related to the current WorkoutRoutine instance."""
         sql = """
             UPDATE workout_routines
-            WHERE title = ?, equipment = ?
+            SET title = ?, equipment = ?
             WHERE id = ?
         """
         CURSOR.execute(sql, (self.title, self.equipment, self.id))
@@ -96,8 +99,21 @@ class WorkoutRoutine:
             DELETE FROM workout_routines
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        
 
+    @classmethod 
+    def instance_from_db(cls, row):
+        """Return a WorkoutRoutine object having the attribute values from the table row."""
+        workout_routine = cls.all.get(row[0])
+        if workout_routine:
+            workout_routine.title = row[1]
+            workout_routine.equipment = row[2]
+        else:
+            workout_routine = cls(row[1], row[2])
+            workout_routine.id = row[0]
+            cls.all[workout_routine.id] = workout_routine
+        return workout_routine
+
+    
     
