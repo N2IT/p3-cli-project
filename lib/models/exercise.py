@@ -19,10 +19,13 @@ class Exercise:
 
     @title.setter
     def title(self, title):
-        if len(title) > 25:
-            raise AttributeError("Title not to exceed 25 characters in length.")
+        if not isinstance(title, str):
+            raise Exception("Title must be of type string")
         else:
-            self._title = title
+            if len(title) > 25:
+                raise Exception("Title not to exceed 25 characters in length.")
+            else:
+                self._title = title
 
     @property
     def description(self):
@@ -30,10 +33,13 @@ class Exercise:
 
     @description.setter
     def description(self, description):
-        if len(description) < 10:
-            raise AttributeError("Description should exceed 10 characters in length.")
+        if not isinstance(description, str):
+            raise Exception("Description must be of type string")
         else:
-            self._description = description
+            if not 10 < len(description) < 120:
+                raise Exception("Description should be between 10 and 120 characters in length")
+            else:
+                self._description = description
 
     @property
     def reps(self):
@@ -42,7 +48,7 @@ class Exercise:
     @reps.setter
     def reps(self, reps):
         if not isinstance(reps, int):
-            raise AttributeError("Reps should be of type Integer.")
+            raise Exception("Reps should be of type Integer.")
         else:
             self._reps = reps
 
@@ -53,7 +59,7 @@ class Exercise:
     @sets.setter
     def sets(self, sets):
         if not isinstance(sets, int):
-            raise AttributeError("Sets should be of type Integer.")
+            raise Exception("Sets should be of type Integer.")
         else:
             self._sets = sets
 
@@ -64,7 +70,7 @@ class Exercise:
     @w_routine_id.setter
     def w_routine_id(self, w_routine_id):
         if not isinstance(w_routine_id, int):
-            raise AttributeError("The workout routine id should be of type integer")
+            raise Exception("The workout routine id should be of type integer")
         else:
             self._w_routine_id = w_routine_id
 
@@ -114,7 +120,7 @@ class Exercise:
     def update(self):
         """Update the table row corresponding to the current Exercise instance."""
         sql = """
-            UPDATE exercise
+            UPDATE exercises
             SET title = ?, description = ?, reps = ?, sets = ?, w_routine_id = ?
             WHERE id = ?
         """
@@ -162,7 +168,7 @@ class Exercise:
         """Return a Exercise object corresponding to the table row matching the specified primary key"""
         sql = """
             SELECT *
-            FROM exercise
+            FROM exercises
             WHERE id = ?
         """
 

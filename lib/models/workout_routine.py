@@ -15,21 +15,27 @@ class WorkoutRoutine:
 
     @title.setter
     def title(self, title):
-        if len(title) > 20:
-            raise TypeError("Title must not exceed 20 characters.")
+        if not isinstance(title, str):
+            raise Exception('Title must be of type string')
         else:
-            self._title = title
-    
+            if len(title) > 25:
+                raise Exception("Title must not exceed 25 characters.")
+            else:
+                self._title = title
+        
     @property
     def equipment(self):
         return self._equipment
 
     @equipment.setter
     def equipment(self, equipment):
-        if len(equipment) > 25:
-            raise TypeError("Equipment must not exceed 25 characters ")
+        if not isinstance(equipment, str):
+            raise Exception('Equipment must be of type string')
         else:
-            self._equipment = equipment
+            if not len(equipment) < 30:
+                raise Exception("Equipment must not exceed 30 characters ")
+            else:
+                self._equipment = equipment
 
     def exercises(self):
         """Returns list of exercises associated with the current workout routine"""
