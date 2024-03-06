@@ -62,4 +62,42 @@ class WorkoutRoutine:
         CURSOR.execute(sql)
         CONN.commit()
 
+    def save(self):
+        """Insert a new row with the title and equipment values of the current WorkoutRoutine instance.  Update object id attribute using the primary key value of the new row."""
+        sql = """
+            INSERT into workout_routines (title, equipment)
+            VALUES (?, ?)
+        """
+        CURSOR.execute(sql, (self.title, self.equipment))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+
+    @classmethod
+    def create(cls):
+        """Check the new WorkoutRoutine does not already exist. Then initialize a new WorkoutRoutine instance and save the object to the database."""
+        new_workout_routine = cls(title, equipment)
+        new_workout_routine.save()
+        return new_workout_routine
+
+    def update(self):
+        """Update table row related to the current WorkoutRoutine instance."""
+        sql = """
+            UPDATE workout_routines
+            WHERE title = ?, equipment = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.title, self.equipment, self.id))
+        CONN.commit()
+
+    def delete(self):
+        """Delete table row of current WorkoutRoutine instance."""
+        sql = """
+            DELETE FROM workout_routines
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
+        
+
     
