@@ -38,3 +38,26 @@ class WorkoutRoutine:
 
     def __repr__(self):
         return f'<Workout Routine {self.id}: {self.title}, {self.equipment}'
+
+    @classmethod
+    def create_table(cls):
+        """ Create a new table to pass attributes of WorkoutRoutine instances"""
+        sql = """
+            CREATE TABLE IF NOT EXISTS workout_routines (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                location TEXT)
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls)
+        """ Remove table if workout_routines table alreadye exists"""
+        sql = """
+            DROP TABLE IF EXISTS workout_routines;
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    
