@@ -19,8 +19,8 @@ class Exercise:
 
     @title.setter
     def title(self, title):
-        if not isinstance(title, str):
-            raise Exception("Title must be of type string")
+        if not isinstance(title, str) and not len(title):
+            raise Exception("Title must be a non-empty string")
         else:
             if len(title) > 25:
                 raise Exception("Title not to exceed 25 characters in length.")
@@ -47,7 +47,7 @@ class Exercise:
 
     @reps.setter
     def reps(self, reps):
-        if not isinstance(reps, int):
+        if not isinstance(reps, int) and not len(reps):
             raise Exception("Reps should be of type Integer.")
         else:
             self._reps = reps
@@ -58,7 +58,7 @@ class Exercise:
 
     @sets.setter
     def sets(self, sets):
-        if not isinstance(sets, int):
+        if not isinstance(sets, int) and not len(sets):
             raise Exception("Sets should be of type Integer.")
         else:
             self._sets = sets
@@ -69,15 +69,17 @@ class Exercise:
 
     @w_routine_id.setter
     def w_routine_id(self, w_routine_id):
-        if not isinstance(w_routine_id, int):
-            raise Exception("The workout routine id should be of type integer")
-        else:
+        if type(w_routine_id) is int and WorkoutRoutine.find_by_id(w_routine_id):
             self._w_routine_id = w_routine_id
+        else:
+            raise ValueError(
+                "w_routine_id must reference a workout routine in the database"
+            )
 
     def __repr__(self):
         return (
-            f"<Exercise {self.id}: {self.title}, {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}" +
-            f"Workout Routine ID: {self.w_routine_id}>"
+            f"<Exercise {self.id}: {self.title}, {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}," + 
+            f" Workout Routine ID: {self.w_routine_id}>"
         )
 
     @classmethod
