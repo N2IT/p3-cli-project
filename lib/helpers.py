@@ -19,30 +19,28 @@ def list_workout_routines():
     wo_id = []
     for workout_routine in workout_routines:
         print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
-        wo_id.append(workout_routine.id)
+        wo_id.append(str(workout_routine.id))
     while True:
         wr_options()
         choice = input("> ")
-
-        # possibly use RegEx to compile numbers option and match number patters for entering id numbers
-            # create regex variable
-            # compile
-            # match for id numbers entered
-
-        # if choice == "r" or choice == "R":
-        #     from cli import menu
-        #     menu()
-        #     return False
-        # elif choice == "A" or choice == "a":
-        #     create_workout_routine()
-        # elif choice in wo_id:
-        #     exercises = WorkoutRoutine.find_by_id(choice)
-        #     if exercises:
-        #         print(exercises)
-        #     else: 
-        #         print(f'Workout Routine {choice} not found') 
+        if choice == "r" or choice == "R":
+            from cli import menu
+            menu()
+            return False
+        elif choice == "A" or choice == "a":
+            create_workout_routine()
+            return false
+        elif choice in wo_id:
+            choice = int(choice)
+            exercises = WorkoutRoutine.find_by_id(choice)
+            if exercises:
+                print(exercises)
+                wr_choice_options()
+            else: 
+                print(f'Workout Routine {choice} not found') 
         else:
-            print(f'{choice} is not valid. Please choose again.')
+            print(f'{int(choice)} is not valid. Please choose again.')
+
     
 def wr_options():
     print("**************************")
@@ -54,6 +52,9 @@ def wr_options():
     print("")
     print("**************************")
         
+def wr_choice_options():
+    print('wr_choice_options reached')
+
 def create_workout_routine():
     print('workout routine added!')
 
