@@ -34,15 +34,19 @@ def list_workout_routines():
             create_workout_routine()
         elif choice in wo_id:
             choice = int(choice)
-            exercises = WorkoutRoutine.find_by_id(choice)
-            if exercises:
+            wo_r = WorkoutRoutine.find_by_id(choice)
+            exercise = Exercise.get_all()
+            if wo_r:
                 print("")
-                print("Here are the workout routine details.")
+                print(f"Here are the workout routine {choice} details.")
                 print("")
-                print(exercises)
-                wr_choice_options()
+                print(wo_r)
             else: 
-                print(f'Workout Routine {choice} not found') 
+                print(f'Workout Routine {choice} not found')
+            for exercises in exercise:
+                if exercises.w_routine_id == int(choice):
+                    print(f'    {exercises}')
+            wr_choice_options()
         else:
             print(f'{choice} is not valid. Please choose again.')
 
@@ -59,15 +63,22 @@ def wr_options():
 
 def wr_choice_options():
     while True:
-        wr_choice_option_menu()
+        wr_choice_options_menu()
         choice = input("> ")
 
 
-
 def wr_choice_options_menu():
+    print("**************************")
     print("")
-    print("Here are the workout routine details.")
+    print(" >>  Type E to edit this workout routine")
+    print(" >>  Type A to add a new exercise to workout routine")
+    print(" >>  Type D to Delete this workout routine")
+    print("                     OR                      ")
+    print(" >>  Type R to return to the previous menu")
+    print(" >>  Type M to go back to main menu")
+    print(" >>  Type X to exit program")
     print("")
+    print("**************************")
 
 def create_workout_routine():
     print('workout routine added!')
