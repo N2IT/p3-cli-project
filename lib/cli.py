@@ -2,10 +2,12 @@
 import re
 from helpers import (
     exit_program,
-    wr_by_id_menu,
+    wr_options,
     clear_screen,
     list_workout_routines,
-    list_exercises
+    list_exercises,
+    create_workout_routine,
+
 )
 
 def login():
@@ -56,6 +58,7 @@ def menu():
     print("✅ Join your exercises to your Workout Routines")
     print("")
     print("See menu options below to get started.")
+    print("")
     print(" >> Type WR to view all WorkoutRoutines.")
     print(" >> Type E to view all Exercises.")
     print("")
