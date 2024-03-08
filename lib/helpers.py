@@ -1,5 +1,6 @@
 # lib/helpers.py
 import os
+import re
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 
@@ -22,24 +23,28 @@ def list_workout_routines():
         wo_id.append(str(workout_routine.id))
     while True:
         wr_options()
-        choice = input("> ")
-        if choice == "r" or choice == "R":
+        choice = input("> ").strip()
+        ret_choice_regex = re.compile(r'(?i)^r$')
+        add_choice_regex = re.compile(r'(?i)^a$')
+        if ret_choice_regex.match(choice):
             from cli import menu
             menu()
             return False
-        elif choice == "A" or choice == "a":
+        elif add_choice_regex.match(choice):
             create_workout_routine()
-            return false
         elif choice in wo_id:
             choice = int(choice)
             exercises = WorkoutRoutine.find_by_id(choice)
             if exercises:
+                print("")
+                print("Here are the workout routine details.")
+                print("")
                 print(exercises)
                 wr_choice_options()
             else: 
                 print(f'Workout Routine {choice} not found') 
         else:
-            print(f'{int(choice)} is not valid. Please choose again.')
+            print(f'{choice} is not valid. Please choose again.')
 
     
 def wr_options():
@@ -51,9 +56,18 @@ def wr_options():
     print(" >>  Type R to return to the previous menu")
     print("")
     print("**************************")
-        
+
 def wr_choice_options():
-    print('wr_choice_options reached')
+    while True:
+        wr_choice_option_menu()
+        choice = input("> ")
+
+
+
+def wr_choice_options_menu():
+    print("")
+    print("Here are the workout routine details.")
+    print("")
 
 def create_workout_routine():
     print('workout routine added!')
