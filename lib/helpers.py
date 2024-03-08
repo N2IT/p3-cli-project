@@ -14,6 +14,7 @@ def clear_screen():
     
 def list_workout_routines():
     workout_routines = WorkoutRoutine.get_all()
+    clear_screen()
     print("")
     print("Here are all workout routines currently on record.")
     print("")
@@ -37,6 +38,7 @@ def list_workout_routines():
             wo_r = WorkoutRoutine.find_by_id(choice)
             exercise = Exercise.get_all()
             if wo_r:
+                clear_screen()
                 print("")
                 print(f"Here are the workout routine {choice} details.")
                 print("")
@@ -116,7 +118,17 @@ def edit_work_routine(id):
 
     
 def wor_add_exercise(id):
-    pass
+    title = input(f'Enter new exercise title: ')
+    description = input(f'Enter new exercise description: ')
+    reps = input(f'Enter target number of reps for new exercise: ')
+    sets = input(f'Enter target number of sets for new exercise: ')
+    w_routine_id = id
+    try:
+        exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
+        print(f'Success! {exercise.title} has been created!')
+        print("")
+    except Exception as exc:
+        print("Error creating exercise: ", exc)
 
 def delete_workout_routine():
     pass
