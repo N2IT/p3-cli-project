@@ -37,20 +37,6 @@ class WorkoutRoutine:
             else:
                 self._equipment = equipment
 
-    def exercises(self):
-        """Returns list of exercises associated with the current workout routine"""
-        from exercise import Exercise
-        sql = """
-            SELECT * FROM exercises
-            WHERE w_routine_id = ?
-        """
-        CURSOR.execute(sql, (self.id,),)
-
-        rows = CURSOR.fetchall()
-        return [
-            Employee.instance_from_db(row) for row in rows
-        ]
-
     def __repr__(self):
 
         return f'<Workout Routine {self.id}: Title: {self.title}, Equipment Needed: {self.equipment}'
@@ -164,5 +150,17 @@ class WorkoutRoutine:
         row = CURSOR.execute(sql,(title,)).fetchone()
         return cls.instance_from_db(row) if row else None
 
-    
+    def exercises(self):
+        """Returns list of exercises associated with the current workout routine"""
+        from models.exercise import Exercise
+        sql = """
+            SELECT * FROM exercises
+            WHERE w_routine_id = ?
+        """
+        CURSOR.execute(sql, (self.id,),)
+
+        rows = CURSOR.fetchall()
+        return [
+            Exercise.instance_from_db(row) for row in rows
+        ]
     
