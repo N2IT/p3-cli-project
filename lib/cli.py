@@ -1,11 +1,15 @@
 # lib/cli.py
-
+import re
 from helpers import (
     exit_program,
-    helper_1
+    wr_by_id_menu,
+    clear_screen,
+    list_workout_routines,
+    list_exercises
 )
 
 def login():
+    clear_screen()
     username = input("Please enter your username: ")
     if username != "":
             password(username)
@@ -14,33 +18,47 @@ def login():
         login()
 
 def password(username):
-    password = input("Please enter your password: ")
+    print("Please Enter your password.")
+    print("HINT: type anything")
+    password = input("Password:  ")
+
     if password != "":
         main(username)
+        clear_screen()
     else:
         (f'{password} is not recognized.')
         password(username)
 
 
 def main(username):
+    clear_screen()
     print("")
     print(f"Welcome {username}!")
     while True:
         menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
+        wr_option_regex = re.compile(r'(?i)^wR$')
+        choice = input("> ").strip()
+        if wr_option_regex.match(choice):
+            list_workout_routines()
+        elif choice == "E" or choice == "e":
+            list_exercises()
         else:
             print(f'{choice} is not valid. Please choose from the options below.')
 
 def menu():
     print("")
     print("**************************")
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
+    print("")
+    print("WELCOME TO THE FITNESS CLI!")
+    print("✅ Create your own workout routines")
+    print("✅ Create your own exercises")
+    print("✅ Set your target number of reps and sets")
+    print("✅ Join your exercises to your Workout Routines")
+    print("")
+    print("See menu options below to get started.")
+    print(" >> Type WR to view all WorkoutRoutines.")
+    print(" >> Type E to view all Exercises.")
+    print("")
     print("**************************")
         
 
