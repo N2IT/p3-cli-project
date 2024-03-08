@@ -46,7 +46,7 @@ def list_workout_routines():
             for exercises in exercise:
                 if exercises.w_routine_id == int(choice):
                     print(f'    {exercises}')
-            wr_choice_options()
+            wr_choice_options(choice)
         else:
             print(f'{choice} is not valid. Please choose again.')
 
@@ -60,7 +60,7 @@ def wr_options():
     print("")
     print("**************************")
 
-def wr_choice_options():
+def wr_choice_options(id):
     while True:
         wr_choice_options_menu()
         choice = input("> ")
@@ -71,11 +71,11 @@ def wr_choice_options():
         m_menu_regex = re.compile(r'(?i)^m$')
         x_regex = re.compile(r'(?i)^x$')
         if wor_edit_regex.match(choice):
-            edit_work_routine()
+            edit_work_routine(id)
         elif wor_add_exercise_regex.match(choice):
-            wor_add_exercise()
+            wor_add_exercise(id)
         elif wor_delete_regex.match(choice):
-            delete_workout_routine()
+            delete_workout_routine(id)
         elif prv_menu_regex.match(choice):
             list_workout_routines()
         # elif m_menu_regex.match(choice):
@@ -99,10 +99,23 @@ def wr_choice_options_menu():
     print("")
     print("**************************")
 
-def edit_work_routine():
-    pass
+def edit_work_routine(id):
+    if workout_routine := WorkoutRoutine.find_by_id(id):
+        try:
+            title = input("Enter the workout routine's new title: ")
+            workout_routine.title = title
+            equipment = input("Enter the workout routine's equipment: ")
+            workout_routine.equipment = equipment
+            workout_routine.update()
+            print("")
+            print(f'Success! {workout_routine.title} has been updated!')
+        except Exception as exc:
+            print("Error updating workout routine: ", exc)
+    else:
+        print(f'Workout Routine {id} not found.')
 
-def wor_add_exercise():
+    
+def wor_add_exercise(id):
     pass
 
 def delete_workout_routine():
