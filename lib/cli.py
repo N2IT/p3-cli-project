@@ -39,10 +39,11 @@ def main(username):
     while True:
         menu()
         wr_option_regex = re.compile(r'(?i)^wR$')
+        exercise_regex = re.compile(r'(?i)^e$')
         choice = input("> ").strip()
         if wr_option_regex.match(choice):
             list_workout_routines()
-        elif choice == "E" or choice == "e":
+        elif exercise_regex.match(choice):
             list_exercises()
         else:
             print(f'{choice} is not valid. Please choose from the options below.')

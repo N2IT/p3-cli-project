@@ -50,13 +50,12 @@ def list_workout_routines():
         else:
             print(f'{choice} is not valid. Please choose again.')
 
-    
 def wr_options():
     print("**************************")
     print("")
     print(" >>  Enter the workout routine id to view its details")
     print("                     OR                      ")
-    print(" >>  Type A to create a new Workout Routine")
+    print(" >>  Type A to add a new Workout Routine")
     print(" >>  Type R to return to the previous menu")
     print("")
     print("**************************")
@@ -65,7 +64,25 @@ def wr_choice_options():
     while True:
         wr_choice_options_menu()
         choice = input("> ")
-
+        wor_edit_regex = re.compile(r'(?i)^e$')
+        wor_add_exercise_regex = re.compile(r'(?i)^a$')
+        wor_delete_regex = re.compile(r'(?i)^d$')
+        prv_menu_regex = re.compile(r'(?i)^r$')
+        m_menu_regex = re.compile(r'(?i)^m$')
+        x_regex = re.compile(r'(?i)^x$')
+        if wor_edit_regex.match(choice):
+            edit_work_routine()
+        elif wor_add_exercise_regex.match(choice):
+            wor_add_exercise()
+        elif wor_delete_regex.match(choice):
+            delete_workout_routine()
+        elif prv_menu_regex.match(choice):
+            list_workout_routines()
+        elif m_menu_regex.match(choice):
+            menu()
+            return False
+        elif x_regex.match(choice):
+            exit_program()
 
 def wr_choice_options_menu():
     print("**************************")
@@ -80,6 +97,15 @@ def wr_choice_options_menu():
     print("")
     print("**************************")
 
+def edit_work_routine():
+    pass
+
+def wor_add_exercise():
+    pass
+
+def delete_workout_routine():
+    pass
+
 def create_workout_routine():
     print('workout routine added!')
 
@@ -88,8 +114,10 @@ def list_exercises():
     pass
     
 def exit_program():
-    print("Goodbye!")
-    exit()
+    confirmation = input("Are you sure you wish to exit? Y/N ")
+    if confirmation == Y or confirmation == y:
+        print("Goodbye!")
+        exit()
 
 # def menu():
 #     choice = input("> ")
