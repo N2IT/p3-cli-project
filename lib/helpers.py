@@ -78,9 +78,11 @@ def wr_choice_options():
             delete_workout_routine()
         elif prv_menu_regex.match(choice):
             list_workout_routines()
-        elif m_menu_regex.match(choice):
-            menu()
-            return False
+        # elif m_menu_regex.match(choice):
+        #     from cli import menu
+        #     clear_screen()
+        #     menu()
+        #     return False
         elif x_regex.match(choice):
             exit_program()
 
@@ -92,7 +94,7 @@ def wr_choice_options_menu():
     print(" >>  Type D to Delete this workout routine")
     print("                     OR                      ")
     print(" >>  Type R to return to the previous menu")
-    print(" >>  Type M to go back to main menu")
+    # print(" >>  Type M to go back to main menu")
     print(" >>  Type X to exit program")
     print("")
     print("**************************")
@@ -115,9 +117,17 @@ def list_exercises():
     
 def exit_program():
     confirmation = input("Are you sure you wish to exit? Y/N ")
-    if confirmation == Y or confirmation == y:
+    if confirmation == "Y" or confirmation == "y":
         print("Goodbye!")
         exit()
+    elif confirmation == "N" or confirmation == "n":
+        return None
+    else:
+        print(f'{confirmation} is not a valid option. Please try again.')
+        print("")
+        print("**************************")
+        print("")
+        exit_program()
 
 # def menu():
 #     choice = input("> ")

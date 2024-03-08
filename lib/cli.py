@@ -1,12 +1,17 @@
 # lib/cli.py
 import re
 from helpers import (
-    exit_program,
-    wr_options,
     clear_screen,
     list_workout_routines,
-    list_exercises,
+    wr_options,
+    wr_choice_options,
+    wr_choice_options_menu,
+    edit_work_routine,
+    wor_add_exercise,
+    delete_workout_routine,
     create_workout_routine,
+    list_exercises,
+    exit_program,
 
 )
 
@@ -42,9 +47,12 @@ def main(username):
         exercise_regex = re.compile(r'(?i)^e$')
         choice = input("> ").strip()
         if wr_option_regex.match(choice):
+            clear_screen()
             list_workout_routines()
+            return False
         elif exercise_regex.match(choice):
             list_exercises()
+            return False
         else:
             print(f'{choice} is not valid. Please choose from the options below.')
 
