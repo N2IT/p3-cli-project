@@ -77,7 +77,18 @@ def wr_choice_options(id):
         elif wor_add_exercise_regex.match(choice):
             wor_add_exercise(id)
         elif wor_delete_regex.match(choice):
-            delete_workout_routine(id)
+            confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
+            if confirmation == "Y" or confirmation == "y":
+                wor_delete_exercises(id)
+                delete_workout_routine(id)
+            elif confirmation == "N" or confirmation == "n":
+                wr_choice_options(id)
+            else:
+                print(f'{confirmation} is not a valid option. Please try again.')
+                print("")
+                print("**************************")
+                print("")
+                wr_choice_options(id)
         elif prv_menu_regex.match(choice):
             list_workout_routines()
         # elif m_menu_regex.match(choice):
@@ -130,8 +141,16 @@ def wor_add_exercise(id):
     except Exception as exc:
         print("Error creating exercise: ", exc)
 
-def delete_workout_routine():
-    pass
+def delete_workout_routine(id):
+    if workout_routine := WorkoutRoutine.find_by_id(id):
+        workout_routine.delete()
+        print(f'Workout Routine {id} has been deleted.')
+
+def wor_delete_exercises(id):
+    exercises = Exercise.get_all()
+    for exercise in exercises:
+        if exercise.w_routine_id == id:
+            exercise.delete()
 
 def create_workout_routine():
     print('workout routine added!')
@@ -152,6 +171,7 @@ def exit_program():
         print("")
         print("**************************")
         print("")
+        
         exit_program()
 
 # def menu():

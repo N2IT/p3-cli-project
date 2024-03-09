@@ -129,6 +129,18 @@ class Exercise:
         CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id))
         CONN.commit()
 
+    def delete(self):
+        """Delete table row of current Exercises instance."""
+        sql = """
+            DELETE FROM exercises
+            WHERE w_routine_id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
+
     @classmethod
     def create(cls, title, description, reps, sets, w_routine_id):
         """ Initialize a new exercise object and save the object to the database. """
