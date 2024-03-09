@@ -133,7 +133,7 @@ class Exercise:
         """Delete table row of current Exercises instance."""
         sql = """
             DELETE FROM exercises
-            WHERE w_routine_id = ?
+            WHERE wr_routine_id = ?
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
