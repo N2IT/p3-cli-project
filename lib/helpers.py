@@ -65,7 +65,8 @@ def wr_options():
 def wr_choice_options(id):
     exercise_id = []
     while True:
-        wr_choice_options_menu()
+        wr_choice_options_menu(id)
+        routine = WorkoutRoutine.find_by_id(id)
         choice = input("> ")
         wor_edit_regex = re.compile(r'(?i)^e$')
         wor_add_exercise_regex = re.compile(r'(?i)^a$')
@@ -74,16 +75,32 @@ def wr_choice_options(id):
         prv_menu_regex = re.compile(r'(?i)^r$')
         m_menu_regex = re.compile(r'(?i)^m$')
         x_regex = re.compile(r'(?i)^x$')
+        y_regex = re.compile(r'(?i)^y$')
+        n_regex = re.compile(r'(?i)^n$')
         if wor_edit_regex.match(choice):
             edit_work_routine(id)
         elif wor_add_exercise_regex.match(choice):
             wor_add_exercise(id)
         elif wor_cut_exercise_regex.match(choice):
-            exercise = Exercise.get_all()
             selection = input(f'Which exercise do you wish to delete? ')
-                # confirm selection is related to current workout routine instance
-            
-
+            # breakpoint()
+            exercise_confirm = Exercise.find_by_id(selection)
+            if exercise_confirm.w_routine_id == id:
+                confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
+                if y_regex.match(confirmation):
+                    wor_cut_exercise(selection)
+                elif n_regex.match(confirmation):
+                    print("")
+                    print("**************************")
+                    print(f'You have opted not to delete {selection}.')
+                    print("**************************")
+                    print(routine)
+                    exercise = Exercise.get_all()
+                    for exercises in exercise:
+                        if exercises.w_routine_id == (id):
+                            print(f'    {exercises}')
+                else:
+                    print(f'{selection} is not associated with this Workout Routine. Please try again.')
         elif wor_delete_regex.match(choice):
             confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
             if confirmation == "Y" or confirmation == "y":
@@ -154,14 +171,23 @@ def wor_add_exercise(id):
     w_routine_id = id
     try:
         exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
-        print(f'Success! {exercise.title} has been created!')
+        wo_r = WorkoutRoutine.find_by_id(id)
+        print(f'Success! {exercise.title} has been added to {wo_r.title}!')
         print("")
     except Exception as exc:
         print("Error creating exercise: ", exc)
+    
+    wo_r = WorkoutRoutine.find_by_id(id)
+    print(wo_r)
+    
+
 
 def wor_cut_exercise(id):
     exercise = Exercise.find_by_id(id)
+    print(f"Exercise {id} has successfully been deleted.")
     exercise.delete()
+    print("")
+    wr_choice_options(id)
 
 def delete_workout_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
