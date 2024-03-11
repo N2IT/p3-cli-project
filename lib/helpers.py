@@ -159,7 +159,6 @@ def wr_choice_options(id):
             print("")
             print("**************************")
             print("")
-            return
     return
 
 def wr_choice_options_menu():
