@@ -47,12 +47,15 @@ def main(username):
         exercise_regex = re.compile(r'(?i)^e$')
         choice = input("> ").strip()
         if wr_option_regex.match(choice):
-            clear_screen()
-            list_workout_routines()
-            return False
+            if not list_workout_routines():
+                continue
+            # clear_screen()
+            # list_workout_routines()
+            
         elif exercise_regex.match(choice):
-            list_exercises()
-            return False
+            if not list_exercises():
+                continue
+
         else:
             print(f'{choice} is not valid. Please choose from the options below.')
 

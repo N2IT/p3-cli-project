@@ -4,6 +4,13 @@ import re
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 
+def wor_list_exercises(id):
+    exercises = Exercise.get_all()
+    for exercise in exercises:
+        if exercise.w_routine_id == id:
+            print(f'    {exercise}')
+    return
+
 def clear_screen():
     # For Windows
     if os.name == 'nt':
@@ -14,7 +21,7 @@ def clear_screen():
     
 def list_workout_routines():
     workout_routines = WorkoutRoutine.get_all()
-    clear_screen()
+    # clear_screen()
     print("")
     print("Here are all workout routines currently on record.")
     print("")
@@ -27,10 +34,9 @@ def list_workout_routines():
         choice = input("> ").strip()
         ret_choice_regex = re.compile(r'(?i)^r$')
         add_choice_regex = re.compile(r'(?i)^a$')
+        x_regex = re.compile(r'(?i)^x$')
         if ret_choice_regex.match(choice):
-            from cli import menu
-            menu()
-            return False
+            return
         elif add_choice_regex.match(choice):
             create_workout_routine()
         elif choice in wo_id:
@@ -38,7 +44,7 @@ def list_workout_routines():
             wo_r = WorkoutRoutine.find_by_id(choice)
             exercise = Exercise.get_all()
             if wo_r:
-                clear_screen()
+                # clear_screen()
                 print("")
                 print(f"Here are the workout routine {choice} details.")
                 print("")
@@ -49,16 +55,20 @@ def list_workout_routines():
                 if exercises.w_routine_id == int(choice):
                     print(f'    {exercises}')
             wr_choice_options(choice)
+        elif x_regex.match(choice):
+            exit_program()
         else:
             print(f'{choice} is not valid. Please choose again.')
+    
 
 def wr_options():
     print("**************************")
     print("")
-    print(" >>  Enter the workout routine id to view its details")
+    print(" >>  Enter the workout routine ID to view its details")
     print("                     OR                      ")
     print(" >>  Type A to add a new Workout Routine")
     print(" >>  Type R to return to the previous menu")
+    print(" >>  Type X to exit program")
     print("")
     print("**************************")
 
@@ -79,8 +89,10 @@ def wr_choice_options(id):
         n_regex = re.compile(r'(?i)^n$')
         if wor_edit_regex.match(choice):
             edit_work_routine(id)
+            continue
         elif wor_add_exercise_regex.match(choice):
             wor_add_exercise(id)
+            continue
         elif wor_cut_exercise_regex.match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
             # breakpoint()
@@ -103,12 +115,14 @@ def wr_choice_options(id):
                     print(f'{selection} is not associated with this Workout Routine. Please try again.')
             else:
                 raise TypeError(f'{selection} is not associated with this Workout Routine. Please try again.')
+            continue
         elif wor_delete_regex.match(choice):
             confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
-            if confirmation == "Y" or confirmation == "y":
+            if y_regex.match(confirmation):
                 wor_delete_exercises(id)
                 delete_workout_routine(id)
-            elif confirmation == "N" or confirmation == "n":
+                return
+            elif n_regex.match(confirmation):
                 print(f"You have opted not to delete routine {id}.")
                 print("")
                 print("**************************")
@@ -125,8 +139,12 @@ def wr_choice_options(id):
                 print("**************************")
                 print("")
                 wr_choice_options(id)
+            continue
         elif prv_menu_regex.match(choice):
-            list_workout_routines()
+            workout_routines = WorkoutRoutine.get_all()
+            for workout_routine in workout_routines:
+                print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
+            return
         # elif m_menu_regex.match(choice):
         #     from cli import menu
         #     clear_screen()
@@ -149,12 +167,7 @@ def wr_choice_options_menu():
     print("")
     print("**************************")
 
-def wor_list_exercises(id):
-    exercises = Exercise.get_all()
-    for exercise in exercises:
-        if exercise.w_routine_id == id:
-            print(f'    {exercise}')
-
+    
 def edit_work_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
         try:
@@ -169,6 +182,7 @@ def edit_work_routine(id):
             print("Error updating workout routine: ", exc)
     else:
         print(f'Workout Routine {id} not found.')
+    
 
 def wor_add_exercise(id):
     title = input(f'Enter new exercise title: ')
@@ -186,7 +200,8 @@ def wor_add_exercise(id):
     
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
-    wor_list_exercises(id)
+    
+    
     
 def wor_cut_exercise(selection, id):
     exercise = Exercise.find_by_id(selection)
@@ -197,21 +212,38 @@ def wor_cut_exercise(selection, id):
     print(wo_r)
     wor_list_exercises(id)
 
+
 def delete_workout_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
         workout_routine.delete()
         print(f'Workout Routine {id} has been deleted.')
-    
 
+    workout_routines = WorkoutRoutine.get_all()
+    for workout_routine in workout_routines:
+        print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
+    return
+   
+    
 def wor_delete_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
             exercise.delete_by_wr()
     
+    
 def create_workout_routine():
-    print('workout routine added!')
+    title = input(f'Enter the name of the new workout routine: ')
+    equipment = input(f'Enter the equipment of the new routine: ')
+    try:
+        workout_routine = WorkoutRoutine.create(title, equipment)
+        print(f'Success! {workout_routine.title} has been created!')
+    except Exception as exc:
+        print("Error creating workout routine: ", exc)
 
+    workout_routines = WorkoutRoutine.get_all()
+    for workout_routine in workout_routines:
+        print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
+    return
 
 def list_exercises():
     pass
