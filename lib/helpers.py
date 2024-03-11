@@ -141,7 +141,7 @@ def wr_choice_options(id):
                 print("**************************")
                 print("")
                 wr_choice_options(id)
-            continue
+            return
         elif prv_menu_regex.match(choice):
             workout_routines = WorkoutRoutine.get_all()
             for workout_routine in workout_routines:
