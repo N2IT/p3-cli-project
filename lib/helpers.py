@@ -154,6 +154,12 @@ def wr_choice_options(id):
         #     return False
         elif x_regex.match(choice):
             exit_program()
+        else:
+            print(f'{choice} is not a valid option. Please try again.')
+            print("")
+            print("**************************")
+            print("")
+            return
     return
 
 def wr_choice_options_menu():
