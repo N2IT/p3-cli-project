@@ -94,7 +94,7 @@ def wr_choice_options(id):
             continue
         elif wor_add_exercise_regex.match(choice):
             wor_add_exercise(id)
-            continue
+            return
         elif wor_cut_exercise_regex.match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
             # breakpoint()
@@ -251,7 +251,6 @@ def create_workout_routine():
     workout_routines = WorkoutRoutine.get_all()
     for workout_routine in workout_routines:
         print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
-    list_workout_routines()
     return
 
 def list_exercises():
