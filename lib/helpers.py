@@ -39,6 +39,7 @@ def list_workout_routines():
             return
         elif add_choice_regex.match(choice):
             create_workout_routine()
+            continue
         elif choice in wo_id:
             choice = int(choice)
             wo_r = WorkoutRoutine.find_by_id(choice)
@@ -59,6 +60,7 @@ def list_workout_routines():
             exit_program()
         else:
             print(f'{choice} is not valid. Please choose again.')
+    return
     
 
 def wr_options():
@@ -152,6 +154,7 @@ def wr_choice_options(id):
         #     return False
         elif x_regex.match(choice):
             exit_program()
+    return
 
 def wr_choice_options_menu():
     print("**************************")
@@ -243,6 +246,7 @@ def create_workout_routine():
     workout_routines = WorkoutRoutine.get_all()
     for workout_routine in workout_routines:
         print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
+    list_workout_routines()
     return
 
 def list_exercises():
