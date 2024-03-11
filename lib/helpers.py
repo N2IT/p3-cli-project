@@ -65,7 +65,7 @@ def wr_options():
 def wr_choice_options(id):
     exercise_id = []
     while True:
-        wr_choice_options_menu(id)
+        wr_choice_options_menu()
         routine = WorkoutRoutine.find_by_id(id)
         choice = input("> ")
         wor_edit_regex = re.compile(r'(?i)^e$')
@@ -88,7 +88,7 @@ def wr_choice_options(id):
             if exercise_confirm.w_routine_id == id:
                 confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
                 if y_regex.match(confirmation):
-                    wor_cut_exercise(selection)
+                    wor_cut_exercise(selection, id)
                 elif n_regex.match(confirmation):
                     print("")
                     print("**************************")
@@ -101,6 +101,8 @@ def wr_choice_options(id):
                             print(f'    {exercises}')
                 else:
                     print(f'{selection} is not associated with this Workout Routine. Please try again.')
+            else:
+                raise TypeError(f'{selection} is not associated with this Workout Routine. Please try again.')
         elif wor_delete_regex.match(choice):
             confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
             if confirmation == "Y" or confirmation == "y":
@@ -147,6 +149,12 @@ def wr_choice_options_menu():
     print("")
     print("**************************")
 
+def wor_list_exercises(id):
+    exercises = Exercise.get_all()
+    for exercise in exercises:
+        if exercise.w_routine_id == id:
+            print(f'    {exercise}')
+
 def edit_work_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
         try:
@@ -162,7 +170,6 @@ def edit_work_routine(id):
     else:
         print(f'Workout Routine {id} not found.')
 
-    
 def wor_add_exercise(id):
     title = input(f'Enter new exercise title: ')
     description = input(f'Enter new exercise description: ')
@@ -179,15 +186,16 @@ def wor_add_exercise(id):
     
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
+    wor_list_exercises(id)
     
-
-
-def wor_cut_exercise(id):
-    exercise = Exercise.find_by_id(id)
-    print(f"Exercise {id} has successfully been deleted.")
+def wor_cut_exercise(selection, id):
+    exercise = Exercise.find_by_id(selection)
+    print(f"Exercise {selection} has successfully been deleted.")
     exercise.delete()
     print("")
-    wr_choice_options(id)
+    wo_r = WorkoutRoutine.find_by_id(id)
+    print(wo_r)
+    wor_list_exercises(id)
 
 def delete_workout_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
@@ -201,7 +209,6 @@ def wor_delete_exercises(id):
         if exercise.w_routine_id == id:
             exercise.delete_by_wr()
     
-
 def create_workout_routine():
     print('workout routine added!')
 
