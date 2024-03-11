@@ -129,11 +129,23 @@ class Exercise:
         CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id))
         CONN.commit()
 
-    def delete(self):
+    def delete_by_wr(self):
         """Delete table row of current Exercises instance."""
         sql = """
             DELETE FROM exercises
             WHERE wr_routine_id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
+
+    def delete(self):
+        """Delete table row of current Exercises instance."""
+        sql = """
+            DELETE FROM exercises
+            WHERE id = ?
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
