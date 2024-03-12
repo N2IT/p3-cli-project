@@ -68,7 +68,7 @@ def ex_choice_options(id):
         elif ex_delete_regex.match(choice):
             confirmation = input("Do you wish to delete this exercise? Y/N ")
             if y_regex.match(confirmation):
-                wr_delete_exercises(id)
+                ex_delete_exercises(id)
                 return
             elif n_regex.match(confirmation):
                 print(f"You have opted not to delete exercise {id}.")
@@ -88,26 +88,13 @@ def ex_choice_options(id):
             return
         elif x_regex.match(choice):
             from wr_helpers import exit_program
-            y_regex = re.compile(r'(?i)^y$')
-            n_regex = re.compile(r'(?i)^n$')
-            confirmation = input("Are you sure you wish to exit? Y/N ")
-            if y_regex.match(confirmation):
-                print("Goodbye!")
-                exit_program()
-            elif n_regex.match(confirmation):
-                return
-            else:
-                print(f'{confirmation} is not a valid option. Please try again.')
-                print("")
-                print("**************************")
-                print("")
+            exit_program()
         else:
             print(f'{choice} is not a valid option. Please try again.')
             print("")
             print("**************************")
             print("")
       
-
 def ex_choice_options_menu():
     print("**************************")
     print("")
@@ -119,11 +106,50 @@ def ex_choice_options_menu():
     print("")
     print("**************************")
 
-def edit_exercise(id):
-    pass
 
+def edit_exercise(id):
+    if exercise := Exercise.find_by_id(id):
+        try:
+            title = input("Enter the exercises new title: ")
+            exercise.title = title
+            description = input("Enter the exercises new description: ")
+            exercise.description = description
+            reps = input("Enter the new number of reps for this exercise: ")
+            exercise.reps = int(reps)
+            sets = input("Enter the new number of sets for this exercise: ")
+            exercise.sets = int(sets)
+            wo = WorkoutRoutine.get_all()
+            print(f'Current Workout Routines in database:')
+            for wos in wo:
+                print(f'ID: {wos.id},Title: {wos.title}')
+            w_routine_id_regex = re.compile(r'^\d{1,3}$')
+            w_routine_id = input(f'Enter the new workout routine id number you wish to apply this exercise: ')
+            if w_routine_id_regex.match(w_routine_id):
+                exercise.w_routine_id = w_routine_id
+                print("")
+                print(f'Success! Exercise number {exercise.id} has been updated!')
+                print(exercise)
+                exercise.update()
+                return
+            else:
+                print("")
+                print("Please enter a valid workout routine id number.")
+                print("")
+        except Exception as exc:
+            print("Error updating exercise: ", exc)
+    else:
+        print(f'Workout Routine {id} not found.')
+            
 def delete_exercise(id):
-    pass
+    if exercise := Exercise.find_by_id(id):
+        exercise.delete()
+        print("")
+        print(f'Exercise {id} has been deleted.')
+        print("")
+    
+    exercises = Exercise.get_all()
+        for exercises in exercises:
+            print(f'ID: {exercises.id}, Title: {exercises.title}')
 
 def create_exercise():
     title = input('Enter a title for your exercise: ')

@@ -128,7 +128,7 @@ class Exercise:
             SET title = ?, description = ?, reps = ?, sets = ?, w_routine_id = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id))
+        CURSOR.execute(sql, (self.title, self.description, self.reps, self.sets, self.w_routine_id, self.id))
         CONN.commit()
 
     def delete_by_wr(self):

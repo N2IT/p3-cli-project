@@ -297,8 +297,9 @@ def exit_program():
         print("")
         print("**************************")
         print("")
+    return
         
-        exit_program()
+        # exit_program()
 
 # def menu():
 #     choice = input("> ")
