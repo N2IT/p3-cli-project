@@ -67,7 +67,7 @@ def wr_options():
     print("**************************")
     print("")
     print(" >>  Enter the workout routine ID to view its details")
-    print("                     OR                      ")
+    print(" OR ")
     print(" >>  Type A to add a new Workout Routine")
     print(" >>  Type R to return to the previous menu")
     print(" >>  Type X to exit program")
