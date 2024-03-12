@@ -70,7 +70,7 @@ def list_workout_routines():
             exit_program()
         else:
             print(f'{choice} is not valid. Please choose again.')
-    return
+    return False
     
 
 def wr_options():
@@ -249,10 +249,17 @@ def create_workout_routine():
     try:
         workout_routine = WorkoutRoutine.create(title, equipment)
         print(f'Success! {workout_routine.title} has been created!')
+        wo = WorkoutRoutine.get_all()
+        last_id = wo[-1].id
+        wr_last = WorkoutRoutine.find_by_id(last_id)
+        print(wr_last)
+        wr_choice_options(last_id)
+        return
+      
     except Exception as exc:
-        print("Error creating workout routine: ", exc)
-
-    list_workout_routines()
+        print("xError creating workout routine: ", exc)
+    return
+    
 
 def list_exercises():
     pass
