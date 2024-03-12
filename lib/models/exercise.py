@@ -49,7 +49,7 @@ class Exercise:
 
     @reps.setter
     def reps(self, reps):
-        if not isinstance(reps, int) and not len(reps):
+        if not isinstance(reps, int):
             raise Exception("Reps should be of type Integer.")
         else:
             self._reps = reps
@@ -60,7 +60,7 @@ class Exercise:
 
     @sets.setter
     def sets(self, sets):
-        if not isinstance(sets, int) and not len(sets):
+        if not isinstance(sets, int):
             raise Exception("Sets should be of type Integer.")
         else:
             self._sets = sets

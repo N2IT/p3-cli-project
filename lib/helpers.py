@@ -201,17 +201,31 @@ def edit_work_routine(id):
 def wor_add_exercise(id):
     title = input(f'Enter new exercise title: ')
     description = input(f'Enter new exercise description: ')
+    reps_regex = re.compile(r'^\d{1,3}$')
     reps = input(f'Enter target number of reps for new exercise: ')
+    sets_regex = re.compile(r'^\d{1,3}$')
     sets = input(f'Enter target number of sets for new exercise: ')
     w_routine_id = id
-    try:
-        exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
-        wo_r = WorkoutRoutine.find_by_id(id)
+    if reps_regex.match(reps):
+        if sets_regex.match(sets):
+            try:
+                exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
+                wo_r = WorkoutRoutine.find_by_id(id)
+                print("")
+                print(f'Success! {exercise.title} has been added to {wo_r.title}!')
+                print("")
+            except Exception as exc:
+                print("")
+                print("Error creating exercise: ", exc)
+                print("")
+        else:
+            print("")
+            print("Please enter numerical values for sets.")
+            print("")
+    else:
         print("")
-        print(f'Success! {exercise.title} has been added to {wo_r.title}!')
+        print("Please enter numerical values for reps.")
         print("")
-    except Exception as exc:
-        print("Error creating exercise: Please make sure your reps and sets are numerical values.")
     
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
@@ -265,7 +279,7 @@ def create_workout_routine():
         return
       
     except Exception as exc:
-        print("xError creating workout routine: ", exc)
+        print("Error creating workout routine: ", exc)
     return
     
 
