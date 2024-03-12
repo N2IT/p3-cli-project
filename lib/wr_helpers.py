@@ -263,6 +263,8 @@ def wr_delete_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
+            print(exercise)
+            breakpoint()
             exercise.delete_by_wr()
     
     

@@ -68,7 +68,7 @@ def ex_choice_options(id):
         elif ex_delete_regex.match(choice):
             confirmation = input("Do you wish to delete this exercise? Y/N ")
             if y_regex.match(confirmation):
-                ex_delete_exercises(id)
+                ex_delete_exercise(id)
                 return
             elif n_regex.match(confirmation):
                 print(f"You have opted not to delete exercise {id}.")
@@ -140,7 +140,7 @@ def edit_exercise(id):
     else:
         print(f'Workout Routine {id} not found.')
             
-def delete_exercise(id):
+def ex_delete_exercise(id):
     if exercise := Exercise.find_by_id(id):
         exercise.delete()
         print("")
@@ -148,8 +148,8 @@ def delete_exercise(id):
         print("")
     
     exercises = Exercise.get_all()
-        for exercises in exercises:
-            print(f'ID: {exercises.id}, Title: {exercises.title}')
+    for exercises in exercises:
+        print(f'ID: {exercises.id}, Title: {exercises.title}')
 
 def create_exercise():
     title = input('Enter a title for your exercise: ')
