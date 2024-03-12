@@ -84,6 +84,7 @@ def wr_options():
     print("")
     print("**************************")
 
+
 def wr_choice_options(id):
     exercise_id = []
     while True:
@@ -104,10 +105,9 @@ def wr_choice_options(id):
             continue
         elif wor_add_exercise_regex.match(choice):
             wor_add_exercise(id)
-            return False
+            continue
         elif wor_cut_exercise_regex.match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
-            # breakpoint()
             exercise_confirm = Exercise.find_by_id(selection)
             if exercise_confirm.w_routine_id == id:
                 confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
@@ -151,11 +151,6 @@ def wr_choice_options(id):
             for workout_routine in workout_routines:
                 print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
             return
-        # elif m_menu_regex.match(choice):
-        #     from cli import menu
-        #     clear_screen()
-        #     menu()
-        #     return False
         elif x_regex.match(choice):
             exit_program()
         else:
@@ -207,12 +202,17 @@ def wor_add_exercise(id):
         wo_r = WorkoutRoutine.find_by_id(id)
         print(f'Success! {exercise.title} has been added to {wo_r.title}!')
         print("")
+        return
     except Exception as exc:
         print("Error creating exercise: ", exc)
     
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
-    
+    exercise = Exercise.get_all()
+    for exercises in exercise:
+                if exercises.w_routine_id == int(choice):
+                    print(f'    {exercises}')
+    return
     
     
 def wor_cut_exercise(selection, id):
