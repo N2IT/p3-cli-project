@@ -33,6 +33,7 @@ def list_exercises_w_menu():
                 print(f'Exercise {choice} not found')
             ex_choice_options(choice)
         elif x_regex.match(choice):
+            from wr_helpers import exit_program
             exit_program()
         else:
             print(f'{choice} is not valid. Please choose again.')
@@ -81,10 +82,25 @@ def ex_choice_options(id):
                 ex_choice_options(id)
             return
         elif prv_menu_regex.match(choice):
+            exercise = Exercise.get_all()
+            for exercises in exercise:
+                print(f'ID: {exercises.id}, Title: {exercises.title}')
             return
         elif x_regex.match(choice):
             from wr_helpers import exit_program
-            exit_program()
+            y_regex = re.compile(r'(?i)^y$')
+            n_regex = re.compile(r'(?i)^n$')
+            confirmation = input("Are you sure you wish to exit? Y/N ")
+            if y_regex.match(confirmation):
+                print("Goodbye!")
+                exit_program()
+            elif n_regex.match(confirmation):
+                return
+            else:
+                print(f'{confirmation} is not a valid option. Please try again.')
+                print("")
+                print("**************************")
+                print("")
         else:
             print(f'{choice} is not a valid option. Please try again.')
             print("")
@@ -114,9 +130,10 @@ def create_exercise():
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    wo = WorkoutRoutines.get_all()
+    wo = WorkoutRoutine.get_all()
+    print(f'Current Workout Routines in database:')
     for wos in wo:
-        print(f'Current Workout Routines in database:\nID: {wos.id},Title: {wos.title}')
+        print(f'ID: {wos.id},Title: {wos.title}')
     w_routine_id_regex = re.compile(r'^\d{1,3}$')
     w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
     if w_routine_id_regex.match(w_routine_id):
@@ -137,3 +154,5 @@ def create_exercise():
     exos = Exercise.get_all()
     latest_exer = exos[-1]
     print(latest_exer)
+    ex_choice_options(latest_exer.id)
+    

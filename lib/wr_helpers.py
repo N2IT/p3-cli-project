@@ -230,8 +230,8 @@ def wr_add_exercise(id):
     print(wo_r)
     exercise = Exercise.get_all()
     for exercises in exercise:
-                if exercises.w_routine_id == int(id):
-                    print(f'    {exercises}')
+        if exercises.w_routine_id == int(id):
+            print(f'    {exercises}')
     return
     
     
@@ -284,12 +284,14 @@ def create_workout_routine():
     return
     
 def exit_program():
+    y_regex = re.compile(r'(?i)^y$')
+    n_regex = re.compile(r'(?i)^n$')
     confirmation = input("Are you sure you wish to exit? Y/N ")
-    if confirmation == "Y" or confirmation == "y":
+    if y_regex.match(confirmation):
         print("Goodbye!")
         exit()
-    elif confirmation == "N" or confirmation == "n":
-        return None
+    elif n_regex.match(confirmation):
+        return
     else:
         print(f'{confirmation} is not a valid option. Please try again.')
         print("")

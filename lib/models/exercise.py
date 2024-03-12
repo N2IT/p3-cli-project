@@ -80,7 +80,7 @@ class Exercise:
 
     def __repr__(self):
         return (
-            f"<Exercise {self.id}: {self.title}, {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}," + 
+            f"<Exercise {self.id}: Title: {self.title}, Description: {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}," + 
             f" Workout Routine ID: {self.w_routine_id}>"
         )
 
