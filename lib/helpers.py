@@ -98,25 +98,32 @@ def wr_choice_options(id):
             continue
         elif wor_cut_exercise_regex.match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
+            selection = int(selection)
             exercise_confirm = Exercise.find_by_id(selection)
-            if exercise_confirm.w_routine_id == id:
-                confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
-                if y_regex.match(confirmation):
-                    wor_cut_exercise(selection, id)
-                elif n_regex.match(confirmation):
-                    print("")
-                    print("**************************")
-                    print(f'You have opted not to delete {selection}.')
-                    print("**************************")
-                    print(routine)
-                    exercise = Exercise.get_all()
-                    for exercises in exercise:
-                        if exercises.w_routine_id == (id):
-                            print(f'    {exercises}')
+            exercise = Exercise.get_all()
+            ex_ids = []
+            for exercises in exercise:
+                ex_ids.append(exercises.id)
+            if selection in ex_ids:
+                if exercise_confirm.w_routine_id == id:
+                    confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
+                    if y_regex.match(confirmation):
+                        wor_cut_exercise(selection, id)
+                    elif n_regex.match(confirmation):
+                        print("")
+                        print("**************************")
+                        print(f'You have opted not to delete {selection}.')
+                        print("**************************")
+                        print(routine)
+                        for exercises in exercise:
+                            if exercises.w_routine_id == id:
+                                print(f'    {exercises}')
+                    else:
+                        print(f'{confirmation} is invalid. Please try again.')
                 else:
-                    print(f'{confirmation} is invalid. Please try again.')
+                    print(f'{selection} is not associated with this workout routine. Please try again.')
             else:
-                raise TypeError(f'{selection} is not associated with this Workout Routine. Please try again.')
+                print(f'{selection} is not a valid exercise option. Please try again.')
             continue
         elif wor_delete_regex.match(choice):
             confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
@@ -148,7 +155,7 @@ def wr_choice_options(id):
             print("")
             print("**************************")
             print("")
-    return
+
 
 def wr_choice_options_menu():
     print("**************************")
