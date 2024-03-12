@@ -12,7 +12,7 @@ def clear_screen():
     else:
         os.system('clear')
 
-def wor_list_exercises(id):
+def wr_list_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
@@ -81,22 +81,22 @@ def wr_choice_options(id):
         wr_choice_options_menu()
         routine = WorkoutRoutine.find_by_id(id)
         choice = input("> ")
-        wor_edit_regex = re.compile(r'(?i)^e$')
-        wor_add_exercise_regex = re.compile(r'(?i)^a$')
-        wor_cut_exercise_regex = re.compile(r'(?i)^c$')
-        wor_delete_regex = re.compile(r'(?i)^d$')
+        wr_edit_regex = re.compile(r'(?i)^e$')
+        wr_add_exercise_regex = re.compile(r'(?i)^a$')
+        wr_cut_exercise_regex = re.compile(r'(?i)^c$')
+        wr_delete_regex = re.compile(r'(?i)^d$')
         prv_menu_regex = re.compile(r'(?i)^r$')
         m_menu_regex = re.compile(r'(?i)^m$')
         x_regex = re.compile(r'(?i)^x$')
         y_regex = re.compile(r'(?i)^y$')
         n_regex = re.compile(r'(?i)^n$')
-        if wor_edit_regex.match(choice):
+        if wr_edit_regex.match(choice):
             edit_work_routine(id)
             continue
-        elif wor_add_exercise_regex.match(choice):
-            wor_add_exercise(id)
+        elif wr_add_exercise_regex.match(choice):
+            wr_add_exercise(id)
             continue
-        elif wor_cut_exercise_regex.match(choice):
+        elif wr_cut_exercise_regex.match(choice):
             selection_regex = re.compile(r'^\d{1,3}$')
             selection = input(f'Which exercise do you wish to delete? ')
             if selection_regex.match(selection):
@@ -110,7 +110,7 @@ def wr_choice_options(id):
                     if exercise_confirm.w_routine_id == id:
                         confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
                         if y_regex.match(confirmation):
-                            wor_cut_exercise(selection, id)
+                            wr_cut_exercise(selection, id)
                         elif n_regex.match(confirmation):
                             print("")
                             print("**************************")
@@ -129,10 +129,10 @@ def wr_choice_options(id):
             else:
                 print('Please enter a numerical value that matches the exercise ID you wish to remove.')
             continue
-        elif wor_delete_regex.match(choice):
+        elif wr_delete_regex.match(choice):
             confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
             if y_regex.match(confirmation):
-                wor_delete_exercises(id)
+                wr_delete_exercises(id)
                 delete_workout_routine(id)
                 return
             elif n_regex.match(confirmation):
@@ -198,7 +198,7 @@ def edit_work_routine(id):
                     print(f'    {exercises}')
     return
 
-def wor_add_exercise(id):
+def wr_add_exercise(id):
     title = input(f'Enter new exercise title: ')
     description = input(f'Enter new exercise description: ')
     reps_regex = re.compile(r'^\d{1,3}$')
@@ -236,7 +236,7 @@ def wor_add_exercise(id):
     return
     
     
-def wor_cut_exercise(selection, id):
+def wr_cut_exercise(selection, id):
     exercise = Exercise.find_by_id(selection)
     print("")
     print(f"Exercise {selection} has successfully been deleted.")
@@ -244,7 +244,7 @@ def wor_cut_exercise(selection, id):
     print("")
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
-    wor_list_exercises(id)
+    wr_list_exercises(id)
 
 
 def delete_workout_routine(id):
@@ -258,7 +258,7 @@ def delete_workout_routine(id):
     return
    
     
-def wor_delete_exercises(id):
+def wr_delete_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
