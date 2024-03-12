@@ -19,11 +19,11 @@ class Exercise:
 
     @title.setter
     def title(self, title):
-        if not isinstance(title, str) and not len(title):
+        if not isinstance(title, str):
             raise Exception("Title must be a non-empty string")
         else:
-            if len(title) > 25:
-                raise Exception("Title not to exceed 25 characters in length.")
+            if not 1 <= len(title) <= 25:
+                raise Exception("Title must be between 1 and 25 characters.")
             else:
                 self._title = title
 
@@ -36,7 +36,7 @@ class Exercise:
         if not isinstance(description, str):
             raise Exception("Description must be of type string")
         else:
-            if not 10 < len(description) < 120:
+            if not 10 <= len(description) <= 120:
                 raise Exception("Description should be between 10 and 120 characters in length")
             else:
                 self._description = description

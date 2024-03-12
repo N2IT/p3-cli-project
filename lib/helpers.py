@@ -4,23 +4,6 @@ import re
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 
-def wor_list_exercises(id):
-    exercises = Exercise.get_all()
-    for exercise in exercises:
-        if exercise.w_routine_id == id:
-            print(f'    {exercise}')
-    return
-
-def wor_list_all():
-    workout_routines = WorkoutRoutine.get_all()
-    # clear_screen()
-    print("")
-    print("Here are all workout routines currently on record.")
-    print("")
-    for workout_routine in workout_routines:
-        print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
-    return
-
 def clear_screen():
     # For Windows
     if os.name == 'nt':
@@ -28,6 +11,13 @@ def clear_screen():
     # For Linux and Mac
     else:
         os.system('clear')
+
+def wor_list_exercises(id):
+    exercises = Exercise.get_all()
+    for exercise in exercises:
+        if exercise.w_routine_id == id:
+            print(f'    {exercise}')
+    return
     
 def list_workout_routines():
     workout_routines = WorkoutRoutine.get_all()
@@ -189,7 +179,13 @@ def edit_work_routine(id):
             print("Error updating workout routine: ", exc)
     else:
         print(f'Workout Routine {id} not found.')
-    
+    wo_r = WorkoutRoutine.find_by_id(id)
+    print(wo_r)
+    exercise = Exercise.get_all()
+    for exercises in exercise:
+                if exercises.w_routine_id == int(id):
+                    print(f'    {exercises}')
+    return
 
 def wor_add_exercise(id):
     title = input(f'Enter new exercise title: ')
@@ -200,9 +196,9 @@ def wor_add_exercise(id):
     try:
         exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
         wo_r = WorkoutRoutine.find_by_id(id)
+        print("")
         print(f'Success! {exercise.title} has been added to {wo_r.title}!')
         print("")
-        return
     except Exception as exc:
         print("Error creating exercise: ", exc)
     
@@ -210,13 +206,14 @@ def wor_add_exercise(id):
     print(wo_r)
     exercise = Exercise.get_all()
     for exercises in exercise:
-                if exercises.w_routine_id == int(choice):
+                if exercises.w_routine_id == int(id):
                     print(f'    {exercises}')
     return
     
     
 def wor_cut_exercise(selection, id):
     exercise = Exercise.find_by_id(selection)
+    print("")
     print(f"Exercise {selection} has successfully been deleted.")
     exercise.delete()
     print("")
