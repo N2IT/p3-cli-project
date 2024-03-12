@@ -1,9 +1,9 @@
 # lib/cli.py
 import re
-from helpers import (
+from wr_helpers import (
     clear_screen,
-    list_workout_routines,
-    wr_options,
+    list_workout_routines_w_menu,
+    wr_menu_options,
     wr_choice_options,
     wr_choice_options_menu,
     edit_work_routine,
@@ -12,9 +12,11 @@ from helpers import (
     wr_delete_exercises,
     delete_workout_routine,
     create_workout_routine,
-    list_exercises,
     exit_program,
+)
 
+from ex_helpers import (
+    list_exercises_w_menu
 )
 
 def login():
@@ -49,13 +51,13 @@ def main(username):
         exercise_regex = re.compile(r'(?i)^e$')
         choice = input("> ").strip()
         if wr_option_regex.match(choice):
-            if not list_workout_routines():
+            if not list_workout_routines_w_menu():
                 continue
             # clear_screen()
             # list_workout_routines()
             
         elif exercise_regex.match(choice):
-            if not list_exercises():
+            if not list_exercises_w_menu():
                 continue
 
         else:

@@ -19,7 +19,7 @@ def wr_list_exercises(id):
             print(f'    {exercise}')
     return
     
-def list_workout_routines():
+def list_workout_routines_w_menu():
     workout_routines = WorkoutRoutine.get_all()
     # clear_screen()
     print("")
@@ -30,7 +30,7 @@ def list_workout_routines():
         print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
         wo_id.append(str(workout_routine.id))
     while True:
-        wr_options()
+        wr_menu_options()
         choice = input("> ").strip()
         ret_choice_regex = re.compile(r'(?i)^r$')
         add_choice_regex = re.compile(r'(?i)^a$')
@@ -63,7 +63,7 @@ def list_workout_routines():
     return False
     
 
-def wr_options():
+def wr_menu_options():
     print("**************************")
     print("")
     print(" >>  Enter the workout routine ID to view its details")
@@ -138,7 +138,6 @@ def wr_choice_options(id):
             elif n_regex.match(confirmation):
                 print(f"You have opted not to delete routine {id}.")
                 print("")
-                print("**************************")
                 continue
             else:
                 print(f'{confirmation} is not a valid option. Please try again.')
@@ -250,7 +249,9 @@ def wr_cut_exercise(selection, id):
 def delete_workout_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
         workout_routine.delete()
+        print("")
         print(f'Workout Routine {id} has been deleted.')
+        print("")
 
     workout_routines = WorkoutRoutine.get_all()
     for workout_routine in workout_routines:
@@ -281,10 +282,6 @@ def create_workout_routine():
     except Exception as exc:
         print("Error creating workout routine: ", exc)
     return
-    
-
-def list_exercises():
-    pass
     
 def exit_program():
     confirmation = input("Are you sure you wish to exit? Y/N ")
