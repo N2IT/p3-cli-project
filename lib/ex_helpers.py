@@ -5,9 +5,6 @@ from models.exercise import Exercise
 
 def list_exercises_w_menu():
     exercise = Exercise.get_all()
-    print("")
-    print("Here are all the exercises currently in the database.")
-    print("")
     ex_id = []
     for exercises in exercise:
         print(f'ID: {exercises.id}, Title: {exercises.title}')
@@ -89,12 +86,14 @@ def ex_choice_options(id):
         elif prv_menu_regex.match(choice):
             return
         elif x_regex.match(choice):
+            from wr_helpers import exit_program
             exit_program()
         else:
             print(f'{choice} is not a valid option. Please try again.')
             print("")
             print("**************************")
             print("")
+      
 
 def ex_choice_options_menu():
     print("**************************")

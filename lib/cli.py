@@ -3,24 +3,24 @@ import re
 from wr_helpers import (
     clear_screen,
     list_workout_routines_w_menu,
-    # wr_menu_options,
-    # wr_choice_options,
-    # wr_choice_options_menu,
-    # edit_work_routine,
-    # wr_add_exercise,
-    # wr_cut_exercise,
-    # wr_delete_exercises,
-    # delete_workout_routine,
-    # create_workout_routine,
-    # exit_program,
+    wr_menu_options,
+    wr_choice_options,
+    wr_choice_options_menu,
+    edit_work_routine,
+    wr_add_exercise,
+    wr_cut_exercise,
+    wr_delete_exercises,
+    delete_workout_routine,
+    create_workout_routine,
+    exit_program,
 )
 
 from ex_helpers import (
     list_exercises_w_menu,
-    # ex_choice_options,
-    # create_exercise,
-    # ex_choice_options,
-    # ex_choice_options_menu
+    ex_choice_options,
+    create_exercise,
+    ex_choice_options,
+    ex_choice_options_menu
 )
 
 def login():
