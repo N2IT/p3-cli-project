@@ -17,9 +17,11 @@ class WorkoutRoutine:
     def title(self, title):
         if not isinstance(title, str):
             raise Exception('Title must be of type string')
+            print("")
         else:
             if not 1 <= len(title) <= 25:
                 raise Exception("Title must be between 1 and 25 characters.")
+                print("")
             else:
                 self._title = title
         
@@ -31,9 +33,11 @@ class WorkoutRoutine:
     def equipment(self, equipment):
         if not isinstance(equipment, str):
             raise Exception('Equipment must be of type string')
+            print("")
         else:
             if not 1 <= len(equipment) <= 30:
                 raise Exception("Equipment must be between 1 and 30 characters ")
+                print("")
             else:
                 self._equipment = equipment
 

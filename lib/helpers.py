@@ -114,7 +114,7 @@ def wr_choice_options(id):
                         if exercises.w_routine_id == (id):
                             print(f'    {exercises}')
                 else:
-                    print(f'{selection} is not associated with this Workout Routine. Please try again.')
+                    print(f'{confirmation} is invalid. Please try again.')
             else:
                 raise TypeError(f'{selection} is not associated with this Workout Routine. Please try again.')
             continue

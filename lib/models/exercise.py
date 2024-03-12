@@ -21,9 +21,11 @@ class Exercise:
     def title(self, title):
         if not isinstance(title, str):
             raise Exception("Title must be a non-empty string")
+            print("")
         else:
             if not 1 <= len(title) <= 25:
                 raise Exception("Title must be between 1 and 25 characters.")
+                print("")
             else:
                 self._title = title
 
