@@ -102,7 +102,7 @@ def ex_choice_options_menu():
     print("**************************")
     print("")
     print(" >>  Type E to edit this exercise")
-    print(" >>  Type D to Delete this workout routine")
+    print(" >>  Type D to Delete this exercise")
     print("                     OR                      ")
     print(" >>  Type R to return to the previous menu")
     print(" >>  Type X to exit program")
@@ -126,9 +126,10 @@ def edit_exercise(id):
             for wos in wo:
                 print(f'ID: {wos.id},Title: {wos.title}')
             w_routine_id_regex = re.compile(r'^\d{1,3}$')
-            w_routine_id = input(f'Enter the new workout routine id number you wish to apply this exercise: ')
+            w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
+            exercise.w_routine_id = int(w_routine_id)
+            # breakpoint()
             if w_routine_id_regex.match(w_routine_id):
-                exercise.w_routine_id = w_routine_id
                 print("")
                 print(f'Success! Exercise number {exercise.id} has been updated!')
                 print(exercise)
@@ -155,6 +156,7 @@ def ex_delete_exercise(id):
         print(f'ID: {exercises.id}, Title: {exercises.title}')
 
 def create_exercise():
+    print("You have opted to create a new exercise.")
     title = input('Enter a title for your exercise: ')
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
@@ -162,8 +164,12 @@ def create_exercise():
     print('You will need to assign this exercise to a workout routine.')
     new_regex = re.compile(r'(?i)^n$')
     exist_regex = re.compile(r'(?i)^e$')
-    decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\nType N for New | Type E for Exisiting: ')
+    print("")
+    decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\n  >>  Type N for New | Type E for Exisiting: ')
+    print("")
     if new_regex.match(decision):
+        print("You have opted to create a new workout routine.")
+        print("")
         wr_title = input('Enter new workout routine title: ')
         wr_equipment = input('Enter new workout routine equipment: ')
         try:
@@ -172,7 +178,7 @@ def create_exercise():
             w_routine_id = wr[-1].id
             new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
             print("")
-            print(f'Success! {exercise.title} has been created.')
+            print(f'Success! {new_exercise.title} has been created.')
             print("")
         except Exception as exc:
             print("")
@@ -184,7 +190,7 @@ def create_exercise():
         for wos in wo:
             print(f'ID: {wos.id},Title: {wos.title}')
         w_routine_id_regex = re.compile(r'^\d{1,3}$')
-        w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
+        w_routine_id = input(f'Enter the workout routine id number you wish to add this exercise: ')
         if w_routine_id_regex.match(w_routine_id):
             try:
                 exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))

@@ -263,8 +263,7 @@ def wr_delete_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
-            print(exercise)
-            exercise.delete_by_wr(id)
+            exercise.delete()
     
     
 def create_workout_routine():
