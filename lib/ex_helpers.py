@@ -7,7 +7,7 @@ def list_exercises_w_menu():
     exercise = Exercise.get_all()
     ex_id = []
     print("")
-    print("Here are all exercises currently on record.")
+    print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
     print("")
     for exercises in exercise:
         print(f'ID: {exercises.id}, Title: {exercises.title}')
@@ -29,17 +29,17 @@ def list_exercises_w_menu():
             if ex:
                 # clear_screen()
                 print("")
-                print(f"Here are the details for exercise {choice}:")
+                print(f"\u001b[36;1mHere are the details for exercise {choice}:\u001b[0m")
                 print("")
                 print(ex)
             else: 
-                print(f'Exercise {choice} not found')
+                print(f'\u001b[41mExercise {choice} not found\u001b[0m')
             ex_choice_options(choice)
         elif x_regex.match(choice):
             from wr_helpers import exit_program
             exit_program()
         else:
-            print(f'{choice} is not valid. Please choose again.')
+            print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
     return False
 
 def ex_menu_options():
@@ -69,7 +69,7 @@ def ex_choice_options(id):
             edit_exercise(id)
             continue
         elif ex_delete_regex.match(choice):
-            confirmation = input("Do you wish to delete this exercise? Y/N ")
+            confirmation = input("\u001b[43mDo you wish to delete this exercise?\u001b[0m Y/N ")
             if y_regex.match(confirmation):
                 ex_delete_exercise(id)
                 return
@@ -78,7 +78,7 @@ def ex_choice_options(id):
                 print("")
                 continue
             else:
-                print(f'{confirmation} is not a valid option. Please try again.')
+                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
                 print("")
                 print("**************************")
                 print("")
@@ -93,7 +93,7 @@ def ex_choice_options(id):
             from wr_helpers import exit_program
             exit_program()
         else:
-            print(f'{choice} is not a valid option. Please try again.')
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
             print("")
             print("**************************")
             print("")
@@ -122,7 +122,7 @@ def edit_exercise(id):
             sets = input("Enter the new number of sets for this exercise: ")
             exercise.sets = int(sets)
             wo = WorkoutRoutine.get_all()
-            print(f'Current Workout Routines in database:')
+            print(f'\u001b[36;1mCurrent Workout Routines in database:\u001b[0m')
             for wos in wo:
                 print(f'ID: {wos.id},Title: {wos.title}')
             w_routine_id_regex = re.compile(r'^\d{1,3}$')
@@ -131,24 +131,24 @@ def edit_exercise(id):
             # breakpoint()
             if w_routine_id_regex.match(w_routine_id):
                 print("")
-                print(f'Success! Exercise number {exercise.id} has been updated!')
+                print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} has been updated!\u001b[0m')
                 print(exercise)
                 exercise.update()
                 return
             else:
                 print("")
-                print("Please enter a valid workout routine id number.")
+                print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
                 print("")
         except Exception as exc:
-            print("Error updating exercise: ", exc)
+            print("\u001b[41mError updating exercise:\u001b[0m ", exc)
     else:
-        print(f'Workout Routine {id} not found.')
+        print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
             
 def ex_delete_exercise(id):
     if exercise := Exercise.find_by_id(id):
         exercise.delete()
         print("")
-        print(f'Exercise {id} has been deleted.')
+        print(f'\u001b[32;1mExercise {id} has been deleted.\u001b[0m')
         print("")
     
     exercises = Exercise.get_all()
@@ -179,15 +179,15 @@ def create_exercise():
             w_routine_id = wr[-1].id
             new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
             print("")
-            print(f'Success! {new_exercise.title} has been created.')
+            print(f'\u001b[32;1mSuccess! {new_exercise.title} has been added.\u001b[0m')
             print("")
         except Exception as exc:
             print("")
-            print("Error creating exercise: ", exc)
+            print("\u001b[41mError creating exercise:\u001b[0m ", exc)
             print("")
     elif exist_regex.match(decision):
         wo = WorkoutRoutine.get_all()
-        print(f'Current Workout Routines in database:')
+        print(f'\u001b[36;1mCurrent Workout Routines in database:\u001b[0m')
         for wos in wo:
             print(f'ID: {wos.id},Title: {wos.title}')
         w_routine_id_regex = re.compile(r'^\d{1,3}$')
@@ -196,18 +196,18 @@ def create_exercise():
             try:
                 exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
                 print("")
-                print(f'Success! {exercise.title} has been created.')
+                print(f'\u001b[32;1mSuccess! {exercise.title} has been created.\u001b[0m')
                 print("")
             except Exception as exc:
                 print("")
-                print("Error creating exercise: ", exc)
+                print("\u001b[41mError creating exercise:\u001b[0m ", exc)
                 print("")
         else: 
             print("")
-            print("Please enter a valid workout routine id number.")
+            print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
             print("")
     else:
-        print(f'{decision} is not a valid option. Please try again.')
+        print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
     exos = Exercise.get_all()
     latest_exer = exos[-1]
     print(latest_exer)

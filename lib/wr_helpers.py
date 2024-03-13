@@ -184,7 +184,7 @@ def edit_work_routine(id):
             workout_routine.equipment = equipment
             workout_routine.update()
             print("")
-            print(f'Success! {workout_routine.title} has been updated!')
+            print(f'\u001b[32;1mSuccess! {workout_routine.title} has been updated!\u001b[0m')
         except Exception as exc:
             print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
     else:
@@ -211,7 +211,7 @@ def wr_add_exercise(id):
                 exercise = Exercise.create(title, description, int(reps), int(sets), w_routine_id)
                 wo_r = WorkoutRoutine.find_by_id(id)
                 print("")
-                print(f'Success! {exercise.title} has been added to {wo_r.title}!')
+                print(f'\u001b[32;1mSuccess! {exercise.title} has been added to {wo_r.title}!\u001b[0m')
                 print("")
             except Exception as exc:
                 print("")
@@ -238,7 +238,7 @@ def wr_add_exercise(id):
 def wr_cut_exercise(selection, id):
     exercise = Exercise.find_by_id(selection)
     print("")
-    print(f"Exercise {selection} has successfully been deleted.")
+    print(f"\u001b[32;1mExercise {selection} has successfully been deleted.\u001b[0m")
     exercise.delete()
     print("")
     wo_r = WorkoutRoutine.find_by_id(id)
@@ -250,7 +250,7 @@ def delete_workout_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
         workout_routine.delete()
         print("")
-        print(f'Workout Routine {id} has been deleted.')
+        print(f'\u001b[32;1mWorkout Routine {id} has been deleted.\u001b[0m')
         print("")
 
     workout_routines = WorkoutRoutine.get_all()
@@ -271,7 +271,7 @@ def create_workout_routine():
     equipment = input(f'Enter the equipment of the new routine: ')
     try:
         workout_routine = WorkoutRoutine.create(title, equipment)
-        print(f'Success! {workout_routine.title} has been created!')
+        print(f'\u001b[32;1mSuccess! {workout_routine.title} has been created!\u001b[0m')
         wo = WorkoutRoutine.get_all()
         last_id = wo[-1].id
         wr_last = WorkoutRoutine.find_by_id(last_id)

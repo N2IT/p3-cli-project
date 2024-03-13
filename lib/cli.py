@@ -75,7 +75,7 @@ def menu():
     print("✅ Create your own workout routines")
     print("✅ Create your own exercises")
     print("✅ Set your target number of reps and sets")
-    print("✅ Join your exercises to your Workout Routines")
+    print("✅ Assign exercises to your Workout Routines")
     print("")
     print("Choose from the options below to get started.")
     print("")
