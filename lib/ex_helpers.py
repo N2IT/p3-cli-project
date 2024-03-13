@@ -8,8 +8,8 @@ def list_exercises_w_menu():
     ex_id = []
     for exercises in exercise:
         print("")
-    print("Here are all exercises currently on record.")
-    print("")
+        print("Here are all exercises currently on record.")
+        print("")
         print(f'ID: {exercises.id}, Title: {exercises.title}')
         ex_id.append(str(exercises.id))
     while True:
@@ -159,27 +159,36 @@ def create_exercise():
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    wo = WorkoutRoutine.get_all()
-    print(f'Current Workout Routines in database:')
-    for wos in wo:
-        print(f'ID: {wos.id},Title: {wos.title}')
-    w_routine_id_regex = re.compile(r'^\d{1,3}$')
-    w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
-    if w_routine_id_regex.match(w_routine_id):
-        try:
-            exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+    print('You will need to assign this exercise to a workout routine.')
+    new_regex = re.compile(r'(?i)^n$')
+    exist_regex = re.compile(r'(?i)^$')
+    decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\nType N for New | Type E for Exisiting ')
+    if new_regex.match(decision):
+        create_workout_routine()
+    elif exist_regex.match(decision):
+        wo = WorkoutRoutine.get_all()
+        print(f'Current Workout Routines in database:')
+        for wos in wo:
+            print(f'ID: {wos.id},Title: {wos.title}')
+        w_routine_id_regex = re.compile(r'^\d{1,3}$')
+            
+        w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
+        if w_routine_id_regex.match(w_routine_id):
+            try:
+                exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+                print("")
+                print(f'Success! {exercise.title} has been created.')
+                print("")
+            except Exception as exc:
+                print("")
+                print("Error creating exercise: ", exc)
+                print("")
+        else: 
             print("")
-            print(f'Success! {exercise.title} has been created.')
+            print("Please enter a valid workout routine id number.")
             print("")
-
-        except Exception as exc:
-            print("")
-            print("Error creating exercise: ", exc)
-            print("")
-    else: 
-        print("")
-        print("Please enter a valid workout routine id number.")
-        print("")
+    else:
+        print(f'{decision} is not a valid option. Please try again.')
     exos = Exercise.get_all()
     latest_exer = exos[-1]
     print(latest_exer)
