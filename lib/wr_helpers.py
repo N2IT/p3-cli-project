@@ -62,7 +62,7 @@ def list_workout_routines_w_menu():
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
-    return False
+    return
     
 
 def wr_menu_options():
@@ -227,7 +227,6 @@ def edit_work_routine(id):
     for exercises in exercise:
                 if exercises.w_routine_id == int(id):
                     print(f'    {exercises}')
-    return
 
 
 def wr_add_exercise(id):
@@ -265,7 +264,7 @@ def wr_add_exercise(id):
     for exercises in exercise:
         if exercises.w_routine_id == int(id):
             print(f'    {exercises}')
-    return
+    
     
     
 def wr_cut_exercise(selection, id):
@@ -313,7 +312,6 @@ def create_workout_routine():
         return
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
-    return
     
 
 def exit_program():
@@ -330,7 +328,7 @@ def exit_program():
         print("")
         print("**************************")
         print("")
-    return
+    
 
 # def menu():
 #     choice = input("> ")

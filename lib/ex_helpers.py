@@ -300,6 +300,8 @@ def ex_delete_exercise(id):
         print("")
         print(f'\u001b[32;1mExercise {id} has been deleted.\u001b[0m')
         print("")
+    else:
+        print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
     
     exercises = Exercise.get_all()
     for exercises in exercises:
