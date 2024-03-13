@@ -6,10 +6,10 @@ from models.exercise import Exercise
 def list_exercises_w_menu():
     exercise = Exercise.get_all()
     ex_id = []
+    print("")
+    print("Here are all exercises currently on record.")
+    print("")
     for exercises in exercise:
-        print("")
-        print("Here are all exercises currently on record.")
-        print("")
         print(f'ID: {exercises.id}, Title: {exercises.title}')
         ex_id.append(str(exercises.id))
     while True:
@@ -161,17 +161,29 @@ def create_exercise():
     sets = input('Enter the target number of sets for your exercise: ')
     print('You will need to assign this exercise to a workout routine.')
     new_regex = re.compile(r'(?i)^n$')
-    exist_regex = re.compile(r'(?i)^$')
-    decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\nType N for New | Type E for Exisiting ')
+    exist_regex = re.compile(r'(?i)^e$')
+    decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\nType N for New | Type E for Exisiting: ')
     if new_regex.match(decision):
-        create_workout_routine()
+        wr_title = input('Enter new workout routine title: ')
+        wr_equipment = input('Enter new workout routine equipment: ')
+        try:
+            new_wr = WorkoutRoutine.create(wr_title, wr_equipment)
+            wr = WorkoutRoutine.get_all()
+            w_routine_id = wr[-1].id
+            new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+            print("")
+                print(f'Success! {exercise.title} has been created.')
+                print("")
+        except Exception as exc:
+            print("")
+            print("Error creating exercise: ", exc)
+            print("")
     elif exist_regex.match(decision):
         wo = WorkoutRoutine.get_all()
         print(f'Current Workout Routines in database:')
         for wos in wo:
             print(f'ID: {wos.id},Title: {wos.title}')
         w_routine_id_regex = re.compile(r'^\d{1,3}$')
-            
         w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
         if w_routine_id_regex.match(w_routine_id):
             try:
