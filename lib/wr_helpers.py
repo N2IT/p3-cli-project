@@ -12,13 +12,15 @@ def clear_screen():
     else:
         os.system('clear')
 
+
 def wr_list_exercises(id):
     exercises = Exercise.get_all()
     for exercise in exercises:
         if exercise.w_routine_id == id:
             print(f'    {exercise}')
     return
-    
+
+
 def list_workout_routines_w_menu():
     workout_routines = WorkoutRoutine.get_all()
     # clear_screen()
@@ -38,7 +40,7 @@ def list_workout_routines_w_menu():
         if ret_choice_regex.match(choice):
             return
         elif add_choice_regex.match(choice):
-            create_workout_routine()
+            list_exercises_w_menu()
             continue
         elif choice in wo_id:
             choice = int(choice)
@@ -95,6 +97,8 @@ def wr_choice_options(id):
             continue
         elif wr_add_exercise_regex.match(choice):
             wr_add_exercise(id)
+            continue
+            list_exercises_w_menu()
             continue
         elif wr_cut_exercise_regex.match(choice):
             selection_regex = re.compile(r'^\d{1,3}$')
@@ -158,6 +162,7 @@ def wr_choice_options(id):
             print("")
             print("**************************")
             print("")
+    return
 
 
 def wr_choice_options_menu():
@@ -166,7 +171,7 @@ def wr_choice_options_menu():
     print(" >>  Type E to edit this workout routine")
     print(" >>  Type A to add a new exercise to workout routine")
     print(" >>  Type C to cut an exercise from workout routine")
-    print(" >>  Type D to Delete this workout routine")
+    print(" >>  Type D to delete this workout routine")
     print("     OR        ")
     print(" >>  Type R to return to the previous menu")
     # print(" >>  Type M to go back to main menu")
@@ -177,16 +182,43 @@ def wr_choice_options_menu():
     
 def edit_work_routine(id):
     if workout_routine := WorkoutRoutine.find_by_id(id):
-        try:
-            title = input("Enter the workout routine's new title: ")
-            workout_routine.title = title
-            equipment = input("Enter the workout routine's equipment: ")
-            workout_routine.equipment = equipment
-            workout_routine.update()
-            print("")
-            print(f'\u001b[32;1mSuccess! {workout_routine.title} has been updated!\u001b[0m')
-        except Exception as exc:
-            print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
+        t_regex = re.compile(r'(?i)^t$')
+        e_regex = re.compile(r'(?i)^e$')
+        b_regex = re.compile(r'(?i)^b$')
+        decision = input("Type T to update title:\nType E to update equipment:\nType B to update both:\n  >> ")
+        if t_regex.match(decision):
+            try:
+                title = input("Enter the workout routine's new title: ")
+                workout_routine.title = title
+                workout_routine.equipment = workout_routine.equipment
+                workout_routine.update()
+                print("")
+                print(f'\u001b[32;1mSuccess! {workout_routine.title} has been updated!\u001b[0m')
+            except Exception as exc:
+                print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
+        elif e_regex.match(decision):
+            try:
+                workout_routine.title = workout_routine.title
+                equipment = input("Enter the workout routine's new equipment: ")
+                workout_routine.equipment = equipment
+                workout_routine.update()
+                print("")
+                print(f'\u001b[32;1mSuccess! {workout_routine.title} has been updated!\u001b[0m')
+            except Exception as exc:
+                print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
+        elif b_regex.match(decision):
+            try:
+                title = input("Enter the workout routine's new title: ")
+                workout_routine.title = title
+                equipment = input("Enter the workout routine's new equipment: ")
+                workout_routine.equipment = equipment
+                workout_routine.update()
+                print("")
+                print(f'\u001b[32;1mSuccess! {workout_routine.title} has been updated!\u001b[0m')
+            except Exception as exc:
+                print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
+        else:
+            print(f'\u001b[41m{decision} is invalid. Please try again.\u001b[0m')
     else:
         print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
     wo_r = WorkoutRoutine.find_by_id(id)
@@ -196,6 +228,7 @@ def edit_work_routine(id):
                 if exercises.w_routine_id == int(id):
                     print(f'    {exercises}')
     return
+
 
 def wr_add_exercise(id):
     title = input(f'Enter new exercise title: ')
@@ -265,7 +298,7 @@ def wr_delete_exercises(id):
         if exercise.w_routine_id == id:
             exercise.delete()
     
-    
+
 def create_workout_routine():
     title = input(f'Enter the name of the new workout routine: ')
     equipment = input(f'Enter the equipment of the new routine: ')
@@ -278,11 +311,11 @@ def create_workout_routine():
         print(wr_last)
         wr_choice_options(last_id)
         return
-      
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
     return
     
+
 def exit_program():
     y_regex = re.compile(r'(?i)^y$')
     n_regex = re.compile(r'(?i)^n$')
@@ -298,8 +331,6 @@ def exit_program():
         print("**************************")
         print("")
     return
-        
-        # exit_program()
 
 # def menu():
 #     choice = input("> ")

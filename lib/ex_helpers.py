@@ -42,6 +42,7 @@ def list_exercises_w_menu():
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
     return
 
+
 def ex_menu_options():
     print("**************************")
     print("")
@@ -53,6 +54,7 @@ def ex_menu_options():
     print(" >>  Type X to exit program")
     print("")
     print("**************************")
+
 
 def ex_choice_options(id):
     while True:
@@ -99,12 +101,13 @@ def ex_choice_options(id):
             print("")
     return
 
+
 def ex_choice_options_menu():
     print("**************************")
     print("")
     print(" >>  Type E to edit this exercise")
     print(" >>  Type D to Delete this exercise")
-    print("                     OR                      ")
+    print("     OR        ")
     print(" >>  Type R to return to the previous menu")
     print(" >>  Type X to exit program")
     print("")
@@ -289,7 +292,8 @@ def edit_exercise(id):
             print(f'\u001b[41mThat is not a valid option. Please try again.\u001b[0m')
     else:
         print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
-            
+
+
 def ex_delete_exercise(id):
     if exercise := Exercise.find_by_id(id):
         exercise.delete()
@@ -300,6 +304,7 @@ def ex_delete_exercise(id):
     exercises = Exercise.get_all()
     for exercises in exercises:
         print(f'ID: {exercises.id}, Title: {exercises.title}')
+
 
 def create_exercise():
     print("You have opted to create a new exercise.")
