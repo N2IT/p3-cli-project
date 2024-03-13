@@ -161,6 +161,7 @@ def create_exercise():
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
+    print("")
     print('You will need to assign this exercise to a workout routine.')
     new_regex = re.compile(r'(?i)^n$')
     exist_regex = re.compile(r'(?i)^e$')

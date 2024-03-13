@@ -23,7 +23,7 @@ def list_workout_routines_w_menu():
     workout_routines = WorkoutRoutine.get_all()
     # clear_screen()
     print("")
-    print("Here are all workout routines currently on record.")
+    print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
     print("")
     wo_id = []
     for workout_routine in workout_routines:
@@ -47,11 +47,11 @@ def list_workout_routines_w_menu():
             if wo_r:
                 # clear_screen()
                 print("")
-                print(f"Here are the workout routine {choice} details.")
+                print(f"\u001b[36;1mHere are the workout routine {choice} details.\u001b[0m")
                 print("")
                 print(wo_r)
             else: 
-                print(f'Workout Routine {choice} not found')
+                print(f'\u001b[41mWorkout Routine {choice} not found\u001b[0m')
             for exercises in exercise:
                 if exercises.w_routine_id == int(choice):
                     print(f'    {exercises}')
@@ -59,7 +59,7 @@ def list_workout_routines_w_menu():
         elif x_regex.match(choice):
             exit_program()
         else:
-            print(f'{choice} is not valid. Please choose again.')
+            print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
     return False
     
 
@@ -108,7 +108,7 @@ def wr_choice_options(id):
                     ex_ids.append(exercises.id)
                 if selection in ex_ids:
                     if exercise_confirm.w_routine_id == id:
-                        confirmation = input(f'Are you sure you want to delete exercise {selection}? Y/N ')
+                        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
                         if y_regex.match(confirmation):
                             wr_cut_exercise(selection, id)
                         elif n_regex.match(confirmation):
@@ -121,16 +121,16 @@ def wr_choice_options(id):
                                 if exercises.w_routine_id == id:
                                     print(f'    {exercises}')
                         else:
-                            print(f'{confirmation} is invalid. Please try again.')
+                            print(f'\u001b[41m{confirmation} is invalid. Please try again.\u001b[0m')
                     else:
-                        print(f'{selection} is not associated with this workout routine. Please try again.')
+                        print(f'\u001b[41m{selection} is not associated with this workout routine. Please try again.\u001b[0m')
                 else:
-                    print(f'{selection} is not a valid exercise option. Please try again.')
+                    print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
             else:
-                print('Please enter a numerical value that matches the exercise ID you wish to remove.')
+                print('\u001b[41mPlease enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
             continue
         elif wr_delete_regex.match(choice):
-            confirmation = input("Deleting this routine will delete all associated exercises. Do you wish to continue? Y/N ")
+            confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
             if y_regex.match(confirmation):
                 wr_delete_exercises(id)
                 delete_workout_routine(id)
@@ -140,7 +140,7 @@ def wr_choice_options(id):
                 print("")
                 continue
             else:
-                print(f'{confirmation} is not a valid option. Please try again.')
+                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
                 print("")
                 print("**************************")
                 print("")
@@ -154,7 +154,7 @@ def wr_choice_options(id):
         elif x_regex.match(choice):
             exit_program()
         else:
-            print(f'{choice} is not a valid option. Please try again.')
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
             print("")
             print("**************************")
             print("")
@@ -186,9 +186,9 @@ def edit_work_routine(id):
             print("")
             print(f'Success! {workout_routine.title} has been updated!')
         except Exception as exc:
-            print("Error updating workout routine: ", exc)
+            print("\u001b[41mError updating workout routine:\u001b[0m ", exc)
     else:
-        print(f'Workout Routine {id} not found.')
+        print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
     exercise = Exercise.get_all()
@@ -215,15 +215,15 @@ def wr_add_exercise(id):
                 print("")
             except Exception as exc:
                 print("")
-                print("Error creating exercise: ", exc)
+                print("\u001b[41mError creating exercise:\u001b[0m ", exc)
                 print("")
         else:
             print("")
-            print("Please enter numerical values for sets.")
+            print("\u001b[41mPlease enter numerical values for sets.\u001b[0m")
             print("")
     else:
         print("")
-        print("Please enter numerical values for reps.")
+        print("\u001b[41mPlease enter numerical values for reps.\u001b[0m")
         print("")
     
     wo_r = WorkoutRoutine.find_by_id(id)
@@ -280,20 +280,20 @@ def create_workout_routine():
         return
       
     except Exception as exc:
-        print("Error creating workout routine: ", exc)
+        print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
     return
     
 def exit_program():
     y_regex = re.compile(r'(?i)^y$')
     n_regex = re.compile(r'(?i)^n$')
-    confirmation = input("Are you sure you wish to exit? Y/N ")
+    confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
     if y_regex.match(confirmation):
         print("Goodbye!")
         exit()
     elif n_regex.match(confirmation):
         return
     else:
-        print(f'{confirmation} is not a valid option. Please try again.')
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
         print("")
         print("**************************")
         print("")

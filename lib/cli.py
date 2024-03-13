@@ -25,7 +25,7 @@ from ex_helpers import (
 
 def login():
     clear_screen()
-    username = input("Please enter your username: ")
+    username = input("Please enter your name: ")
     if username != "":
             password(username)
     else:
@@ -48,7 +48,7 @@ def password(username):
 def main(username):
     clear_screen()
     print("")
-    print(f"Welcome {username}!")
+    print(f"\u001b[36;1mWELCOME TO THE FITNESS CLI {username.upper()}!\u001b[0m")
     while True:
         menu()
         wr_option_regex = re.compile(r'(?i)^wR$')
@@ -72,13 +72,12 @@ def menu():
     print("")
     print("**************************")
     print("")
-    print("WELCOME TO THE FITNESS CLI!")
     print("✅ Create your own workout routines")
     print("✅ Create your own exercises")
     print("✅ Set your target number of reps and sets")
     print("✅ Join your exercises to your Workout Routines")
     print("")
-    print("See menu options below to get started.")
+    print("Choose from the options below to get started.")
     print("")
     print(" >> Type WR to view all WorkoutRoutines.")
     print(" >> Type E to view all Exercises.")
