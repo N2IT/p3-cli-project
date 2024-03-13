@@ -172,8 +172,8 @@ def create_exercise():
             w_routine_id = wr[-1].id
             new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
             print("")
-                print(f'Success! {exercise.title} has been created.')
-                print("")
+            print(f'Success! {exercise.title} has been created.')
+            print("")
         except Exception as exc:
             print("")
             print("Error creating exercise: ", exc)
