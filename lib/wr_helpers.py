@@ -237,7 +237,7 @@ def edit_work_routine(id):
                     print(exercise)
                     print("")
                     ###
-                    
+
                     t_regex = re.compile(r'(?i)^t$')
                     d_regex = re.compile(r'(?i)^d$')
                     r_regex = re.compile(r'(?i)^r$')
@@ -255,7 +255,7 @@ def edit_work_routine(id):
                             exercise.w_routine_id = exercise.w_routine_id
                             print("")
                             print(f'\u001b[32;1mSuccess! Title for exercise number {exercise.id} has been updated.\u001b[0m')
-                            print(exercise)
+                            print("")
                             exercise.update()
                         except Exception as exc:
                             print("\u001b[41mError updating exercise:\u001b[0m ", exc)
@@ -269,7 +269,7 @@ def edit_work_routine(id):
                             exercise.w_routine_id = exercise.w_routine_id
                             print("")
                             print(f'\u001b[32;1mSuccess! Description for exercise number {exercise.id} has been updated.\u001b[0m')
-                            print(exercise)
+                            print("")
                             exercise.update()
                         except Exception as exc:
                             print("\u001b[41mError updating exercise:\u001b[0m ", exc)
@@ -283,7 +283,7 @@ def edit_work_routine(id):
                             exercise.w_routine_id = exercise.w_routine_id
                             print("")
                             print(f'\u001b[32;1mSuccess! Reps for exercise number {exercise.id} has been updated.\u001b[0m')
-                            print(exercise)
+                            print("")
                             exercise.update()
                         except Exception as exc:
                             print("\u001b[41mError updating exercise:\u001b[0m ", exc)
@@ -297,7 +297,7 @@ def edit_work_routine(id):
                             exercise.w_routine_id = exercise.w_routine_id
                             print("")
                             print(f'\u001b[32;1mSuccess! Sets for exercise number {exercise.id} has been updated.\u001b[0m')
-                            print(exercise)
+                            print("")
                             exercise.update()
                         except Exception as exc:
                             print("\u001b[41mError updating exercise:\u001b[0m ", exc)
@@ -322,7 +322,6 @@ def edit_work_routine(id):
                                     wr = WorkoutRoutine.get_all()
                                     w_routine_id = int(new_wr.id)
                                     exercise.w_routine_id = w_routine_id
-                                    print(exercise)
                                     # breakpoint()
                                     print("")
                                     print(f'\u001b[32;1mSuccess! {exercise.title.upper()} is now associated to your new workout routine, {new_wr.title.upper()}.\u001b[0m')
