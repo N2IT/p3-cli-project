@@ -7,6 +7,9 @@ def list_exercises_w_menu():
     exercise = Exercise.get_all()
     ex_id = []
     for exercises in exercise:
+        print("")
+    print("Here are all exercises currently on record.")
+    print("")
         print(f'ID: {exercises.id}, Title: {exercises.title}')
         ex_id.append(str(exercises.id))
     while True:

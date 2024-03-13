@@ -16,11 +16,11 @@ from wr_helpers import (
 )
 
 from ex_helpers import (
-    list_exercises_w_menu
-    # ex_choice_options,
-    # create_exercise,
-    # ex_choice_options,
-    # ex_choice_options_menu
+    list_exercises_w_menu,
+    ex_choice_options,
+    create_exercise,
+    ex_choice_options,
+    ex_choice_options_menu
 )
 
 def login():
@@ -53,17 +53,18 @@ def main(username):
         menu()
         wr_option_regex = re.compile(r'(?i)^wR$')
         exercise_regex = re.compile(r'(?i)^e$')
+        x_regex = re.compile(r'(?i)^x$')
         choice = input("> ").strip()
         if wr_option_regex.match(choice):
             if not list_workout_routines_w_menu():
                 continue
             # clear_screen()
             # list_workout_routines()
-            
         elif exercise_regex.match(choice):
             if not list_exercises_w_menu():
                 continue
-
+        elif x_regex.match(choice):
+            exit_program()
         else:
             print(f'{choice} is not valid. Please choose from the options below.')
 
@@ -81,6 +82,7 @@ def menu():
     print("")
     print(" >> Type WR to view all WorkoutRoutines.")
     print(" >> Type E to view all Exercises.")
+    print(" >> Type X to exit program.")
     print("")
     print("**************************")
         

@@ -264,8 +264,7 @@ def wr_delete_exercises(id):
     for exercise in exercises:
         if exercise.w_routine_id == id:
             print(exercise)
-            breakpoint()
-            exercise.delete_by_wr()
+            exercise.delete_by_wr(id)
     
     
 def create_workout_routine():

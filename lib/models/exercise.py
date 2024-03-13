@@ -137,7 +137,7 @@ class Exercise:
             DELETE FROM exercises
             WHERE w_routine_id = ?
         """
-        CURSOR.execute(sql, (self.id,))
+        CURSOR.execute(sql, (self.w_routine_id,))
         CONN.commit()
 
         del type(self).all[self.id]
