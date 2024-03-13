@@ -40,7 +40,7 @@ def list_exercises_w_menu():
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
-    return False
+    return
 
 def ex_menu_options():
     print("**************************")
@@ -97,7 +97,8 @@ def ex_choice_options(id):
             print("")
             print("**************************")
             print("")
-      
+    return
+
 def ex_choice_options_menu():
     print("**************************")
     print("")
@@ -118,7 +119,7 @@ def edit_exercise(id):
         s_regex = re.compile(r'(?i)^s$')
         w_regex = re.compile(r'(?i)^w$')
         a_regex = re.compile(r'(?i)^a$')
-        prim_decision = input("What would you like to update?\nType T for Title:\nType D for description:\nType R for reps:\nType S for sets:\nType W for workout routine id:\nType A for all:\n ")
+        prim_decision = input("What would you like to update?\nType T for title:\nType D for description:\nType R for reps:\nType S for sets:\nType W for workout routine id:\nType A for all:\n  >> ")
         if t_regex.match(prim_decision):
             try:
                 title = input("Enter the exercises new title: ")
@@ -152,7 +153,7 @@ def edit_exercise(id):
                 exercise.title = exercise.title
                 exercise.description = exercise.description
                 reps = input("Enter the updated number of reps: ")
-                exercise.reps = reps
+                exercise.reps = int(reps)
                 exercise.sets = exercise.sets
                 exercise.w_routine_id = exercise.w_routine_id
                 print("")
@@ -167,7 +168,7 @@ def edit_exercise(id):
                 exercise.description = exercise.description
                 exercise.reps = exercise.reps
                 sets = input("Enter the updated number of sets: ")
-                exercise.sets = sets
+                exercise.sets = int(sets)
                 exercise.w_routine_id = exercise.w_routine_id
                 print("")
                 print(f'\u001b[32;1mSuccess! Sets for exercise number {exercise.id} has been updated.\u001b[0m')
@@ -181,12 +182,52 @@ def edit_exercise(id):
                 exercise.description = exercise.description
                 exercise.reps = exercise.reps
                 exercise.sets = exercise.sets
-                w_routine_id = input("Enter the updated number of sets: ")
-                exercise.w_routine_id = w_routine_id
+                new_regex = re.compile(r'(?i)^n$')
+                exist_regex = re.compile(r'(?i)^e$')
                 print("")
-                print(f'\u001b[32;1mSuccess! Sets for exercise number {exercise.id} has been updated.\u001b[0m')
-                print(exercise)
-                exercise.update()
+                decision = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\n  >>  Type N for New | Type E for Exisiting: ')
+                print("")
+                if new_regex.match(decision):
+                    print("You have opted to create a new workout routine.")
+                    print("")
+                    wr_title = input('Enter new workout routine title: ')
+                    wr_equipment = input('Enter new workout routine equipment: ')
+                    try:
+                        new_wr = WorkoutRoutine.create(wr_title, wr_equipment)
+                        wr = WorkoutRoutine.get_all()
+                        w_routine_id = int(new_wr.id)
+                        exercise.w_routine_id = w_routine_id
+                        print(exercise)
+                        # breakpoint()
+                        print("")
+                        print(f'\u001b[32;1mSuccess! {exercise.title.upper()} is now associated to your new workout routine, {new_wr.title.upper()}.\u001b[0m')
+                        exercise.update()
+                        return
+                    except Exeption as exc:
+                        print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+                elif exist_regex.match(decision):
+                    wo = WorkoutRoutine.get_all()
+                    print(f'\u001b[36;1mCurrent Workout Routines in database:\u001b[0m')
+                    for wos in wo:
+                        print(f'ID: {wos.id},Title: {wos.title}')
+                    w_routine_id_regex = re.compile(r'^\d{1,3}$')
+                    w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
+                    exercise.w_routine_id = int(w_routine_id)
+                    # breakpoint()
+                    if w_routine_id_regex.match(w_routine_id):
+                        print("")
+                        print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} is now associated to workout routine number {exercise.w_routine_id}!\u001b[0m')
+                        print(exercise)
+                        exercise.update()
+                        return
+                    else:
+                        print("")
+                        print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
+                        print("")
+                else:
+                    print("")
+                    print(f"\u001b[41m{decision} is invalid. Please try again.\u001b[0m")
+                    print("")
             except Exception as exc:
                 print("\u001b[41mError updating exercise:\u001b[0m ", exc)
         elif a_regex.match(prim_decision):
@@ -199,8 +240,6 @@ def edit_exercise(id):
                 exercise.reps = int(reps)
                 sets = input("Enter the new number of sets for this exercise: ")
                 exercise.sets = int(sets)
-                print("")
-                print('You will need to assign this exercise to a workout routine.')
                 new_regex = re.compile(r'(?i)^n$')
                 exist_regex = re.compile(r'(?i)^e$')
                 print("")
@@ -215,30 +254,39 @@ def edit_exercise(id):
                         new_wr = WorkoutRoutine.create(wr_title, wr_equipment)
                         wr = WorkoutRoutine.get_all()
                         w_routine_id = wr[-1].id
+                        print("")
+                        print(f'\u001b[32;1mSuccess! {exercise.title} is now associated to your new workout routine, {new_wr.title}\u001b[0m')
+                        print(exercise)
+                        exercise.update()
                     except Exeption as exc:
                         print("\u001b[41mError updating exercise:\u001b[0m ", exc)
-                wo = WorkoutRoutine.get_all()
-                print(f'\u001b[36;1mCurrent Workout Routines in database:\u001b[0m')
-                for wos in wo:
-                    print(f'ID: {wos.id},Title: {wos.title}')
-                w_routine_id_regex = re.compile(r'^\d{1,3}$')
-                w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
-                exercise.w_routine_id = int(w_routine_id)
-                # breakpoint()
-                if w_routine_id_regex.match(w_routine_id):
-                    print("")
-                    print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} has been updated!\u001b[0m')
-                    print(exercise)
-                    exercise.update()
-                    return
+                elif exist_regex.match(decision):
+                    wo = WorkoutRoutine.get_all()
+                    print(f'\u001b[36;1mCurrent Workout Routines in database:\u001b[0m')
+                    for wos in wo:
+                        print(f'ID: {wos.id},Title: {wos.title}')
+                    w_routine_id_regex = re.compile(r'^\d{1,3}$')
+                    w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
+                    exercise.w_routine_id = int(w_routine_id)
+                    # breakpoint()
+                    if w_routine_id_regex.match(w_routine_id):
+                        print("")
+                        print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} is now associated to workout routine {w_routine_id}!\u001b[0m')
+                        print(exercise)
+                        exercise.update()
+                        return
+                    else:
+                        print("")
+                        print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
+                        print("")
                 else:
                     print("")
-                    print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
+                    print(f"\u001b[41m{decision} is invalid. Please try again.\u001b[0m")
                     print("")
             except Exception as exc:
                 print("\u001b[41mError updating exercise:\u001b[0m ", exc)
         else:
-            (f'\u001b[41mThat is not a valid option. Please try again.\u001b[0m')
+            print(f'\u001b[41mThat is not a valid option. Please try again.\u001b[0m')
     else:
         print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
             
@@ -277,7 +325,7 @@ def create_exercise():
             w_routine_id = wr[-1].id
             new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
             print("")
-            print(f'\u001b[32;1mSuccess! {new_exercise.title} has been added.\u001b[0m')
+            print(f'\u001b[32;1mSuccess! Your new exercise,{new_exercise.title}, is now associated with your new workout routine, {new_wr.title}.\u001b[0m')
             print("")
         except Exception as exc:
             print("")
@@ -294,7 +342,7 @@ def create_exercise():
             try:
                 exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
                 print("")
-                print(f'\u001b[32;1mSuccess! {exercise.title} has been created.\u001b[0m')
+                print(f'\u001b[32;1mSuccess! Your new exercise, {exercise.title.upper()} has been created and is associated to workout routine number {w_routine_id}.\u001b[0m')
                 print("")
             except Exception as exc:
                 print("")
