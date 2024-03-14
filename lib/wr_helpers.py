@@ -22,16 +22,15 @@ def wr_list_exercises(id):
 
 
 def list_workout_routines_w_menu():
-    workout_routines = WorkoutRoutine.get_all()
-    # clear_screen()
+    wo_id = []
     print("")
     print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
     print("")
-    wo_id = []
-    for workout_routine in workout_routines:
-        print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
-        wo_id.append(str(workout_routine.id))
     while True:
+        workout_routines = WorkoutRoutine.get_all()
+        for workout_routine in workout_routines:
+            print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
+            wo_id.append(str(workout_routine.id))
         wr_menu_options()
         choice = input("> ").strip()
         ret_choice_regex = re.compile(r'(?i)^r$')
@@ -79,7 +78,14 @@ def wr_menu_options():
 def wr_choice_options(id):
     exercise_id = []
     while True:
-        wr_choice_options_menu()
+        exercise = Exercise.get_all()
+        for exos in exercise:
+            if exos.w_routine_id == id:
+                exercise_id.append(exos.id)
+        if exercise_id:
+            wr_choice_options_menu_w_cut()
+        else:
+            wr_choice_options_menu()
         routine = WorkoutRoutine.find_by_id(id)
         choice = input("> ")
         wr_edit_regex = re.compile(r'(?i)^e$')
@@ -164,6 +170,20 @@ def wr_choice_options(id):
 
 
 def wr_choice_options_menu():
+    print("**************************")
+    print("")
+    print(" >>  Type E to edit this workout routine")
+    print(" >>  Type A to add a new exercise to workout routine")
+    # print(" >>  Type C to cut an exercise from workout routine")
+    print(" >>  Type D to delete this workout routine")
+    print("     OR        ")
+    print(" >>  Type R to return to the previous menu")
+    # print(" >>  Type M to go back to main menu")
+    print(" >>  Type X to exit program")
+    print("")
+    print("**************************")
+
+def wr_choice_options_menu_w_cut():
     print("**************************")
     print("")
     print(" >>  Type E to edit this workout routine")
@@ -500,7 +520,6 @@ def wr_add_exercise(id):
             print(f'    {exercises}')
     
     
-    
 def wr_cut_exercise(selection, id):
     exercise = Exercise.find_by_id(selection)
     print("")
@@ -537,7 +556,9 @@ def create_workout_routine():
     equipment = input(f'Enter the equipment of the new routine: ')
     try:
         workout_routine = WorkoutRoutine.create(title, equipment)
+        print("")
         print(f'\u001b[32;1mSuccess! {workout_routine.title} has been created!\u001b[0m')
+        print("")
         wo = WorkoutRoutine.get_all()
         last_id = wo[-1].id
         wr_last = WorkoutRoutine.find_by_id(last_id)
@@ -547,6 +568,7 @@ def create_workout_routine():
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
     return
+
 
 def exit_program():
     y_regex = re.compile(r'(?i)^y$')
