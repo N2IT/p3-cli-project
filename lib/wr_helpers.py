@@ -63,6 +63,7 @@ def list_workout_routines_w_menu():
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
     return
 
+
 def wr_menu_options():
     print("**************************")
     print("")
@@ -76,12 +77,12 @@ def wr_menu_options():
 
 
 def wr_choice_options(id):
-    exercise_id = []
     while True:
+        exercise_id = []
         exercise = Exercise.get_all()
-        for exos in exercise:
-            if exos.w_routine_id == id:
-                exercise_id.append(exos.id)
+        for exs in exercise:
+            if exs.w_routine_id == id:
+                exercise_id.append(exs.id)
         if exercise_id:
             wr_choice_options_menu_w_cut()
         else:
@@ -102,19 +103,17 @@ def wr_choice_options(id):
         elif wr_add_exercise_regex.match(choice):
             wr_add_exercise(id)
             continue
-            list_exercises_w_menu()
-            continue
         elif wr_cut_exercise_regex.match(choice):
             selection_regex = re.compile(r'^\d{1,3}$')
             selection = input(f'Which exercise do you wish to delete? ')
             if selection_regex.match(selection):
                 selection = int(selection)
                 exercise_confirm = Exercise.find_by_id(selection)
-                exercise = Exercise.get_all()
+                # exercise = Exercise.get_all()
                 ex_ids = []
                 for exercises in exercise:
                     ex_ids.append(exercises.id)
-                if selection in ex_ids:
+                if selection in exercise_id:
                     if exercise_confirm.w_routine_id == id:
                         confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
                         if y_regex.match(confirmation):
@@ -135,8 +134,7 @@ def wr_choice_options(id):
                 else:
                     print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
             else:
-                print('\u001b[41mPlease enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
-            continue
+                print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
         elif wr_delete_regex.match(choice):
             confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
             if y_regex.match(confirmation):
@@ -160,9 +158,6 @@ def wr_choice_options(id):
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
-            print("")
-            print("**************************")
-            print("")
     return
 
 
@@ -429,7 +424,7 @@ def edit_work_routine(id):
                         print(f'\u001b[41m{exercise_id} is invalid. Please try again.\u001b[0m')
                 ###
                 else:
-                    print("\u001b[41mError updating workout routine:\u001b[0m")
+                    print(f"\u001b[41m{exercise_id} is invalid. Please try again.\u001b[0m")
             else:
                 print(f'\u001b[41m{decision} is invalid. Please try again.\u001b[0m')
         else:
@@ -524,7 +519,7 @@ def wr_cut_exercise(selection, id):
     print("")
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
-    wr_list_exercises(id)
+    return
 
 
 def delete_workout_routine(id):
@@ -533,10 +528,6 @@ def delete_workout_routine(id):
         print("")
         print(f'\u001b[32;1mWorkout Routine {id} has been deleted.\u001b[0m')
         print("")
-
-    workout_routines = WorkoutRoutine.get_all()
-    for workout_routine in workout_routines:
-        print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')
     return
    
     

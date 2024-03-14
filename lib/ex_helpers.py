@@ -75,6 +75,7 @@ def ex_choice_options(id):
         x_regex = re.compile(r'(?i)^x$')
         y_regex = re.compile(r'(?i)^y$')
         n_regex = re.compile(r'(?i)^n$')
+        v_regex = re.compile(r'(?i)^v$')
         if ex_edit_regex.match(choice):
             edit_exercise(id)
             continue
@@ -103,6 +104,14 @@ def ex_choice_options(id):
         elif x_regex.match(choice):
             from wr_helpers import exit_program
             exit_program()
+        elif v_regex.match(choice):
+            wr = WorkoutRoutine.get_all()
+            for routines in wr:
+                if routines.id == id:
+                    print("")
+                    print("\u001b[36;1mHere are the workout routine details.\u001b[0m")
+                    print(routines)
+                    print("")
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
             print("")
@@ -116,6 +125,7 @@ def ex_choice_options_menu():
     print("")
     print(" >>  Type E to edit this exercise")
     print(" >>  Type D to Delete this exercise")
+    print(" >>  Type V to view work routine details")
     print("     OR        ")
     print(" >>  Type R to return to the previous menu")
     print(" >>  Type X to exit program")
