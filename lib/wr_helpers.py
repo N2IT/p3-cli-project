@@ -23,10 +23,10 @@ def wr_list_exercises(id):
 
 def list_workout_routines_w_menu():
     wo_id = []
-    print("")
-    print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
-    print("")
     while True:
+        print("")
+        print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
+        print("")
         workout_routines = WorkoutRoutine.get_all()
         for workout_routine in workout_routines:
             print(f'ID: {workout_routine.id}, Title: {workout_routine.title}')

@@ -375,35 +375,3 @@ def create_exercise():
     print(latest_exer)
     ex_choice_options(latest_exer.id)
     
-
-# def create_exercise():
-#     title = input('Enter a title for your exercise: ')
-#     description = input('Enter a description of your exercise: ')
-#     reps = input('Enter the target number of reps for your exercise: ')
-#     sets = input('Enter the target number of sets for your exercise: ')
-#     wo = WorkoutRoutine.get_all()
-#     print(f'Current Workout Routines in database:')
-#     for wos in wo:
-#         print(f'ID: {wos.id},Title: {wos.title}')
-#     w_routine_id_regex = re.compile(r'^\d{1,3}$')
-#     w_routine_id = input(f'Enter the workout routine id number you wish to apply this exercise: ')
-#     if w_routine_id_regex.match(w_routine_id):
-#         try:
-#             exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
-#             print("")
-#             print(f'Success! {exercise.title} has been created.')
-#             print("")
-#         except Exception as exc:
-#             print("")
-#             print("Error creating exercise: ", exc)
-#             print("")
-#     else: 
-#         print("")
-#         print("Please enter a valid workout routine id number.")
-#         print("")
-#     exos = Exercise.get_all()
-#     latest_exer = exos[-1]
-#     print(latest_exer)
-#     ex_choice_options(latest_exer.id)
-    # Exercise.get_all()
-    

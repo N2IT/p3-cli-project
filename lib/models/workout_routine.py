@@ -19,8 +19,8 @@ class WorkoutRoutine:
             raise Exception('Title must be of type string')
             print("")
         else:
-            if not 1 <= len(title) <= 25:
-                raise Exception("Title must be between 1 and 25 characters.")
+            if not 1 <= len(title) <= 40:
+                raise Exception("Title must be between 1 and 40 characters.")
                 print("")
             else:
                 self._title = title
@@ -35,8 +35,8 @@ class WorkoutRoutine:
             raise Exception('Equipment must be of type string')
             print("")
         else:
-            if not 1 <= len(equipment) <= 30:
-                raise Exception("Equipment must be between 1 and 30 characters ")
+            if not 1 <= len(equipment) <= 50:
+                raise Exception("Equipment must be between 1 and 50 characters ")
                 print("")
             else:
                 self._equipment = equipment
