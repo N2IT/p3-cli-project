@@ -53,9 +53,9 @@ def list_workout_routines_w_menu():
                 print(wo_r)
             else: 
                 print(f'\u001b[41mWorkout Routine {choice} not found\u001b[0m')
-            for exercises in exercise:
-                if exercises.w_routine_id == int(choice):
-                    print(f'    {exercises}')
+            # for exercises in exercise:
+            #     if exercises.w_routine_id == int(choice):
+            #         print(f'    {exercises}')
             wr_choice_options(choice)
         elif x_regex.match(choice):
             exit_program()
@@ -82,6 +82,7 @@ def wr_choice_options(id):
         exercise = Exercise.get_all()
         for exs in exercise:
             if exs.w_routine_id == id:
+                print(f'    {exs}')
                 exercise_id.append(exs.id)
         if exercise_id:
             wr_choice_options_menu_w_cut()
@@ -468,10 +469,6 @@ def edit_work_routine(id):
     print("")
     print(f'You are still editing workout routine number {wo_r.id}')
     print(wo_r)
-    exercise = Exercise.get_all()
-    for exercises in exercise:
-        if exercises.w_routine_id == int(id):
-            print(f'    {exercises}')
     wr_choice_options(id)
 
 def wr_add_exercise(id):
@@ -506,9 +503,9 @@ def wr_add_exercise(id):
     wo_r = WorkoutRoutine.find_by_id(id)
     print(wo_r)
     exercise = Exercise.get_all()
-    for exercises in exercise:
-        if exercises.w_routine_id == int(id):
-            print(f'    {exercises}')
+    # for exercises in exercise:
+    #     if exercises.w_routine_id == int(id):
+    #         print(f'    {exercises}')
     
     
 def wr_cut_exercise(selection, id):
