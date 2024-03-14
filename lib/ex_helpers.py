@@ -7,13 +7,14 @@ def refresh_exercises_list():
     global exercises
     exercises = Exercise.get_all()
 
+
 def list_exercises_w_menu():
     ex_id = []
-    print("")
-    print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
-    print("")
     # breakpoint()
     while True:
+        print("")
+        print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
+        print("")
         exercise = Exercise.get_all()
         for exercises in exercise:
             print(f'ID: {exercises.id}, Title: {exercises.title}')
