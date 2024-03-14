@@ -342,7 +342,6 @@ def edit_work_routine(id):
                                         print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} is now associated to workout routine number {exercise.w_routine_id}!\u001b[0m')
                                         print(exercise)
                                         exercise.update()
-                                        return
                                     else:
                                         print("")
                                         print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
@@ -397,7 +396,6 @@ def edit_work_routine(id):
                                         print(f'\u001b[32;1mSuccess! Exercise number {exercise.id} is now associated to workout routine {w_routine_id}!\u001b[0m')
                                         print(exercise)
                                         exercise.update()
-                                        return
                                     else:
                                         print("")
                                         print("\u001b[41mPlease enter a valid workout routine id number.\u001b[0m")
@@ -458,8 +456,8 @@ def edit_work_routine(id):
     print(wo_r)
     exercise = Exercise.get_all()
     for exercises in exercise:
-                if exercises.w_routine_id == int(id):
-                    print(f'    {exercises}')
+        if exercises.w_routine_id == int(id):
+            print(f'    {exercises}')
     wr_choice_options(id)
 
 def wr_add_exercise(id):
