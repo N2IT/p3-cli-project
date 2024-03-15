@@ -1,39 +1,20 @@
 # lib/cli.py
 import re
-from wr_helpers import (
+from models.workout_routine import WorkoutRoutine
+from models.exercise import Exercise 
+from helpers import (
     clear_screen,
-    list_workout_routines_w_menu,
-    exit_program
-)
-
-from ex_helpers import (
-    list_exercises_w_menu,
-    ex_choice_options,
-    create_exercise,
-    ex_choice_options,
-    ex_choice_options_menu
+    exit_program,
+    create_workout_routine
 )
 
 def login():
     clear_screen()
     username = input("Please enter your name: ")
     if username != "":
-            password(username)
+            main(username)
     else:
-        print(f'{username} is not recognized. Please try again.')
-        login()
-
-def password(username):
-    print("Please Enter your password.")
-    print("HINT: type anything")
-    password = input("Password:  ")
-
-    if password != "":
-        main(username)
-        clear_screen()
-    else:
-        (f'{password} is not recognized.')
-        password(username)
+        print(f'Please enter your username.')
 
 
 def main(username):
@@ -56,20 +37,18 @@ def main(username):
     print("")
     while True:
         menu()
-        wr_option_regex = re.compile(r'(?i)^wR$')
-        exercise_regex = re.compile(r'(?i)^e$')
-        x_regex = re.compile(r'(?i)^x$')
         choice = input("> ").strip()
-        if wr_option_regex.match(choice):
+        if re.compile(r'(?i)^wR$').match(choice):
             if not list_workout_routines_w_menu():
                 continue
-        elif exercise_regex.match(choice):
+        elif re.compile(r'(?i)^e$').match(choice):
             if not list_exercises_w_menu():
                 continue
-        elif x_regex.match(choice):
+        elif re.compile(r'(?i)^x$').match(choice):
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose from the options below.\u001b[0m')
+
 
 def menu():
     print("")
@@ -82,8 +61,147 @@ def menu():
     print(" >> Type X to exit program.")
     print("")
     print("**************************")
-        
 
+        
+def list_workout_routines_w_menu():
+    print("")
+    print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
+    print("")
+    while True:
+        WorkoutRoutine.get_all()
+        routines = WorkoutRoutine.all
+        # breakpoint()
+        for i, routine in enumerate(routines.values(), start=1):
+            print(f'{i}.', routine.title)
+        wr_menu_options()
+        choice = input("> ").strip()
+        if re.compile(r'(?i)^r$').match(choice):
+            return
+        elif re.compile(r'(?i)^a$').match(choice):
+            create_workout_routine()
+            continue
+        # elif choice == i:
+        #     choice = int(choice)
+        #     wo_r = WorkoutRoutine.find_by_id(choice)
+        #     exercise = Exercise.get_all()
+        #     if wo_r:
+        #         # clear_screen()
+        #         print("")
+        #         print(f"\u001b[36;1mHere are the workout routine {choice} details.\u001b[0m")
+        #         print("")
+        #         print(wo_r)
+        #     else: 
+        #         print(f'\u001b[41mWorkout Routine {choice} not found\u001b[0m')
+        #     wr_choice_options(choice)
+        elif re.compile(r'(?i)^x$').match(choice):
+            exit_program()
+        else:
+            print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
+    return
+
+
+def wr_menu_options():
+        print("**************************")
+        print("")
+        print(" >>  Enter the workout routine number to view its details")
+        print("     OR        ")
+        print(" >>  Type A to add a new Workout Routine")
+        print(" >>  Type R to return to the previous menu")
+        print(" >>  Type X to exit program")
+        print("")
+        print("**************************")
+
+
+def wr_choice_options(id):
+    while True:
+        Exercise.get_all()
+        for exs in exercise:
+            if exs.w_routine_id == id:
+                print(f'    {exs}')
+                exercise_id.append(exs.id)
+        if exercise_id:
+            wr_choice_options_menu_w_cut()
+        else:
+            wr_choice_options_menu()
+        routine = WorkoutRoutine.find_by_id(id)
+        choice = input("> ")
+        if re.compile(r'(?i)^e$').match(choice):
+            edit_work_routine(id)
+            return
+        elif re.compile(r'(?i)^a$').match(choice):
+            wr_add_exercise(id)
+            continue
+        elif re.compile(r'(?i)^c$').match(choice):
+            selection_regex = re.compile(r'^\d{1,3}$')
+            selection = input(f'Which exercise do you wish to delete? ')
+            if selection_regex.match(selection):
+                selection = int(selection)
+                exercise_confirm = Exercise.find_by_id(selection)
+                # exercise = Exercise.get_all()
+                ex_ids = []
+                for exercises in exercise:
+                    ex_ids.append(exercises.id)
+                if selection in exercise_id:
+                    if exercise_confirm.w_routine_id == id:
+                        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+                        if y_regex.match(confirmation):
+                            wr_cut_exercise(selection, id)
+                        elif n_regex.match(confirmation):
+                            print("")
+                            print("**************************")
+                            print(f'You have opted not to delete {selection}.')
+                            print("**************************")
+                            print(routine)
+                            for exercises in exercise:
+                                if exercises.w_routine_id == id:
+                                    print(f'    {exercises}')
+                        else:
+                            print(f'\u001b[41m{confirmation} is invalid. Please try again.\u001b[0m')
+                    else:
+                        print(f'\u001b[41m{selection} is not associated with this workout routine. Please try again.\u001b[0m')
+                else:
+                    print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
+            else:
+                print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
+        elif re.compile(r'(?i)^d$').match(choice):
+            confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
+            if re.compile(r'(?i)^y$').match(confirmation):
+                wr_delete_exercises(id)
+                delete_workout_routine(id)
+                return
+            elif re.compile(r'(?i)^n$').match(confirmation):
+                print(f"You have opted not to delete routine {id}.")
+                print("")
+                continue
+            else:
+                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+                print("")
+                print("**************************")
+                print("")
+                wr_choice_options(id)
+            return
+        elif re.compile(r'(?i)^r$').match(choice):
+            return
+        elif re.compile(r'(?i)^x$').match(choice):
+            exit_program()
+        else:
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    return
+
+
+def wr_choice_options_menu_w_cut():
+    print("**************************")
+    print("")
+    print(" >>  Type E to edit this workout routine")
+    print(" >>  Type A to add a new exercise to workout routine")
+    print(" >>  Type C to cut an exercise from workout routine")
+    print(" >>  Type D to delete this workout routine")
+    print("     OR        ")
+    print(" >>  Type R to return to the previous menu")
+    # print(" >>  Type M to go back to main menu")
+    print(" >>  Type X to exit program")
+    print("")
+    print("**************************")
 
 
 if __name__ == "__main__":

@@ -13,6 +13,14 @@ class Exercise:
         self.sets = sets
         self.w_routine_id = w_routine_id
 
+
+    def __repr__(self):
+        return (
+            f"<Exercise {self.id}: Title: {self.title}, Description: {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}," + 
+            f" Workout Routine ID: {self.w_routine_id}>"
+        )
+
+
     @property
     def title(self):
         return self._title
@@ -77,12 +85,6 @@ class Exercise:
         #     raise ValueError(
         #         "w_routine_id must reference a workout routine in the database"
         #     )
-
-    # def __repr__(self):
-    #     return (
-    #         f"<Exercise {self.id}: Title: {self.title}, Description: {self.description}, Target Reps: {self.reps}, Target Sets: {self.sets}," + 
-    #         f" Workout Routine ID: {self.w_routine_id}>"
-    #     )
 
     @classmethod
     def create_table(cls):
