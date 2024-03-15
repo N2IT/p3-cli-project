@@ -41,6 +41,7 @@ def create_workout_routine():
 
 
 def edit_work_routine(routine):
+    from cli import wr_choice_options
     print("")
     print("\u001b[36;1mChoose from the options below.\u001b[0m")
     print("")
@@ -63,17 +64,84 @@ def edit_work_routine(routine):
         if routine.exercises():
             for i, exercise in enumerate(routine.exercises(), start=1):
                 print(f'     {i}.', exercise.title)
+            # breakpoint()
             choice = input("Please choose which exercise you wish to edit: ")
-            if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises) >= int(choice):
-                breakpoint()
-                print(f'You have selected to edit ')
+            if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises()) >= int(choice):
+                choice = int(choice)
+                print("")
+                print(f'You have selected to edit the exercise titled: {routine.exercises()[(choice - 1)].title}. ')
+                print("")
+                edit_exercise(routine.exercises()[(choice - 1)])
                 return
         else:
             print("There are currently 0 exercises associated to this routine.")
-
-
     else:
         print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
     routine.update()
     print("")
     print(f'You are still editing routine {routine.title}')
+    wr_choice_options(routine)
+
+
+def edit_exercise(exercise):
+    decision = input("What would you like to update?\nType T for title:\nType D for description:\nType R for reps:\nType S for sets:\nType W for workout routine id:\nType A for all:\n\n**************************\n  >> ")
+    if re.compile(r'(?i)^t$').match(decision):
+        title = input("Enter a new title: ")
+        exercise.title = title
+        print("")
+        print(f'\u001b[32;1mSuccess! The exercise title, {exercise.title},  has been updated!\u001b[0m')
+        print("")
+        
+        
+    elif re.compile(r'(?i)^d$').match(decision):
+        description = input("Enter a new description: ")
+        exercise.description = description    
+        print("")    
+        print(f'\u001b[32;1mSuccess! {exercise.description} has been updated!\u001b[0m')
+        print("")
+        
+    elif re.compile(r'(?i)^r$').match(decision):
+        reps = input('Enter a new number of reps for this exercise: ')
+        exercise.reps = reps
+        print("")
+        print(f'\u001b[32;1mSuccess! {exercise.reps} has been updated!\u001b[0m')
+        print("")
+        
+    elif re.compile(r'(?i)^s$').match(decision):
+        sets = input('Enter a new number of sets for this exercise: ')
+        exercise.sets = sets
+        print("")
+        print(f'\u001b[32;1mSuccess! {exercise.sets} has been updated!\u001b[0m')
+        print("")
+        
+    elif re.compile(r'(?i)^w$').match(decision):
+        print("")
+        option = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\n  >>  Type N for New | Type E for Exisiting: ')
+        print("")
+        if re.compile(r'(?i)^n$').match(option):
+            print("")
+            create_workout_routine()
+        elif re.compile(r'(?i)^e$').match(option):
+            WorkoutRoutine.get_all()
+            routines = WorkoutRoutine.all
+            for i, routine in enumerate(routines.values(), start=1):
+                print(f'{i}.', routine.title)
+            print("")
+            w_routine_id = input(f'Please select which routine you would like to assign the exercise: ')
+            if re.compile(r'^\d{1,3}$').match(w_routine_id) and len(routines) >= int(w_routine_id):
+                exercise.w_routine_id = int(w_routine_id)
+                print("")
+                print(f'\u001b[32;1mSuccess! {exercise.title} has been reassigned to routine number {exercise.w_routine_id}.\u001b[0m')
+                print("")
+        else:
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    else:
+        print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    exercise.update()
+
+
+    
+    
+    
+            
+    
