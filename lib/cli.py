@@ -70,9 +70,9 @@ def list_workout_routines_w_menu():
     while True:
         WorkoutRoutine.get_all()
         routines = WorkoutRoutine.all
-        # breakpoint()
         for i, routine in enumerate(routines.values(), start=1):
             print(f'{i}.', routine.title)
+        print("")
         wr_menu_options()
         choice = input("> ").strip()
         if re.compile(r'(?i)^r$').match(choice):
@@ -80,23 +80,18 @@ def list_workout_routines_w_menu():
         elif re.compile(r'(?i)^a$').match(choice):
             create_workout_routine()
             continue
-        # elif choice == i:
-        #     choice = int(choice)
-        #     wo_r = WorkoutRoutine.find_by_id(choice)
-        #     exercise = Exercise.get_all()
-        #     if wo_r:
-        #         # clear_screen()
-        #         print("")
-        #         print(f"\u001b[36;1mHere are the workout routine {choice} details.\u001b[0m")
-        #         print("")
-        #         print(wo_r)
-        #     else: 
-        #         print(f'\u001b[41mWorkout Routine {choice} not found\u001b[0m')
-        #     wr_choice_options(choice)
+        elif re.compile(r'^\d{1,3}$').match(choice) and len(routines) >= int(choice):
+            print("")
+            print(f"\u001b[36;1mHere are the workout routine {choice} details.\u001b[0m")
+            print("")
+            routine = WorkoutRoutine.find_by_id(choice)
+            print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
+            wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
+            print("")
     return
 
 
@@ -112,21 +107,18 @@ def wr_menu_options():
         print("**************************")
 
 
-def wr_choice_options(id):
+def wr_choice_options(routine):
     while True:
-        Exercise.get_all()
-        for exs in exercise:
-            if exs.w_routine_id == id:
-                print(f'    {exs}')
-                exercise_id.append(exs.id)
-        if exercise_id:
-            wr_choice_options_menu_w_cut()
+        if routine.exercises():
+            print("Exercises:")
+            for i, exercise in enumerate(routine.exercises(), start=1):
+                print(f'     {i}.', exercise.title)
         else:
-            wr_choice_options_menu()
-        routine = WorkoutRoutine.find_by_id(id)
+            print("There are currently 0 exercises associated to this routine.")
+        wr_choice_options_menu()
         choice = input("> ")
         if re.compile(r'(?i)^e$').match(choice):
-            edit_work_routine(id)
+            edit_work_routine(routine)
             return
         elif re.compile(r'(?i)^a$').match(choice):
             wr_add_exercise(id)
@@ -189,7 +181,7 @@ def wr_choice_options(id):
     return
 
 
-def wr_choice_options_menu_w_cut():
+def wr_choice_options_menu():
     print("**************************")
     print("")
     print(" >>  Type E to edit this workout routine")

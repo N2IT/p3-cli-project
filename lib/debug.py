@@ -43,7 +43,7 @@ e3_wr5 = Exercise.create("Burpees, lunges, pushups", "burpees and jumping lunges
 e1_wr6 = Exercise.create("Walk or light bicycle", "Do either for 20 minutes at an easy pace", 0, 1, 6)
 e2_wr6 = Exercise.create("Dynamic Stretching","Stretch muscles for both upper and lower body for 10 to 15 mins", 1, 1, 6)
 
-e1_wr7 = Exercise.create("Hike, bike, or brisk walk", "60 - 100 minutes of activity", 1, 1, 7)
+# e1_wr7 = Exercise.create("Hike, bike, or brisk walk", "60 - 100 minutes of activity", 1, 1, 7)
 
 
 
