@@ -96,7 +96,7 @@ def wr_choice_options(id):
         wr_delete_regex = re.compile(r'(?i)^d$')
         prv_menu_regex = re.compile(r'(?i)^r$')
         x_regex = re.compile(r'(?i)^x$')
-        y_regex = re.compile(r'(?i)^y$')
+        # y_regex = re.compile(r'(?i)^y$')
         n_regex = re.compile(r'(?i)^n$')
         if wr_edit_regex.match(choice):
             edit_work_routine(id)
@@ -138,7 +138,7 @@ def wr_choice_options(id):
                 print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
         elif wr_delete_regex.match(choice):
             confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
-            if y_regex.match(confirmation):
+            if re.compile(r'(?i)^y$').match(confirmation):
                 wr_delete_exercises(id)
                 delete_workout_routine(id)
                 return
@@ -175,6 +175,7 @@ def wr_choice_options_menu():
     print(" >>  Type X to exit program")
     print("")
     print("**************************")
+
 
 def wr_choice_options_menu_w_cut():
     print("**************************")
@@ -470,6 +471,7 @@ def edit_work_routine(id):
     print(f'You are still editing workout routine number {wo_r.id}')
     print(wo_r)
     wr_choice_options(id)
+
 
 def wr_add_exercise(id):
     title = input(f'Enter new exercise title: ')

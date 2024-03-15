@@ -41,9 +41,9 @@ class WorkoutRoutine:
             else:
                 self._equipment = equipment
 
-    def __repr__(self):
+    # def __repr__(self):
 
-        return f'<Workout Routine {self.id}: Title: {self.title}, Equipment Needed: {self.equipment}'
+    #     return f'<Workout Routine {self.id}: Title: {self.title}, Equipment Needed: {self.equipment}'
 
     @classmethod
     def create_table(cls):
