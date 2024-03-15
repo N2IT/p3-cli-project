@@ -5,7 +5,8 @@ from models.exercise import Exercise
 from helpers import (
     clear_screen,
     exit_program,
-    create_workout_routine
+    create_workout_routine,
+    edit_work_routine
 )
 
 def login():
