@@ -116,7 +116,7 @@ def wr_choice_options(routine):
                 print(f'     {i}.', exercise.title)
         else:
             print("There are currently 0 exercises associated to this routine.")
-        wr_choice_options_menu()
+        wr_choice_options_menu(routine)
         choice = input("> ")
         if re.compile(r'(?i)^e$').match(choice):
             edit_work_routine(routine)
@@ -182,12 +182,13 @@ def wr_choice_options(routine):
     return
 
 
-def wr_choice_options_menu():
+def wr_choice_options_menu(routine):
     print("**************************")
     print("")
     print(" >>  Type E to edit this workout routine")
     print(" >>  Type A to add a new exercise to workout routine")
-    print(" >>  Type C to cut an exercise from workout routine")
+    if routine.exercises():
+        print(" >>  Type C to cut an exercise from workout routine")
     print(" >>  Type D to delete this workout routine")
     print("     OR        ")
     print(" >>  Type R to return to the previous menu")
