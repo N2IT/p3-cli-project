@@ -54,7 +54,7 @@ def edit_work_routine(routine):
     elif re.compile(r'(?i)^e$').match(decision):
         equipment = input("Enter the workout routine's new equipment: ")
         routine.equipment = equipment
-        print(f'\u001b[32;1mSuccess! {routine.euipment} has been updated!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! {routine.equipment} has been updated!\u001b[0m')
     elif re.compile(r'(?i)^b$').match(decision):
         title = input("Enter the workout routine's new title: ")
         routine.title = title
@@ -73,14 +73,16 @@ def edit_work_routine(routine):
                 print("")
                 edit_exercise(routine.exercises()[(choice - 1)])
                 return
+            else:
+                print(f'\u001b[41m{choice} not a valid option.\u001b[0m')
         else:
             print("There are currently 0 exercises associated to this routine.")
     else:
         print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
     routine.update()
     print("")
-    print(f'You are still editing routine {routine.title}')
-    wr_choice_options(routine)
+    # print(f'You are still editing routine {routine.title}')
+    # wr_choice_options(routine)
 
 
 def edit_exercise(exercise):
@@ -89,29 +91,29 @@ def edit_exercise(exercise):
         title = input("Enter a new title: ")
         exercise.title = title
         print("")
-        print(f'\u001b[32;1mSuccess! The exercise title, {exercise.title},  has been updated!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! The exercise title, {exercise.title}, from routine number {exercise.w_routine_id}  has been updated!\u001b[0m')
         print("")
-        
+        return
         
     elif re.compile(r'(?i)^d$').match(decision):
         description = input("Enter a new description: ")
         exercise.description = description    
         print("")    
-        print(f'\u001b[32;1mSuccess! {exercise.description} has been updated!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! The {exercise.description} has been updated on exercise {exercise.title}.\u001b[0m')
         print("")
         
     elif re.compile(r'(?i)^r$').match(decision):
         reps = input('Enter a new number of reps for this exercise: ')
-        exercise.reps = reps
+        exercise.reps = int(reps)
         print("")
-        print(f'\u001b[32;1mSuccess! {exercise.reps} has been updated!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! The number of reps have been updated to {exercise.reps} for {exercise.title}.\u001b[0m')
         print("")
         
     elif re.compile(r'(?i)^s$').match(decision):
         sets = input('Enter a new number of sets for this exercise: ')
-        exercise.sets = sets
+        exercise.sets = int(sets)
         print("")
-        print(f'\u001b[32;1mSuccess! {exercise.sets} has been updated!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! The number of sets has been updated to {exercise.sets} for exercise {exercise.title}.\u001b[0m')
         print("")
         
     elif re.compile(r'(?i)^w$').match(decision):
