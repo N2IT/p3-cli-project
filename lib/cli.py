@@ -71,6 +71,7 @@ def list_workout_routines_w_menu():
     while True:
         WorkoutRoutine.get_all()
         routines = WorkoutRoutine.all
+        breakpoint()
         for i, routine in enumerate(routines.values(), start=1):
             print(f'{i}.', routine.title)
         print("")
@@ -83,9 +84,9 @@ def list_workout_routines_w_menu():
             continue
         elif re.compile(r'^\d{1,3}$').match(choice) and len(routines) >= int(choice):
             print("")
-            print(f"\u001b[36;1mHere are the workout routine {choice} details.\u001b[0m")
+            print(f"\u001b[36;1mHere are workout routine {choice}'s details.\u001b[0m")
             print("")
-            routine = WorkoutRoutine.find_by_id(choice)
+            routine = WorkoutRoutine.find_by_id(routine.id)
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
@@ -193,6 +194,99 @@ def wr_choice_options_menu(routine):
     print("     OR        ")
     print(" >>  Type R to return to the previous menu")
     # print(" >>  Type M to go back to main menu")
+    print(" >>  Type X to exit program")
+    print("")
+    print("**************************")
+
+
+def list_exercises_w_menu():
+    print("")
+    print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
+    print("")
+    while True:
+        Exercise.get_all()
+        WorkoutRoutine.get_all()
+        exercises = Exercise.all
+        routines = WorkoutRoutine.all
+        for i, exercise in enumerate(exercises.values(), start = 1):
+            print(f'{i}.', exercise.title)
+        print("")
+        ex_list_menu()
+        choice = input("> ").strip()
+        if re.compile(r'^\d{1,3}$').match(choice) and len(exercises) >= int(choice):
+            print("")
+            print(f"\u001b[36;1mHere are the exercise {choice}'s details:\u001b[0m")
+            print("")
+            exercise = Exercise.find_by_id(exercise.id)
+            routine = WorkoutRoutine.find_by_id(routine.id)
+            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine Association: {routine.title}')
+            ex_choice_options(exercise, routine)
+        elif re.compile(r'(?i)^a$').match(choice):
+            create_exercise()
+            continue
+        elif re.compile(r'(?i)^r$').match(choice):
+            return
+        else:
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    return
+
+
+def ex_list_menu():
+    print("**************************")
+    print("")
+    print(" >>  Enter the exercise ID to view its details")
+    # print(" >>  Enter the exercise Name to view its details")
+    print("     OR        ")
+    print(" >>  Type A to add a new exercise")
+    print(" >>  Type R to return to the previous menu")
+    print(" >>  Type X to exit program")
+    print("")
+    print("**************************")
+
+
+def ex_choice_options(exercise, routine):
+    while True:
+        ex_choice_options_menu()
+        choice = input("> ")
+        if re.compile(r'(?i)^e$').match(choice):
+            edit_exercise(exercise)
+            continue
+        elif re.compile(r'(?i)^d$').match(choice):
+            delete_exercise(exercise.id)
+            continue
+        elif re.compile(r'(?i)^v$').match(choice):
+            print("")
+            print(f'Here are the details of the workout routine associated to this exercise:')
+            print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
+            print("")
+            decision = input(f'Would you like to edit {routine.title}? Y/N ')
+            if re.compile(r'(?i)^y$').match(decision):
+                edit_work_routine(routine)
+            elif re.compile(r'(?i)^y$').match(decision):
+                continue
+            else:
+                print("")
+                print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
+                print("")
+        elif re.compile(r'(?i)^r$').match(choice):
+            return
+        elif re.compile(r'(?i)^x$').match(choice):
+            exit_program()
+        else:
+            print("")
+            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+            print("")
+    return
+        
+
+def ex_choice_options_menu():
+    print("**************************")
+    print("")
+    print(" >>  Type E to edit this exercise")
+    print(" >>  Type D to Delete this exercise")
+    print(" >>  Type V to view work routine details")
+    print("     OR        ")
+    print(" >>  Type R to return to the previous menu")
     print(" >>  Type X to exit program")
     print("")
     print("**************************")
