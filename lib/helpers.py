@@ -67,11 +67,16 @@ def edit_work_routine(routine):
             # breakpoint()
             choice = input("Please choose which exercise you wish to edit: ")
             if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises()) >= int(choice):
+                from cli import countdown_timer
                 choice = int(choice)
                 print("")
-                print(f'You have selected to edit the exercise titled: {routine.exercises()[(choice - 1)].title}. ')
+                # breakpoint()
+                # Stopping here but I think i have it working
+                exercise = routine.exercises()[choice - 1]
+                print(f'You have selected to edit the exercise titled: {exercise.title}. ')
                 print("")
-                edit_exercise(routine.exercises()[(choice - 1)])
+                seconds = 3
+                countdown_timer_exercise(seconds, exercise)
                 return
             else:
                 print(f'\u001b[41m{choice} not a valid option.\u001b[0m')

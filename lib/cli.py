@@ -1,5 +1,6 @@
 # lib/cli.py
 import re
+import time
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 from helpers import (
@@ -8,6 +9,17 @@ from helpers import (
     create_workout_routine,
     edit_work_routine
 )
+
+
+def countdown_timer_routines(seconds, routine):
+    while seconds > 0:
+        if seconds == 1:
+            print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+        elif seconds == 2 or seconds == 3:
+            print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+        time.sleep(1)
+        seconds -= 1
+    
 
 def login():
     clear_screen()
@@ -71,7 +83,6 @@ def list_workout_routines_w_menu():
     while True:
         WorkoutRoutine.get_all()
         routines = WorkoutRoutine.all
-        breakpoint()
         for i, routine in enumerate(routines.values(), start=1):
             print(f'{i}.', routine.title)
         print("")
@@ -86,7 +97,7 @@ def list_workout_routines_w_menu():
             print("")
             print(f"\u001b[36;1mHere are workout routine {choice}'s details.\u001b[0m")
             print("")
-            routine = WorkoutRoutine.find_by_id(routine.id)
+            routine = WorkoutRoutine.find_by_id(choice)
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
@@ -111,6 +122,7 @@ def wr_menu_options():
 
 def wr_choice_options(routine):
     while True:
+        breakpoint()
         if routine.exercises():
             print("Exercises:")
             for i, exercise in enumerate(routine.exercises(), start=1):
@@ -217,9 +229,11 @@ def list_exercises_w_menu():
             print("")
             print(f"\u001b[36;1mHere are the exercise {choice}'s details:\u001b[0m")
             print("")
-            exercise = Exercise.find_by_id(exercise.id)
-            routine = WorkoutRoutine.find_by_id(routine.id)
-            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine Association: {routine.title}')
+            exercise = Exercise.find_by_id(choice)
+            # i DONT BELIEVE THIS CHOICE WILL WORK AFTER EXERCISES OR WRS ARE DELETED / CREATED
+            # SAME FOR OTHER MENU
+            routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
+            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine {routine.title}, Equipment {routine.equipment}')
             ex_choice_options(exercise, routine)
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise()
@@ -256,12 +270,13 @@ def ex_choice_options(exercise, routine):
             continue
         elif re.compile(r'(?i)^v$').match(choice):
             print("")
-            print(f'Here are the details of the workout routine associated to this exercise:')
+            print(f'\u001b[36;1mHere are the details of the workout routine associated to this exercise:\u001b[0m')
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             print("")
             decision = input(f'Would you like to edit {routine.title}? Y/N ')
             if re.compile(r'(?i)^y$').match(decision):
-                edit_work_routine(routine)
+                seconds = 3
+                countdown_timer(seconds, routine)
             elif re.compile(r'(?i)^y$').match(decision):
                 continue
             else:
