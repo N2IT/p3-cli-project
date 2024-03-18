@@ -211,11 +211,5 @@ def create_exercise(routine=None):
 
 def delete_exercise(e):
     breakpoint()
-    i = len(e)
-    if i > 1:
-        breakpoint()
-        for exercise in e:
-            Exercise.delete(exercise)
-    else:
-        breakpoint()
-        Exercise.delete(e)
+    for exercise in e:
+        Exercise.delete(exercise)

@@ -95,9 +95,8 @@ def list_workout_routines_w_menu():
     print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
     print("")
     while True:
-        WorkoutRoutine.get_all()
-        routines = WorkoutRoutine.all
-        for i, routine in enumerate(routines.values(), start=1):
+        routines = WorkoutRoutine.get_all()
+        for i, routine in enumerate(routines, start=1):
             print(f'{i}.', routine.title)
         print("")
         wr_menu_options()
@@ -107,9 +106,10 @@ def list_workout_routines_w_menu():
         elif re.compile(r'(?i)^a$').match(choice):
             create_workout_routine()
             continue
-        elif re.compile(r'^\d{1,3}$').match(choice) and len(routines) >= int(choice):
-            routine = WorkoutRoutine.find_by_id(choice)
+        elif re.compile(r'^[1-9]$').match(choice) and len(routines) >= int(choice):
             breakpoint()
+            choice = int(choice)
+            routine = routines[choice - 1]
             wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
             exit_program()
@@ -152,12 +152,14 @@ def wr_choice_options(routine):
             create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
-            if re.compile(r'^\d{1,3}$').match(selection):
+            if re.compile(r'^[1-9]$').match(selection):
                 confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
                 selection = int(selection) - 1
                 terminate_exercise = routine.exercises()[selection]
                 if re.compile(r'(?i)^y$').match(confirmation):
-                    delete_exercise(terminate_exercise)
+                    print("")
+                    print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                    delete_exercise([terminate_exercise])
                 elif re.compile(r'(?i)^n$').match(confirmation):
                     print("")
                     print("**************************")
@@ -214,23 +216,20 @@ def list_exercises_w_menu():
         print("")
         print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
         print("")
-        Exercise.get_all()
         WorkoutRoutine.get_all()
-        exercises = Exercise.all
+        exercises = Exercise.get_all()
         routines = WorkoutRoutine.all
-        for i, exercise in enumerate(exercises.values(), start = 1):
+        for i, exercise in enumerate(exercises, start = 1):
             print(f'{i}.', exercise.title)
         print("")
         ex_list_menu()
         choice = input("> ").strip()
-        if re.compile(r'^\d{1,3}$').match(choice) and len(exercises) >= int(choice):
+        if re.compile(r'^[1-9]$').match(choice) and len(exercises) >= int(choice):
             print("")
             print(f"\u001b[36;1mHere are exercise {choice}'s details:\u001b[0m")
             print("")
-            exercise = Exercise.find_by_id(choice)
-            breakpoint()
-            # i DONT BELIEVE THIS CHOICE WILL WORK AFTER EXERCISES OR WRS ARE DELETED / CREATED
-            # SAME FOR OTHER MENU
+            choice = int(choice)
+            exercise = exercises[choice - 1]
             routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
             print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine {routine.title}, Equipment {routine.equipment}')
             ex_choice_options(exercise, routine)
@@ -267,7 +266,7 @@ def ex_choice_options(exercise, routine):
             edit_exercise(exercise)
             continue
         elif re.compile(r'(?i)^d$').match(choice):
-            delete_exercise(exercise.id)
+            delete_exercise([exercise])
             continue
         elif re.compile(r'(?i)^v$').match(choice):
             print("")
