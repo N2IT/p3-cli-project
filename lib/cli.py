@@ -9,7 +9,8 @@ from helpers import (
     create_workout_routine,
     edit_work_routine,
     edit_exercise,
-    create_exercise
+    create_exercise,
+    delete_exercise
 )
 
 
@@ -131,7 +132,7 @@ def wr_menu_options():
 def wr_choice_options(routine):
     while True:
         print("")
-        print(f"\u001b[36;1mHere are workout routine {choice}'s details.\u001b[0m")
+        print(f"\u001b[36;1mHere are {routine.title}'s details.\u001b[0m")
         print("")
         print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
         if routine.exercises():
@@ -148,33 +149,19 @@ def wr_choice_options(routine):
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
-            selection_regex = re.compile(r'^\d{1,3}$')
+            breakpoint()
             selection = input(f'Which exercise do you wish to delete? ')
-            if selection_regex.match(selection):
-                selection = int(selection)
-                exercise_confirm = Exercise.find_by_id(selection)
-                # exercise = Exercise.get_all()
-                ex_ids = []
-                for exercises in exercise:
-                    ex_ids.append(exercises.id)
-                if selection in exercise_id:
-                    if exercise_confirm.w_routine_id == id:
-                        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
-                        if y_regex.match(confirmation):
-                            wr_cut_exercise(selection, id)
-                        elif n_regex.match(confirmation):
-                            print("")
-                            print("**************************")
-                            print(f'You have opted not to delete {selection}.')
-                            print("**************************")
-                            print(routine)
-                            for exercises in exercise:
-                                if exercises.w_routine_id == id:
-                                    print(f'    {exercises}')
-                        else:
-                            print(f'\u001b[41m{confirmation} is invalid. Please try again.\u001b[0m')
-                    else:
-                        print(f'\u001b[41m{selection} is not associated with this workout routine. Please try again.\u001b[0m')
+            if re.compile(r'^\d{1,3}$').match(selection):
+                confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+                selection = int(selection) - 1
+                terminate_exercise = routine.exercises()[selection]
+                if re.compile(r'(?i)^y$').match(confirmation):
+                    delete_exercise(terminate_exercise)
+                elif re.compile(r'(?i)^n$').match(confirmation):
+                    print("")
+                    print("**************************")
+                    print(f'You have opted not to delete {selection}.')
+                    print("**************************")
                 else:
                     print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
             else:

@@ -177,7 +177,6 @@ def edit_exercise(exercise):
 
 
 def create_exercise(routine=None):
-    breakpoint()
     print("")
     print("You have opted to create a new exercise.")
     title = input('Enter a title for your exercise: ')
@@ -206,5 +205,14 @@ def create_exercise(routine=None):
         print("")
     print("")
     
-            
+
+def delete_exercise(exercise):
+    breakpoint()
+    print(exercise)
+    print("")
+    print(f'\u001b[32;1mExercise {exercise.title} has been deleted.\u001b[0m')
+    Exercise.delete(exercise)
+
+
+
     
