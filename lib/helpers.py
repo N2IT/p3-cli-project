@@ -215,6 +215,7 @@ def edit_exercise(exercise):
     else:
         print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
     exercise.update()
+    breakpoint()
     return
     
 def delete_exercise(e):

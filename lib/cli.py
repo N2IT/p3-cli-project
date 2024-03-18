@@ -218,9 +218,7 @@ def list_exercises_w_menu():
         print("")
         print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
         print("")
-        WorkoutRoutine.get_all()
         exercises = Exercise.get_all()
-        routines = WorkoutRoutine.all
         for i, exercise in enumerate(exercises, start = 1):
             print(f'{i}.', exercise.title)
         print("")
@@ -232,9 +230,8 @@ def list_exercises_w_menu():
             print("")
             choice = int(choice)
             exercise = exercises[choice - 1]
-            routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
-            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine: {routine.title}, Equipment: {routine.equipment}')
-            ex_choice_options(exercise, routine)
+            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
+            ex_choice_options(exercise)
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise()
             continue
@@ -260,8 +257,10 @@ def ex_list_menu():
     print("**************************")
 
 
-def ex_choice_options(exercise, routine):
+def ex_choice_options(exercise):
     while True:
+        breakpoint()
+        routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
         ex_choice_options_menu()
         choice = input("> ")
         if re.compile(r'(?i)^e$').match(choice):
