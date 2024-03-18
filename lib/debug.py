@@ -2,6 +2,7 @@
 # lib/debug.py
 from models.exercise import Exercise
 from models.workout_routine import WorkoutRoutine
+from models.user import User
 from models.__init__ import CONN, CURSOR
 import ipdb
 
@@ -9,6 +10,8 @@ WorkoutRoutine.drop_table()
 WorkoutRoutine.create_table()
 Exercise.drop_table()
 Exercise.create_table()
+User.drop_table()
+User.create_table()
 
 wr1 = WorkoutRoutine.create('Lower Body Strength', 'Dumbbells / Circuit Machines')
 wr2 = WorkoutRoutine.create('Cardio and Core', 'Optional: Bicycle')

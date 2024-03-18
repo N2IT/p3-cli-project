@@ -1,6 +1,7 @@
 # lib/helpers.py
 import os
 import re
+from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 
@@ -13,12 +14,11 @@ def clear_screen():
         os.system('clear')
 
 def exit_program():
-    from cli import username
+    user = User.get_all()
     confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
     if re.compile(r'(?i)^y$').match(confirmation):
         print("")
-        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI {username.upper()}!\u001b[0m")
-        print("")
+        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI {user[0].name.upper()}!\u001b[0m")
         print("")
         print("**************************")
         print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
@@ -28,6 +28,8 @@ def exit_program():
         print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
         print("     \/                          \/        \/        \/        \/          \/        \/    ")
         print("")
+        print("")
+        User.delete(user[0])
         exit()
     elif re.compile(r'(?i)^n$').match(confirmation):
         return
@@ -119,14 +121,11 @@ def edit_work_routine(routine):
         if routine.exercises():
             for i, exercise in enumerate(routine.exercises(), start=1):
                 print(f'     {i}.', exercise.title)
-            # breakpoint()
             choice = input("Please choose which exercise you wish to edit: ")
             if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises()) >= int(choice):
                 from cli import countdown_timer_exercises
                 choice = int(choice)
                 print("")
-                # breakpoint()
-                # Stopping here but I think i have it working
                 exercise = routine.exercises()[choice - 1]
                 print(f'You have selected to edit the exercise titled: {exercise.title}. ')
                 print("")
@@ -220,6 +219,5 @@ def edit_exercise(exercise):
     edit_exercise(exercise)
     
 def delete_exercise(e):
-    breakpoint()
     for exercise in e:
         Exercise.delete(exercise)

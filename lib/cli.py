@@ -1,6 +1,7 @@
 # lib/cli.py
 import re
 import time
+from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 from helpers import (
@@ -37,17 +38,19 @@ def countdown_timer_exercises(seconds, exercise):
 
 def login():
     clear_screen()
-    username = input("Please enter your name: ")
-    if username != "":
-            main(username)
-    else:
-        print(f'Please enter your username.')
+    name = input("Please enter your name: ")
+    try:
+        user = User.create(name)
+        main(user)
+    except Exception as exc:
+        print("\u001b[41mError creating user:\u001b[0m ", exc)
+    
 
-
-def main(username):
+def main(user):
     clear_screen()
     print("")
-    print(f"\u001b[36;1mWELCOME TO THE FITNESS CLI {username.upper()}!\u001b[0m")
+    print(f"\u001b[36;1mWELCOME TO THE FITNESS CLI {user.name.upper()}!\u001b[0m")
+    print("")
     print("")
     print("**************************")
     print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
