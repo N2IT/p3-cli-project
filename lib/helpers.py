@@ -13,9 +13,21 @@ def clear_screen():
         os.system('clear')
 
 def exit_program():
+    from cli import username
     confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
     if re.compile(r'(?i)^y$').match(confirmation):
-        print("Goodbye!")
+        print("")
+        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI {username.upper()}!\u001b[0m")
+        print("")
+        print("")
+        print("**************************")
+        print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
+        print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
+        print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \  /    \  \/|    |   |   |")
+        print(" |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |")
+        print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
+        print("     \/                          \/        \/        \/        \/          \/        \/    ")
+        print("")
         exit()
     elif re.compile(r'(?i)^n$').match(confirmation):
         return
@@ -44,6 +56,35 @@ def create_workout_routine(exercise=None):
         print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
         edit_exercise(exercise)
     return
+
+def create_exercise(routine=None):
+    print("")
+    print("You have opted to create a new exercise.")
+    title = input('Enter a title for your exercise: ')
+    description = input('Enter a description of your exercise: ')
+    reps = input('Enter the target number of reps for your exercise: ')
+    sets = input('Enter the target number of sets for your exercise: ')
+    if routine:
+        w_routine_id = routine.id
+    else:
+        print("")
+        print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
+        WorkoutRoutine.get_all()
+        routines = WorkoutRoutine.all
+        for i, routine in enumerate(routines.values(), start=1):
+            print(f'{i}.', routine.title)
+        print("")
+        w_routine_id = input('Enter the routine you wish to apply this exercise: ')
+    try:
+        new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+        print("")
+        print(f'\u001b[32;1mSuccess! Your new exercise,{new_exercise.title} has been created!\u001b[0m')
+        print("")
+    except Exception as exc:
+        print("")
+        print("\u001b[41mError creating exercise:\u001b[0m ", exc)
+        print("")
+    print("")
 
 def edit_work_routine(routine):
     from cli import wr_choice_options
@@ -177,38 +218,7 @@ def edit_exercise(exercise):
         print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
     exercise.update()
     edit_exercise(exercise)
-
-
-def create_exercise(routine=None):
-    print("")
-    print("You have opted to create a new exercise.")
-    title = input('Enter a title for your exercise: ')
-    description = input('Enter a description of your exercise: ')
-    reps = input('Enter the target number of reps for your exercise: ')
-    sets = input('Enter the target number of sets for your exercise: ')
-    if routine:
-        w_routine_id = routine.id
-    else:
-        print("")
-        print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
-        WorkoutRoutine.get_all()
-        routines = WorkoutRoutine.all
-        for i, routine in enumerate(routines.values(), start=1):
-            print(f'{i}.', routine.title)
-        print("")
-        w_routine_id = input('Enter the routine you wish to apply this exercise: ')
-    try:
-        new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
-        print("")
-        print(f'\u001b[32;1mSuccess! Your new exercise,{new_exercise.title} has been created!\u001b[0m')
-        print("")
-    except Exception as exc:
-        print("")
-        print("\u001b[41mError creating exercise:\u001b[0m ", exc)
-        print("")
-    print("")
     
-
 def delete_exercise(e):
     breakpoint()
     for exercise in e:
