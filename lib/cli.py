@@ -8,6 +8,7 @@ from helpers import (
     exit_program,
     create_workout_routine,
     edit_work_routine,
+    delete_workout_routine,
     edit_exercise,
     create_exercise,
     delete_exercise
@@ -108,6 +109,7 @@ def list_workout_routines_w_menu():
             continue
         elif re.compile(r'^\d{1,3}$').match(choice) and len(routines) >= int(choice):
             routine = WorkoutRoutine.find_by_id(choice)
+            breakpoint()
             wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
             exit_program()
@@ -149,7 +151,6 @@ def wr_choice_options(routine):
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
-            breakpoint()
             selection = input(f'Which exercise do you wish to delete? ')
             if re.compile(r'^\d{1,3}$').match(selection):
                 confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
@@ -160,7 +161,7 @@ def wr_choice_options(routine):
                 elif re.compile(r'(?i)^n$').match(confirmation):
                     print("")
                     print("**************************")
-                    print(f'You have opted not to delete {selection}.')
+                    print(f'You have opted not to delete {terminate_exercise.title}.')
                     print("**************************")
                 else:
                     print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
@@ -169,8 +170,8 @@ def wr_choice_options(routine):
         elif re.compile(r'(?i)^d$').match(choice):
             confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
             if re.compile(r'(?i)^y$').match(confirmation):
-                wr_delete_exercises(id)
-                delete_workout_routine(id)
+                delete_exercise(routine.exercises())
+                delete_workout_routine(routine)
                 return
             elif re.compile(r'(?i)^n$').match(confirmation):
                 print(f"You have opted not to delete routine {id}.")
@@ -227,6 +228,7 @@ def list_exercises_w_menu():
             print(f"\u001b[36;1mHere are exercise {choice}'s details:\u001b[0m")
             print("")
             exercise = Exercise.find_by_id(choice)
+            breakpoint()
             # i DONT BELIEVE THIS CHOICE WILL WORK AFTER EXERCISES OR WRS ARE DELETED / CREATED
             # SAME FOR OTHER MENU
             routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)

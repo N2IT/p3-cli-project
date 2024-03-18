@@ -45,7 +45,6 @@ def create_workout_routine(exercise=None):
         edit_exercise(exercise)
     return
 
-
 def edit_work_routine(routine):
     from cli import wr_choice_options
     print("")
@@ -107,6 +106,10 @@ def edit_work_routine(routine):
     # print(f'You are still editing routine {routine.title}')
     # wr_choice_options(routine)
 
+def delete_workout_routine(routine):
+    print("")
+    print(f'\u001b[32;1mRoutine {routine.title} and all associated exercises have been deleted.\u001b[0m')
+    WorkoutRoutine.delete(routine)
 
 def edit_exercise(exercise):
     decision = input(f"What would you like to update?        \n  >>  Type T to update {exercise.title}'s title:\n  >>  Type D to update {exercise.title}'s description:\n  >>  Type P for reps:\n  >>  Type S for sets:\n  >>  Type W for workout routine id:\n  >>  Type R for previous menu:\n\n**************************\n  >> ")
@@ -206,13 +209,13 @@ def create_exercise(routine=None):
     print("")
     
 
-def delete_exercise(exercise):
+def delete_exercise(e):
     breakpoint()
-    print(exercise)
-    print("")
-    print(f'\u001b[32;1mExercise {exercise.title} has been deleted.\u001b[0m')
-    Exercise.delete(exercise)
-
-
-
-    
+    i = len(e)
+    if i > 1:
+        breakpoint()
+        for exercise in e:
+            Exercise.delete(exercise)
+    else:
+        breakpoint()
+        Exercise.delete(e)
