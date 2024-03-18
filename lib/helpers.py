@@ -25,7 +25,8 @@ def exit_program():
         print("**************************")
         print("")
 
-def create_workout_routine():
+def create_workout_routine(exercise=None):
+    breakpoint()
     title = input(f'Enter the name of the new workout routine: ')
     equipment = input(f'Enter the equipment of the new routine: ')
     try:
@@ -33,10 +34,17 @@ def create_workout_routine():
         print("")
         print(f'\u001b[32;1mSuccess! {routine.title} has been created!\u001b[0m')
         print("")
-        print(routine)
-        return
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
+    if exercise:
+        breakpoint()
+        print("")
+        exercise.w_routine_id = routine.id
+        exercise.update()
+        print("")
+        print(f'Exercise {exercise.title} is now associated to your new routine, {routine.title}.')
+        print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
+        edit_exercise(exercise)
     return
 
 
@@ -67,7 +75,7 @@ def edit_work_routine(routine):
             # breakpoint()
             choice = input("Please choose which exercise you wish to edit: ")
             if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises()) >= int(choice):
-                from cli import countdown_timer
+                from cli import countdown_timer_exercises
                 choice = int(choice)
                 print("")
                 # breakpoint()
@@ -76,7 +84,7 @@ def edit_work_routine(routine):
                 print(f'You have selected to edit the exercise titled: {exercise.title}. ')
                 print("")
                 seconds = 3
-                countdown_timer_exercise(seconds, exercise)
+                countdown_timer_exercises(seconds, exercise)
                 return
             else:
                 print(f'\u001b[41m{choice} not a valid option.\u001b[0m')
@@ -91,43 +99,51 @@ def edit_work_routine(routine):
 
 
 def edit_exercise(exercise):
-    decision = input("What would you like to update?\nType T for title:\nType D for description:\nType R for reps:\nType S for sets:\nType W for workout routine id:\nType A for all:\n\n**************************\n  >> ")
+    decision = input("What would you like to update?        \nType T for title:\nType D for description:\nType P for reps:\nType S for sets:\nType W for workout routine id:\nType R for previous menu:\n\n**************************\n  >> ")
+    print("")
     if re.compile(r'(?i)^t$').match(decision):
-        title = input("Enter a new title: ")
-        exercise.title = title
-        print("")
-        print(f'\u001b[32;1mSuccess! The exercise title, {exercise.title}, from routine number {exercise.w_routine_id}  has been updated!\u001b[0m')
-        print("")
-        return
-        
+        try:
+            title = input("Enter a new title: ")
+            exercise.title = title
+            print("")
+            print(f'\u001b[32;1mSuccess! The exercise title, {exercise.title}, from routine number {exercise.w_routine_id}  has been updated!\u001b[0m')
+            print("")
+        except Exception as exc:
+                print("\u001b[41mError updating exercise:\u001b[0m ", exc)
     elif re.compile(r'(?i)^d$').match(decision):
-        description = input("Enter a new description: ")
-        exercise.description = description    
-        print("")    
-        print(f'\u001b[32;1mSuccess! The {exercise.description} has been updated on exercise {exercise.title}.\u001b[0m')
-        print("")
-        
-    elif re.compile(r'(?i)^r$').match(decision):
-        reps = input('Enter a new number of reps for this exercise: ')
-        exercise.reps = int(reps)
-        print("")
-        print(f'\u001b[32;1mSuccess! The number of reps have been updated to {exercise.reps} for {exercise.title}.\u001b[0m')
-        print("")
-        
+        try:
+            description = input("Enter a new description: ")
+            exercise.description = description    
+            print("")    
+            print(f'\u001b[32;1mSuccess! The {exercise.description} has been updated on exercise {exercise.title}.\u001b[0m')
+            print("")
+        except Exception as exc:
+                print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+    elif re.compile(r'(?i)^p$').match(decision):
+        try:
+            reps = input('Enter a new number of reps for this exercise: ')
+            exercise.reps = int(reps)
+            print("")
+            print(f'\u001b[32;1mSuccess! The number of reps have been updated to {exercise.reps} for {exercise.title}.\u001b[0m')
+            print("")
+        except Exception as exc:
+                print("\u001b[41mError updating exercise:\u001b[0m ", exc)
     elif re.compile(r'(?i)^s$').match(decision):
-        sets = input('Enter a new number of sets for this exercise: ')
-        exercise.sets = int(sets)
-        print("")
-        print(f'\u001b[32;1mSuccess! The number of sets has been updated to {exercise.sets} for exercise {exercise.title}.\u001b[0m')
-        print("")
-        
+        try:
+            sets = input('Enter a new number of sets for this exercise: ')
+            exercise.sets = int(sets)
+            print("")
+            print(f'\u001b[32;1mSuccess! The number of sets has been updated to {exercise.sets} for exercise {exercise.title}.\u001b[0m')
+            print("")
+        except Exception as exc:
+                print("\u001b[41mError updating exercise:\u001b[0m ", exc)        
     elif re.compile(r'(?i)^w$').match(decision):
         print("")
         option = input(f'Would you like to create a new Workout Routine for this exercise or assign to an existing?\n  >>  Type N for New | Type E for Exisiting: ')
         print("")
         if re.compile(r'(?i)^n$').match(option):
             print("")
-            create_workout_routine()
+            create_workout_routine(exercise)
         elif re.compile(r'(?i)^e$').match(option):
             WorkoutRoutine.get_all()
             routines = WorkoutRoutine.all
@@ -142,9 +158,12 @@ def edit_exercise(exercise):
                 print("")
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    elif re.compile(r'(?i)^r$').match(decision):
+        return
     else:
-        print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+        print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
     exercise.update()
+    edit_exercise(exercise)
 
 
     

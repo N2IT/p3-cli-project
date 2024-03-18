@@ -7,7 +7,8 @@ from helpers import (
     clear_screen,
     exit_program,
     create_workout_routine,
-    edit_work_routine
+    edit_work_routine,
+    edit_exercise
 )
 
 
@@ -19,7 +20,17 @@ def countdown_timer_routines(seconds, routine):
             print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
         time.sleep(1)
         seconds -= 1
-    
+    edit_work_routine(routine)
+
+def countdown_timer_exercises(seconds, exercise):
+    while seconds > 0:
+        if seconds == 1:
+            print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+        elif seconds == 2 or seconds == 3:
+            print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+        time.sleep(1)
+        seconds -= 1
+    edit_exercise(exercise)
 
 def login():
     clear_screen()
@@ -122,7 +133,6 @@ def wr_menu_options():
 
 def wr_choice_options(routine):
     while True:
-        breakpoint()
         if routine.exercises():
             print("Exercises:")
             for i, exercise in enumerate(routine.exercises(), start=1):
@@ -227,7 +237,7 @@ def list_exercises_w_menu():
         choice = input("> ").strip()
         if re.compile(r'^\d{1,3}$').match(choice) and len(exercises) >= int(choice):
             print("")
-            print(f"\u001b[36;1mHere are the exercise {choice}'s details:\u001b[0m")
+            print(f"\u001b[36;1mHere are exercise {choice}'s details:\u001b[0m")
             print("")
             exercise = Exercise.find_by_id(choice)
             # i DONT BELIEVE THIS CHOICE WILL WORK AFTER EXERCISES OR WRS ARE DELETED / CREATED
@@ -240,6 +250,8 @@ def list_exercises_w_menu():
             continue
         elif re.compile(r'(?i)^r$').match(choice):
             return
+        elif re.compile(r'(?i)^x$').match(choice):
+            exit_program()
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
     return
@@ -270,13 +282,13 @@ def ex_choice_options(exercise, routine):
             continue
         elif re.compile(r'(?i)^v$').match(choice):
             print("")
-            print(f'\u001b[36;1mHere are the details of the workout routine associated to this exercise:\u001b[0m')
+            print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             print("")
             decision = input(f'Would you like to edit {routine.title}? Y/N ')
             if re.compile(r'(?i)^y$').match(decision):
                 seconds = 3
-                countdown_timer(seconds, routine)
+                countdown_timer_routines(seconds, routine)
             elif re.compile(r'(?i)^y$').match(decision):
                 continue
             else:
