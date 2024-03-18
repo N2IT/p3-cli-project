@@ -17,23 +17,23 @@ from helpers import (
 
 
 def countdown_timer_routines(seconds, routine):
-    while seconds > 0:
-        if seconds == 1:
-            print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-        elif seconds == 2 or seconds == 3:
-            print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-        time.sleep(1)
-        seconds -= 1
+    # while seconds > 0:
+    #     if seconds == 1:
+    #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+    #     elif seconds == 2 or seconds == 3:
+    #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+    #     time.sleep(1)
+    #     seconds -= 1
     edit_work_routine(routine)
 
 def countdown_timer_exercises(seconds, exercise):
-    while seconds > 0:
-        if seconds == 1:
-            print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-        elif seconds == 2 or seconds == 3:
-            print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-        time.sleep(1)
-        seconds -= 1
+    # while seconds > 0:
+    #     if seconds == 1:
+    #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+    #     elif seconds == 2 or seconds == 3:
+    #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+    #     time.sleep(1)
+    #     seconds -= 1
     edit_exercise(exercise)
 
 def login():
@@ -109,8 +109,7 @@ def list_workout_routines_w_menu():
         elif re.compile(r'(?i)^a$').match(choice):
             create_workout_routine()
             continue
-        elif re.compile(r'^[1-9]$').match(choice) and len(routines) >= int(choice):
-            breakpoint()
+        elif re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(routines) >= int(choice):
             choice = int(choice)
             routine = routines[choice - 1]
             wr_choice_options(routine)
@@ -155,7 +154,7 @@ def wr_choice_options(routine):
             create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
             selection = input(f'Which exercise do you wish to delete? ')
-            if re.compile(r'^[1-9]$').match(selection):
+            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(selection):
                 confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
                 selection = int(selection) - 1
                 terminate_exercise = routine.exercises()[selection]
@@ -227,14 +226,14 @@ def list_exercises_w_menu():
         print("")
         ex_list_menu()
         choice = input("> ").strip()
-        if re.compile(r'^[1-9]$').match(choice) and len(exercises) >= int(choice):
+        if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(exercises) >= int(choice):
             print("")
             print(f"\u001b[36;1mHere are exercise {choice}'s details:\u001b[0m")
             print("")
             choice = int(choice)
             exercise = exercises[choice - 1]
             routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
-            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine {routine.title}, Equipment {routine.equipment}')
+            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}\nRoutine: {routine.title}, Equipment: {routine.equipment}')
             ex_choice_options(exercise, routine)
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise()

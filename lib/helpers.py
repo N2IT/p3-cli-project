@@ -80,7 +80,7 @@ def create_exercise(routine=None):
     try:
         new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
         print("")
-        print(f'\u001b[32;1mSuccess! Your new exercise,{new_exercise.title} has been created!\u001b[0m')
+        print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
         print("")
     except Exception as exc:
         print("")
@@ -122,7 +122,7 @@ def edit_work_routine(routine):
             for i, exercise in enumerate(routine.exercises(), start=1):
                 print(f'     {i}.', exercise.title)
             choice = input("Please choose which exercise you wish to edit: ")
-            if re.compile(r'^\d{1,3}$').match(choice) and len(routine.exercises()) >= int(choice):
+            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(routine.exercises()) >= int(choice):
                 from cli import countdown_timer_exercises
                 choice = int(choice)
                 print("")
@@ -143,8 +143,7 @@ def edit_work_routine(routine):
     routine.update()
     print("")
     edit_work_routine(routine)
-    # print(f'You are still editing routine {routine.title}')
-    # wr_choice_options(routine)
+
 
 def delete_workout_routine(routine):
     print("")
@@ -204,7 +203,7 @@ def edit_exercise(exercise):
                 print(f'{i}.', routine.title)
             print("")
             w_routine_id = input(f'Please select which routine you would like to assign the exercise: ')
-            if re.compile(r'^\d{1,3}$').match(w_routine_id) and len(routines) >= int(w_routine_id):
+            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(w_routine_id) and len(routines) >= int(w_routine_id):
                 exercise.w_routine_id = int(w_routine_id)
                 print("")
                 print(f'\u001b[32;1mSuccess! {exercise.title} has been reassigned to routine number {exercise.w_routine_id}.\u001b[0m')
