@@ -8,7 +8,8 @@ from helpers import (
     exit_program,
     create_workout_routine,
     edit_work_routine,
-    edit_exercise
+    edit_exercise,
+    create_exercise
 )
 
 
@@ -105,11 +106,7 @@ def list_workout_routines_w_menu():
             create_workout_routine()
             continue
         elif re.compile(r'^\d{1,3}$').match(choice) and len(routines) >= int(choice):
-            print("")
-            print(f"\u001b[36;1mHere are workout routine {choice}'s details.\u001b[0m")
-            print("")
             routine = WorkoutRoutine.find_by_id(choice)
-            print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             wr_choice_options(routine)
         elif re.compile(r'(?i)^x$').match(choice):
             exit_program()
@@ -133,6 +130,10 @@ def wr_menu_options():
 
 def wr_choice_options(routine):
     while True:
+        print("")
+        print(f"\u001b[36;1mHere are workout routine {choice}'s details.\u001b[0m")
+        print("")
+        print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
         if routine.exercises():
             print("Exercises:")
             for i, exercise in enumerate(routine.exercises(), start=1):
@@ -145,8 +146,7 @@ def wr_choice_options(routine):
             edit_work_routine(routine)
             return
         elif re.compile(r'(?i)^a$').match(choice):
-            wr_add_exercise(id)
-            continue
+            create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
             selection_regex = re.compile(r'^\d{1,3}$')
             selection = input(f'Which exercise do you wish to delete? ')
@@ -222,10 +222,10 @@ def wr_choice_options_menu(routine):
 
 
 def list_exercises_w_menu():
-    print("")
-    print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
-    print("")
     while True:
+        print("")
+        print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
+        print("")
         Exercise.get_all()
         WorkoutRoutine.get_all()
         exercises = Exercise.all
