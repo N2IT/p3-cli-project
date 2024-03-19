@@ -16,25 +16,25 @@ from helpers import (
 )
 
 
-def countdown_timer_routines(seconds, routine):
-    # while seconds > 0:
-    #     if seconds == 1:
-    #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-    #     elif seconds == 2 or seconds == 3:
-    #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-    #     time.sleep(1)
-    #     seconds -= 1
-    edit_work_routine(routine)
+# def countdown_timer_routines(seconds, routine):
+#     # while seconds > 0:
+#     #     if seconds == 1:
+#     #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+#     #     elif seconds == 2 or seconds == 3:
+#     #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+#     #     time.sleep(1)
+#     #     seconds -= 1
+#     edit_work_routine(routine)
 
-def countdown_timer_exercises(seconds, exercise):
-    # while seconds > 0:
-    #     if seconds == 1:
-    #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-    #     elif seconds == 2 or seconds == 3:
-    #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-    #     time.sleep(1)
-    #     seconds -= 1
-    edit_exercise(exercise)
+# def countdown_timer_exercises(seconds, exercise):
+#     # while seconds > 0:
+#     #     if seconds == 1:
+#     #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
+#     #     elif seconds == 2 or seconds == 3:
+#     #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
+#     #     time.sleep(1)
+#     #     seconds -= 1
+#     edit_exercise(exercise)
 
 def login():
     clear_screen()
@@ -276,8 +276,7 @@ def ex_choice_options(exercise):
             print("")
             decision = input(f'Would you like to edit {routine.title}? Y/N ')
             if re.compile(r'(?i)^y$').match(decision):
-                seconds = 3
-                countdown_timer_routines(seconds, routine)
+                edit_routine(routine)
             elif re.compile(r'(?i)^n$').match(decision):
                 continue
             else:
