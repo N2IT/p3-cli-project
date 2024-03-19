@@ -70,22 +70,24 @@ def edit_work_routine(routine, exercise_path=None):
         try:
             routine.title = title if title else routine.title
             routine.equipment = equipment if equipment else routine.equipment
-            routine.update()
             print("")
-            print(f'\u001b[32;1m{routine.title} has been updated.\u001b[0m')
+            print(f'\u001b[32;1mThe following has been updated:\u001b[0m')
             print("")
-            print(f'Routine Title: {routine.title}')
-            print(f'Routine Equipment: {routine.equipment}')
-            print("")
+            if title:
+                print(f'Routine Title: {title}')
+            if equipment:
+                print(f'Routine Equipment: {equipment}')
             if exercise_path:
                 print("")
                 print(f'\u001b[36;1mYou are still editing routine {routine.title}:\u001b[0m')
+            routine.update()
         except Exception as exc:
                     print("\u001b[41mError updating routine:\u001b[0m ", exc)
         selected_routine(routine)
     else:
         print("")
         print("\u001b[32;1mNo updates were made.\u001b[0m")
+        selected_routine(routine)
 
 
 def delete_workout_routine(routine):
@@ -193,6 +195,7 @@ def edit_exercise(exercise, routine_path=None):
     else:
         print("")
         print("\u001b[32;1mNo updates were made.\u001b[0m")
+        selected_exercise(exercise)
     
 def delete_exercise(e):
     for exercise in e:
