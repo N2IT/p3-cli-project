@@ -254,8 +254,18 @@ def selected_exercise(exercise):
             edit_exercise(exercise)
             continue
         elif re.compile(r'(?i)^d$').match(choice):
-            delete_exercise([exercise])
-            continue
+            decision = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
+            if re.compile(r'(?i)^y$').match(decision):
+                print("")
+                print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
+                print("")
+                delete_exercise([exercise])
+            elif re.compile(r'(?i)^n$').match(decision):
+                continue
+            else:
+                print("")
+                print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
+            return
         elif re.compile(r'(?i)^v$').match(choice):
             routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
             print("")
