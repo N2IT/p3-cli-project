@@ -38,7 +38,7 @@ def exit_program():
         print("")
         print("**************************")
         print("")
-
+    
 def create_workout_routine(exercise=None):
     title = input(f'Enter the name of the new workout routine: ')
     equipment = input(f'Enter the equipment of the new routine: ')
@@ -58,6 +58,40 @@ def create_workout_routine(exercise=None):
         print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
         edit_exercise(exercise)
     return
+
+def edit_work_routine(routine, exercise_path=None):
+    from cli import selected_routine
+    print("")
+    print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
+    print("")
+    title = input("Enter a new title: ")
+    equipment = input("Enter new equipment: ")
+    if any([title, equipment]):
+        try:
+            routine.title = title if title else routine.title
+            routine.equipment = equipment if equipment else routine.equipment
+            routine.update()
+            print("")
+            print(f'\u001b[32;1m{routine.title} has been updated.\u001b[0m')
+            print("")
+            print(f'Routine Title: {routine.title}')
+            print(f'Routine Equipment: {routine.equipment}')
+            print("")
+            if exercise_path:
+                print("")
+                print(f'\u001b[36;1mYou are still editing routine {routine.title}:\u001b[0m')
+        except Exception as exc:
+                    print("\u001b[41mError updating routine:\u001b[0m ", exc)
+        selected_routine(routine)
+    else:
+        print("")
+        print("\u001b[32;1mNo updates were made.\u001b[0m")
+
+
+def delete_workout_routine(routine):
+    print("")
+    print(f'\u001b[32;1mRoutine {routine.title} and all associated exercises have been deleted.\u001b[0m')
+    WorkoutRoutine.delete(routine)
 
 def create_exercise(routine=None):
     print("")
@@ -88,108 +122,77 @@ def create_exercise(routine=None):
         print("")
     print("")
 
-def edit_work_routine(routine, exercise_path=None):
-    from cli import wr_choice_options
-    print("")
-    print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
-    print("")
-    try:
-        title = input("Enter a new title: ")
-        if title == "":
-            routine.title = routine.title
-        else:
-            routine.title = title
-        equipment = input("Enter new equipment: ")
-        if equipment == "":
-            routine.equipment = routine.equipment
-        else:
-            routine.equipment = equipment
-        routine.update()
-        print("")
-        print(f'\u001b[32;1m{routine.title} has been updated.\u001b[0m')
-        print("")
-        print(f'Routine Title: {routine.title}')
-        print(f'Routine Equipment: {routine.equipment}')
-        print("")
-        if exercise_path:
-            print("")
-            print(f'\u001b[36;1mYou are still editing routine {routine.title}:\u001b[0m')
-    except Exception as exc:
-                print("\u001b[41mError updating routine:\u001b[0m ", exc)
-    wr_choice_options(routine)
-
-def delete_workout_routine(routine):
-    print("")
-    print(f'\u001b[32;1mRoutine {routine.title} and all associated exercises have been deleted.\u001b[0m')
-    WorkoutRoutine.delete(routine)
-
 def edit_exercise(exercise, routine_path=None):
-    from cli import ex_choice_options
+    from cli import selected_exercise
+    print("")
     print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
-    try:
-        title = input("Enter a new title: ")
-        if title == "":
-            exercise.title = exercise.title
-        else:
-            exercise.title = title
-        description = input("Enter a new description: ")
-        if description == "":
-            exercise.description = exercise.description
-        else:
-            exercise.description = description
-        reps = input('Enter a new number of reps for this exercise: ')
-        if reps == "":
-            exercise.reps = exercise.reps
-        else:
-            if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(reps):
-                exercise.reps = int(reps)
+    print("")
+    title = input("Enter a new title: ")
+    description = input("Enter a new description: ")
+    reps = input('Enter a new number of reps for this exercise: ')
+    sets = input('Enter a new number of sets for this exercise: ')
+    print("")
+    routines = WorkoutRoutine.get_all()
+    for i, routine in enumerate(routines, start=1):
+        print(f'{i}.', routine.title)
+    print("")
+    w_routine_id = input('Assign your exercise to a new routine: ')
+    if any([title, description, reps, sets, w_routine_id]):
+        try:
+            exercise.title = title if title else exercise.title
+            exercise.description = description if description else exercise.description
+            if reps:
+                if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(reps):
+                    exercise.reps = int(reps)
+                else:
+                    print("")
+                    print('\u001b[41mReps value must be numerical.\u001b[0m')
+                    return
             else:
-                print("")
-                print('\u001b[41mReps value must be numerical.\u001b[0m')
-                return
-        sets = input('Enter a new number of sets for this exercise: ')
-        if sets == "":
-            exercise.sets = exercise.sets
-        else:
-            if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(sets):
-                exercise.sets = int(sets)
+                exercise.reps = exercise.reps
+            if sets:
+                if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(sets):
+                    exercise.sets = int(sets)
+                else:
+                    print("")
+                    print('\u001b[41mSets value must be numerical.\u001b[0m')
+                    return
             else:
-                print("")
-                print('\u001b[41mSets value must be numerical.\u001b[0m')
-                return
-        print("")
-        routines = WorkoutRoutine.get_all()
-        for i, routine in enumerate(routines, start=1):
-            print(f'{i}.', routine.title)
-        print("")
-        w_routine_id = input('Assign your exercise to a new routine: ')
-        if w_routine_id == "":
-            exercise.w_routine_id == exercise.w_routine_id
-        else:
-            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(w_routine_id) and len(routines) >= int(w_routine_id):
-                routines = WorkoutRoutine.get_all()
-                exercise.w_routine_id = routines[int(w_routine_id) - 1].id
+                exercise.sets = exercise.sets
+            if w_routine_id:
+                if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(w_routine_id) and len(routines) >= int(w_routine_id):
+                    routines = WorkoutRoutine.get_all()
+                    exercise.w_routine_id = routines[int(w_routine_id) - 1].id
+                else:
+                    print('\u001b[41mThe routine number you selected is invalid. Please try again.\u001b[0m')   
+                    return
             else:
-                print('\u001b[41mThe routine number you selected is invalid. Please try again.\u001b[0m')   
-                return
-        exercise.update()
-        print("")
-        print(f'\u001b[32;1mExercise {exercise.title} has been updated.\u001b[0m')
-        print("")
-        print(f'Exercise Title: {exercise.title}')
-        print(f'Exercise Description: {exercise.description}')
-        print(f'Exercise Reps: {exercise.reps}')
-        print(f'Exercise Sets: {exercise.sets}')
-        print("")
-        breakpoint()
-        if routine_path:
+                exercise.w_routine_id == exercise.w_routine_id
             print("")
-            print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
-            ex_choice_options(exercise)
-        else:
-            return
-    except Exception as exc:
-                print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+            print(f'\u001b[32;1mThe following has been updated:\u001b[0m')
+            print("")
+            if title:
+                print(f'Exercise Title: {title}')
+            if description:
+                print(f'Exercise Description: {description}')
+            if reps:
+                print(f'Exercise Reps: {reps}')
+            if sets:
+                print(f'Exercise Sets: {sets}')
+            if w_routine_id:
+                print(f'Exercise Workout Routine: {w_routine_id}')
+            print("")
+            exercise.update()
+            if routine_path:
+                print("")
+                selected_exercise(exercise)
+            else:
+                return
+        except Exception as exc:
+                    print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+    else:
+        print("")
+        print("\u001b[32;1mNo updates were made.\u001b[0m")
     
 def delete_exercise(e):
     for exercise in e:
