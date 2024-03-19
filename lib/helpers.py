@@ -88,60 +88,35 @@ def create_exercise(routine=None):
         print("")
     print("")
 
-def edit_work_routine(routine):
+def edit_work_routine(routine, exercise_path=None):
     from cli import wr_choice_options
     print("")
-    print("\u001b[36;1mChoose from the options below.\u001b[0m")
+    print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
     print("")
-    decision = input(f"  >>  Type T to update {routine.title}'s title:\n  >>  Type E to update {routine.title}'s equipment:\n  >>  Type B to update both:\n  >>  Type X to edit an exercise of {routine.title}:\n  >>  Type R to return to previous menu\n\n**************************\n  >> ")
-    if re.compile(r'(?i)^t$').match(decision):
-        try:
-            title = input("Enter the workout routine's new title: ")
-            routine.title = title
-            print("")
-            print(f'\u001b[32;1mSuccess! {routine.title} has been updated!\u001b[0m')
-        except Exception as exc:
-            print("\u001b[41mError editing workout routine:\u001b[0m ", exc)
-    elif re.compile(r'(?i)^e$').match(decision):
-        try:
-            equipment = input("Enter the workout routine's new equipment: ")
-            routine.equipment = equipment
-            print(f'\u001b[32;1mSuccess! {routine.equipment} has been updated!\u001b[0m')
-        except Exception as exc:
-            print("\u001b[41mError editing workout routine:\u001b[0m ", exc)
-    elif re.compile(r'(?i)^b$').match(decision):
-        try:
-            title = input("Enter the workout routine's new title: ")
-            routine.title = title
-            equipment = input("Enter the workout routine's new equipment: ")
-            routine.equipment = equipment
-        except Exception as exc:
-            print("\u001b[41mError editing workout routine:\u001b[0m ", exc)
-    elif re.compile(r'(?i)^x$').match(decision):
-        if routine.exercises():
-            for i, exercise in enumerate(routine.exercises(), start=1):
-                print(f'     {i}.', exercise.title)
-            choice = input("Please choose which exercise you wish to edit: ")
-            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(routine.exercises()) >= int(choice):
-                choice = int(choice)
-                print("")
-                exercise = routine.exercises()[choice - 1]
-                print(f'You have selected to edit the exercise titled: {exercise.title}. ')
-                print("")
-                edit_exercise(exercise, routine)
-                return
-            else:
-                print(f'\u001b[41m{choice} not a valid option.\u001b[0m')
+    try:
+        title = input("Enter a new title: ")
+        if title == "":
+            routine.title = routine.title
         else:
-            print("There are currently 0 exercises associated to this routine.")
-    elif re.compile(r'(?i)^r$').match(decision):
-        return
-    else:
-        print(f'\u001b[41mWorkout Routine {id} not found.\u001b[0m')
-    routine.update()
-    print("")
-    edit_work_routine(routine)
-
+            routine.title = title
+        equipment = input("Enter new equipment: ")
+        if equipment == "":
+            routine.equipment = routine.equipment
+        else:
+            routine.equipment = equipment
+        routine.update()
+        print("")
+        print(f'\u001b[32;1m{routine.title} has been updated.\u001b[0m')
+        print("")
+        print(f'Routine Title: {routine.title}')
+        print(f'Routine Equipment: {routine.equipment}')
+        print("")
+        if exercise_path:
+            print("")
+            print(f'\u001b[36;1mYou are still editing routine {routine.title}:\u001b[0m')
+    except Exception as exc:
+                print("\u001b[41mError updating routine:\u001b[0m ", exc)
+    wr_choice_options(routine)
 
 def delete_workout_routine(routine):
     print("")
@@ -149,9 +124,8 @@ def delete_workout_routine(routine):
     WorkoutRoutine.delete(routine)
 
 def edit_exercise(exercise, routine_path=None):
-    breakpoint()
     from cli import ex_choice_options
-    print('Leave input blank to keep exercise item as is.')
+    print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
     try:
         title = input("Enter a new title: ")
         if title == "":
@@ -173,7 +147,6 @@ def edit_exercise(exercise, routine_path=None):
                 print("")
                 print('\u001b[41mReps value must be numerical.\u001b[0m')
                 return
-            
         sets = input('Enter a new number of sets for this exercise: ')
         if sets == "":
             exercise.sets = exercise.sets
@@ -184,7 +157,6 @@ def edit_exercise(exercise, routine_path=None):
                 print("")
                 print('\u001b[41mSets value must be numerical.\u001b[0m')
                 return
-            
         print("")
         routines = WorkoutRoutine.get_all()
         for i, routine in enumerate(routines, start=1):
@@ -195,7 +167,6 @@ def edit_exercise(exercise, routine_path=None):
             exercise.w_routine_id == exercise.w_routine_id
         else:
             if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(w_routine_id) and len(routines) >= int(w_routine_id):
-                breakpoint()
                 routines = WorkoutRoutine.get_all()
                 exercise.w_routine_id = routines[int(w_routine_id) - 1].id
             else:
@@ -214,7 +185,6 @@ def edit_exercise(exercise, routine_path=None):
         if routine_path:
             print("")
             print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
-            print("")
             ex_choice_options(exercise)
         else:
             return

@@ -15,27 +15,6 @@ from helpers import (
     delete_exercise
 )
 
-
-# def countdown_timer_routines(seconds, routine):
-#     # while seconds > 0:
-#     #     if seconds == 1:
-#     #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-#     #     elif seconds == 2 or seconds == 3:
-#     #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-#     #     time.sleep(1)
-#     #     seconds -= 1
-#     edit_work_routine(routine)
-
-# def countdown_timer_exercises(seconds, exercise):
-#     # while seconds > 0:
-#     #     if seconds == 1:
-#     #         print(f'Passing you over to edit in \u001b[33m{seconds}\u001b[0m second', end='\r')
-#     #     elif seconds == 2 or seconds == 3:
-#     #         print(f'Passing you over to edit in \u001b[31m{seconds}\u001b[0m seconds', end='\r')
-#     #     time.sleep(1)
-#     #     seconds -= 1
-#     edit_exercise(exercise)
-
 def login():
     clear_screen()
     name = input("Please enter your name: ")
@@ -150,6 +129,23 @@ def wr_choice_options(routine):
         if re.compile(r'(?i)^e$').match(choice):
             edit_work_routine(routine)
             return
+        elif re.compile(r'(?i)^d$').match(choice):
+            confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
+            if re.compile(r'(?i)^y$').match(confirmation):
+                delete_exercise(routine.exercises())
+                delete_workout_routine(routine)
+                return
+            elif re.compile(r'(?i)^n$').match(confirmation):
+                print(f"You have opted not to delete routine {id}.")
+                print("")
+                continue
+            else:
+                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+                print("")
+                print("**************************")
+                print("")
+                wr_choice_options(id)
+            return
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise(routine)
         elif re.compile(r'(?i)^c$').match(choice):
@@ -171,23 +167,13 @@ def wr_choice_options(routine):
                     print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
             else:
                 print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
-        elif re.compile(r'(?i)^d$').match(choice):
-            confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
-            if re.compile(r'(?i)^y$').match(confirmation):
-                delete_exercise(routine.exercises())
-                delete_workout_routine(routine)
-                return
-            elif re.compile(r'(?i)^n$').match(confirmation):
-                print(f"You have opted not to delete routine {id}.")
-                print("")
-                continue
-            else:
-                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-                print("")
-                print("**************************")
-                print("")
-                wr_choice_options(id)
-            return
+        elif re.compile(r'(?i)^z$').match(choice):
+            breakpoint()
+            selection = input(f'Which exercise do you wish to edit? ')
+            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(selection):
+                selection = int(selection) - 1
+                exercise_to_edit = routine.exercises()[selection]
+                edit_exercise(exercise_to_edit, routine)
         elif re.compile(r'(?i)^r$').match(choice):
             return
         elif re.compile(r'(?i)^x$').match(choice):
@@ -201,10 +187,11 @@ def wr_choice_options_menu(routine):
     print("**************************")
     print("")
     print(" >>  Type E to edit this workout routine")
+    print(" >>  Type D to delete this workout routine")
     print(" >>  Type A to add a new exercise to workout routine")
     if routine.exercises():
-        print(" >>  Type C to cut an exercise from workout routine")
-    print(" >>  Type D to delete this workout routine")
+        print(" >>  Type C to cut an exercise from this routine")
+        print(" >>  Type Z to edit an exercise from this routine")
     print("     OR        ")
     print(" >>  Type R to return to the previous menu")
     # print(" >>  Type M to go back to main menu")
@@ -230,7 +217,6 @@ def list_exercises_w_menu():
             print("")
             choice = int(choice)
             exercise = exercises[choice - 1]
-            print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
             ex_choice_options(exercise)
         elif re.compile(r'(?i)^a$').match(choice):
             create_exercise()
@@ -259,6 +245,9 @@ def ex_list_menu():
 
 def ex_choice_options(exercise):
     while True:
+        print("")
+        print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
+        print("")
         routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
         ex_choice_options_menu()
         choice = input("> ")
@@ -276,7 +265,7 @@ def ex_choice_options(exercise):
             print("")
             decision = input(f'Would you like to edit {routine.title}? Y/N ')
             if re.compile(r'(?i)^y$').match(decision):
-                edit_routine(routine)
+                edit_work_routine(routine, exercise)
             elif re.compile(r'(?i)^n$').match(decision):
                 continue
             else:
