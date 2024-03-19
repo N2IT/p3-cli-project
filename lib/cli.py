@@ -259,7 +259,6 @@ def ex_list_menu():
 
 def ex_choice_options(exercise):
     while True:
-        breakpoint()
         routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
         ex_choice_options_menu()
         choice = input("> ")
@@ -270,6 +269,7 @@ def ex_choice_options(exercise):
             delete_exercise([exercise])
             continue
         elif re.compile(r'(?i)^v$').match(choice):
+            routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
             print("")
             print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
@@ -278,7 +278,7 @@ def ex_choice_options(exercise):
             if re.compile(r'(?i)^y$').match(decision):
                 seconds = 3
                 countdown_timer_routines(seconds, routine)
-            elif re.compile(r'(?i)^y$').match(decision):
+            elif re.compile(r'(?i)^n$').match(decision):
                 continue
             else:
                 print("")

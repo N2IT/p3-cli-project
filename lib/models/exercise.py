@@ -1,5 +1,7 @@
 from models.__init__ import CURSOR, CONN
 from models.workout_routine import WorkoutRoutine
+import re
+
 
 class Exercise:
 
