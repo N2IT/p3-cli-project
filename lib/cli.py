@@ -248,16 +248,16 @@ def exercises_list_with_menu():
         print("")
         exercises_list_menu()
         choice = input("> ").strip()
-        if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(exercises) >= int(choice):
+        if int(choice) in range(1, 100) and len(exercises) >= int(choice):
             choice = int(choice)
             exercise = exercises[choice - 1]
             selected_exercise(exercise)
-        elif re.compile(r'(?i)^a$').match(choice):
+        elif choice.lower() == 'a':
             create_exercise()
             continue
-        elif re.compile(r'(?i)^r$').match(choice):
+        elif choice.lower() == 'r':
             return
-        elif re.compile(r'(?i)^x$').match(choice):
+        elif choice.lower() == 'x':
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
@@ -285,10 +285,11 @@ def selected_exercise(exercise):
         routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
         selected_exercise_menu()
         choice = input("> ")
-        if re.compile(r'(?i)^e$').match(choice):
+        if choice.lower() == 'e':
             edit_exercise(exercise)
             continue
         elif re.compile(r'(?i)^d$').match(choice):
+            # PICK BACK UP HERE LATER - NEED TO INTRODUCE UPDATED STRING_CHECK METHOD WITH RANGE
             decision = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
             if re.compile(r'(?i)^y$').match(decision):
                 print("")
