@@ -1,17 +1,18 @@
 
 <p align="left">
-**************************
-___________._____________________  ___________ _________ _________ _________ .____    .___ 
-\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |
- |    __)  |   | |    |   /   |   \ |    ___) \_____  \ \_____  \  /    \  \/|    |   |   |
- |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |
- \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|
-     \/                          \/        \/        \/        \/          \/        \/    
-
-✅ Create your own workout routines
-✅ Create your own exercises
-✅ Set your target number of reps and sets
-✅ Assign exercises to your Workout Routines
+print("**************************")
+print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
+print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
+print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \  /    \  \/|    |   |   |")
+print(" |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |")
+print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
+print("     \/                          \/        \/        \/        \/          \/        \/    ")
+print("")
+print("✅ Create your own workout routines")
+print("✅ Create your own exercises")
+print("✅ Set your target number of reps and sets")
+print("✅ Assign exercises to your Workout Routines")
+print("")
 
 </p>
 
