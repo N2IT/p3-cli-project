@@ -13,7 +13,11 @@ Exercise.create_table()
 User.drop_table()
 User.create_table()
 
-wr1 = WorkoutRoutine.create('Lower Body Strength', 'Dumbbells / Circuit Machines')
+# wr1 = WorkoutRoutine.create('Lower Body Strength', 'Dumbbells / Circuit Machines')
+# e1_wr1 = Exercise.create("Squats", "With or without weights", 10, 3, 1)
+# e2_wr1 = Exercise.create("Lunges", "With or without weights", 10, 3, 1)
+
+
 wr2 = WorkoutRoutine.create('Cardio and Core', 'Optional: Bicycle')
 wr3 = WorkoutRoutine.create('Cardio and Mobility', 'None')
 wr4 = WorkoutRoutine.create('Upper Body Strength', 'Weight Bench / Dumbbells')
@@ -21,8 +25,8 @@ wr5 = WorkoutRoutine.create('Cardio and Full Body', 'None')
 wr6 = WorkoutRoutine.create('Active Recovery and Flexibility', 'None')
 wr7 = WorkoutRoutine.create('Endurance Cardio', 'Optional: Bicycle')
 
-e1_wr1 = Exercise.create("Squats", "With or without weights", 10, 3, 1)
-e2_wr1 = Exercise.create("Lunges", "With or without weights", 10, 3, 1)
+# e1_wr1 = Exercise.create("Squats", "With or without weights", 10, 3, 1)
+# e2_wr1 = Exercise.create("Lunges", "With or without weights", 10, 3, 1)
 # e3_wr1 = Exercise.create("Hamstring Curls", "At home, substitute deadlifts, donkey kicks or hip presses with feet on the floor or a wall.", 12, 3, 1)
 # e4_wr1 = Exercise.create("Calf Raises", "With or without weights", 15, 3, 1)
 
