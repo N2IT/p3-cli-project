@@ -1,4 +1,4 @@
-<p style="text-align:center"
+<p style="text-align:center">
 <img src="https://github.com/N2IT/p3-cli-project/FitCLILogo.png>
 </p>
 
