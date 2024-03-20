@@ -40,14 +40,21 @@ python lib/cli.py
 ```
 
 ## Usage
+Follow the easy-to-use menu's to manage your Workout Routines and exercises. Simple, single character entries will take you where you need to go to create the workout routines and exercises aligned with your fitness goals.
 
-![CreateNewRoutine](https://github.com/N2IT/p3-cli-project/assets/32651728/a5d974e8-8ec6-4ed3-ad92-f3931ccf5653)
+<b>Main Menu</b>
+![MainMenu](https://github.com/N2IT/p3-cli-project/assets/32651728/d11b4a1c-a52c-4ca2-b9ba-9de91137b237)
 
+<b>Notifications</b>
+![notificationMsg](https://github.com/N2IT/p3-cli-project/assets/32651728/f32b02ee-8db3-4892-a8ab-c92aafd54cae)
 
+<b>Caution and Success Messaging</b>
+![Caution SuccessMsg](https://github.com/N2IT/p3-cli-project/assets/32651728/a07e65cf-b263-4596-b99e-265f9b18b626)
 
+<b>Error</b>
+![ERRORmsg](https://github.com/N2IT/p3-cli-project/assets/32651728/2d944664-25cd-4604-99be-a04da8e62d8d)
 
 
 ## Contribution
 
 I welcome contributions from the community! If you have suggestions for improvements or bug fixes, please feel free to fork the repository and submit a pull request.
-
