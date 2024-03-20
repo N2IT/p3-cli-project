@@ -13,9 +13,9 @@ print("✅ Assign exercises to your Workout Routines")
 print("")
 
 
-# Workout Routine CLI
+# FITNESS CLI
 
-Welcome to the Workout Routine Command Line Interface (CLI) Program, a powerful and user-friendly tool designed to help fitness enthusiasts and trainers organize their workout routines with ease and flexibility. My CLI application enables you to meticulously tailor your exercise plans to fit your individual fitness goals and preferences.
+Welcome to the Fitness Command Line Interface (CLI) Program, a powerful and user-friendly tool designed to help fitness enthusiasts and trainers organize their workout routines with ease and flexibility. My CLI application enables you to tailor your exercise plans to fit your individual fitness goals and preferences.
 
 ## Key Features
 
