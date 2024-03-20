@@ -43,7 +43,7 @@ python lib/cli.py
 Follow the easy-to-use menu's to manage your Workout Routines and exercises. Simple, single character entries will take you where you need to go to create the workout routines and exercises aligned with your fitness goals.
 
 <b>Main Menu</b>
-<p style="width:50%">
+<p style="width:600px">
 ![MainMenu](https://github.com/N2IT/p3-cli-project/assets/32651728/d11b4a1c-a52c-4ca2-b9ba-9de91137b237)
 </p>
 
