@@ -1,5 +1,5 @@
 <p style="text-align:center"
-<img src="https://github.com/N2IT/p3-cli-project/FitCLILogo.png length=10% width=10% >
+<img src="https://github.com/N2IT/p3-cli-project/FitCLILogo.png>
 </p>
 
 # FITNESS CLI
