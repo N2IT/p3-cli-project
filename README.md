@@ -41,6 +41,11 @@ python lib/cli.py
 
 ## Usage
 
+![CreateNewRoutine](https://github.com/N2IT/p3-cli-project/assets/32651728/a5d974e8-8ec6-4ed3-ad92-f3931ccf5653)
+
+
+
+
 
 ## Contribution
 
