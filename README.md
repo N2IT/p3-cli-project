@@ -1,5 +1,3 @@
-
-<p align="left">
 print("**************************")
 print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
 print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
@@ -14,7 +12,6 @@ print("✅ Set your target number of reps and sets")
 print("✅ Assign exercises to your Workout Routines")
 print("")
 
-</p>
 
 # Workout Routine CLI
 
