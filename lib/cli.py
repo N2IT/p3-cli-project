@@ -15,6 +15,13 @@ from helpers import (
     delete_exercise
 )
 
+def check_string(str):
+    flag_string = False
+    for i in str:
+        if i in "abcdefghijklmnopqrstuvwxyz" or i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            flag_string = True
+    return flag_string
+
 def login():
     clear_screen()
     name = input("Please enter your name: ")
@@ -31,11 +38,11 @@ def main(user):
     print("")
     print("")
     print("**************************")
-    print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
-    print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
-    print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \  /    \  \/|    |   |   |")
-    print(" |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |")
-    print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
+    print("___________._____________________  ___________ _________ _________  _________ .____    .___ ")
+    print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/  \_   ___ \|    |   |   |")
+    print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \   /    \  \/|    |   |   |")
+    print(" |     \   |   | |    |  /    |    \|        \/        \/        \  \     \___|    |___|   |")
+    print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /   \______  /_______ \___|")
     print("     \/                          \/        \/        \/        \/          \/        \/    ")
     print("")
     print("✅ Create your own workout routines")
@@ -52,13 +59,13 @@ def main(user):
         print("        \/     \/         \/           \/     \/     \/        ")
         menu()
         choice = input("> ").strip()
-        if re.compile(r'(?i)^wR$').match(choice):
+        if choice.lower() == 'wr':
             if not routines_list_with_menu():
                 continue
-        elif re.compile(r'(?i)^e$').match(choice):
+        elif choice.lower() == 'e':
             if not exercises_list_with_menu():
                 continue
-        elif re.compile(r'(?i)^x$').match(choice):
+        elif choice.lower() == 'x':
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose from the options below.\u001b[0m')
@@ -69,9 +76,9 @@ def menu():
     print("")
     print("You are at the main menu. Choose from the options below.")
     print("")
-    print(" >> Type WR to view all WorkoutRoutines.")
-    print(" >> Type E to view all Exercises.")
-    print(" >> Type X to exit program.")
+    print(" >> Type WR or wr to view all WorkoutRoutines.")
+    print(" >> Type E or e to view all Exercises.")
+    print(" >> Type X or x to exit program.")
     print("")
     print("**************************")
 
@@ -86,16 +93,16 @@ def routines_list_with_menu():
         print("")
         routines_menu()
         choice = input("> ").strip()
-        if re.compile(r'(?i)^r$').match(choice):
+        if choice.lower() =='r':
             return
-        elif re.compile(r'(?i)^a$').match(choice):
+        elif choice.lower() =='a':
             create_workout_routine()
             continue
-        elif re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(choice) and len(routines) >= int(choice):
+        elif int(choice) in range(1, 100) and len(routines) >= int(choice):
             choice = int(choice)
             routine = routines[choice - 1]
             selected_routine(routine)
-        elif re.compile(r'(?i)^x$').match(choice):
+        elif choice.lower() =='x':
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
@@ -108,9 +115,9 @@ def routines_menu():
         print("")
         print(" >>  Enter the workout routine number to view its details")
         print("     OR        ")
-        print(" >>  Type A to add a new Workout Routine")
-        print(" >>  Type R to return to the previous menu")
-        print(" >>  Type X to exit program")
+        print(" >>  Type A or a to add a new Workout Routine")
+        print(" >>  Type R or r to return to the previous menu")
+        print(" >>  Type X or x to exit program")
         print("")
         print("**************************")
 
@@ -129,16 +136,16 @@ def selected_routine(routine):
             print("There are currently 0 exercises associated to this routine.")
         selected_routine_menu(routine)
         choice = input("> ")
-        if re.compile(r'(?i)^e$').match(choice):
+        if choice.lower() =='e':
             edit_work_routine(routine)
             return
-        elif re.compile(r'(?i)^d$').match(choice):
+        elif choice.lower() =='d':
             confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
-            if re.compile(r'(?i)^y$').match(confirmation):
+            if choice.lower() =='y':
                 delete_exercise(routine.exercises())
                 delete_workout_routine(routine)
                 return
-            elif re.compile(r'(?i)^n$').match(confirmation):
+            elif choice.lower() =='y':
                 print(f"You have opted not to delete routine {id}.")
                 print("")
                 continue
@@ -149,36 +156,64 @@ def selected_routine(routine):
                 print("")
                 selected_routine(id)
             return
-        elif re.compile(r'(?i)^a$').match(choice):
+        elif choice.lower() =='a':
             create_exercise(routine)
-        elif re.compile(r'(?i)^c$').match(choice):
-            selection = input(f'Which exercise do you wish to delete? ')
-            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(selection):
-                confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
-                selection = int(selection) - 1
-                terminate_exercise = routine.exercises()[selection]
-                if re.compile(r'(?i)^y$').match(confirmation):
-                    print("")
-                    print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+        elif choice.lower() == 'c':
+            if len(routine.exercises()) == 1:
+                terminate_exercise = routine.exercises()[0]
+                confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
+                if confirmation.lower() == 'y':
                     delete_exercise([terminate_exercise])
-                elif re.compile(r'(?i)^n$').match(confirmation):
+                elif confirmation.lower() == 'n':
                     print("")
                     print("**************************")
-                    print(f'You have opted not to delete {terminate_exercise.title}.')
+                    print(f'You have opted not to delete the exercise.')
                     print("**************************")
                 else:
-                    print(f'\u001b[41m{selection} is not a valid exercise option. Please try again.\u001b[0m')
+                    print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
             else:
-                print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
-        elif re.compile(r'(?i)^z$').match(choice):
-            selection = input(f'Which exercise do you wish to edit? ')
-            if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(selection):
-                selection = int(selection) - 1
-                exercise_to_edit = routine.exercises()[selection]
-                edit_exercise(exercise_to_edit, routine)
-        elif re.compile(r'(?i)^r$').match(choice):
+                selection = input(f'Which exercise do you wish to delete? ')
+                if check_string(selection):
+                    print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
+                else:
+                    if int(selection) in range(1, 100) and len(routine.exercises()) >= int(selection):
+                        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+                        breakpoint()
+                        selection = int(selection) - 1
+                        terminate_exercise = routine.exercises()[selection]
+                        if confirmation.lower() == 'y':
+                            print("")
+                            print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                            delete_exercise([terminate_exercise])
+                        elif confirmation.lower() == 'n':
+                            print("")
+                            print("**************************")
+                            print(f'You have opted not to delete {terminate_exercise.title}.')
+                            print("**************************")
+                        else:
+                            print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
+                    else:
+                        print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
+        elif choice.lower() == 'z':
+            if len(routine.exercises()) == 1:
+                exercise_to_edit = routine.exercises()[0]
+                print("")
+                print(f'\u001b[36;1mNow editing {exercise_to_edit.title}\u001b[0m')
+                edit_exercise(exercise_to_edit)
+            else:
+                selection = input(f'Which exercise do you wish to edit? ')
+                if check_string(selection):
+                    print('\u001b[41mYou will need to enter a numerical value that matches the exercise you wish to edit.\u001b[0m')
+                else: 
+                    if int(selection) in range(1, 100) and len(routine.exercises()) >= int(selection):
+                        selection = int(selection) - 1
+                        exercise_to_edit = routine.exercises()[selection]
+                        edit_exercise(exercise_to_edit, routine)
+                    else:
+                        print('\u001b[41mYou will need to enter a numerical value that matches the exercise number you wish to edit.\u001b[0m')
+        elif choice.lower() == 'r':
             return
-        elif re.compile(r'(?i)^x$').match(choice):
+        elif choice.lower() == 'x':
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
@@ -188,16 +223,16 @@ def selected_routine(routine):
 def selected_routine_menu(routine):
     print("**************************")
     print("")
-    print(" >>  Type E to edit this workout routine")
-    print(" >>  Type D to delete this workout routine")
-    print(" >>  Type A to add a new exercise to workout routine")
+    print(" >>  Type E or e to edit this workout routine")
+    print(" >>  Type D or d to delete this workout routine")
+    print(" >>  Type A or a to add a new exercise to workout routine")
     if routine.exercises():
-        print(" >>  Type C to cut an exercise from this routine")
-        print(" >>  Type Z to edit an exercise from this routine")
+        print(" >>  Type C or c to cut an exercise from this routine")
+        print(" >>  Type Z or z to edit an exercise from this routine")
     print("     OR        ")
-    print(" >>  Type R to return to the previous menu")
+    print(" >>  Type R or r to return to the previous menu")
     # print(" >>  Type M to go back to main menu")
-    print(" >>  Type X to exit program")
+    print(" >>  Type X or x to exit program")
     print("")
     print("**************************")
 
@@ -234,9 +269,9 @@ def exercises_list_menu():
     print(" >>  Enter the exercise number to view its details")
     # print(" >>  Enter the exercise Name to view its details")
     print("     OR        ")
-    print(" >>  Type A to add a new exercise")
-    print(" >>  Type R to return to the previous menu")
-    print(" >>  Type X to exit program")
+    print(" >>  Type A or a to add a new exercise")
+    print(" >>  Type R or r to return to the previous menu")
+    print(" >>  Type X or x to exit program")
     print("")
     print("**************************")
 
@@ -294,12 +329,12 @@ def selected_exercise(exercise):
 def selected_exercise_menu():
     print("**************************")
     print("")
-    print(" >>  Type E to edit this exercise")
-    print(" >>  Type D to Delete this exercise")
-    print(" >>  Type V to view work routine details")
+    print(" >>  Type E or e to edit this exercise")
+    print(" >>  Type D or d to Delete this exercise")
+    print(" >>  Type V or v to view work routine details")
     print("     OR        ")
-    print(" >>  Type R to return to the previous menu")
-    print(" >>  Type X to exit program")
+    print(" >>  Type R or r to return to the previous menu")
+    print(" >>  Type X or x to exit program")
     print("")
     print("**************************")
 
