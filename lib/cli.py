@@ -69,6 +69,7 @@ def main(user):
             exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose from the options below.\u001b[0m')
+    return
 
 def menu():
     print("")
@@ -93,21 +94,24 @@ def routines_list_with_menu():
         print("")
         routines_menu()
         choice = input("> ").strip()
-        if choice.lower() =='r':
-            return
-        elif choice.lower() =='a':
-            create_workout_routine()
-            continue
-        elif int(choice) in range(1, 100) and len(routines) >= int(choice):
+        if check_string(choice):
+            if choice.lower() =='r':
+                return
+            elif choice.lower() =='a':
+                create_workout_routine()
+                continue
+            elif choice.lower() == 'x':
+                exit_program()
+            else:
+                print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
+                print("")
+        elif len(routines) >= int(choice) and int(choice) in range(1, 100):
             choice = int(choice)
             routine = routines[choice - 1]
             selected_routine(routine)
-        elif choice.lower() =='x':
-            exit_program()
         else:
             print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
             print("")
-    return
 
 
 def routines_menu():
@@ -141,12 +145,15 @@ def selected_routine(routine):
             return
         elif choice.lower() =='d':
             confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
-            if choice.lower() =='y':
+            if confirmation.lower() =='y':
                 delete_exercise(routine.exercises())
                 delete_workout_routine(routine)
                 return
-            elif choice.lower() =='y':
-                print(f"You have opted not to delete routine {id}.")
+            elif confirmation.lower() =='n':
+                print("")
+                print("**************************")
+                print(f"\u001b[32;1mYou have opted not to delete routine {routine.id}.\u001b[0m")
+                print("**************************")
                 print("")
                 continue
             else:
@@ -167,7 +174,7 @@ def selected_routine(routine):
                 elif confirmation.lower() == 'n':
                     print("")
                     print("**************************")
-                    print(f'You have opted not to delete the exercise.')
+                    print(f'You have opted not to delete {terminate_exercise.title}.')
                     print("**************************")
                 else:
                     print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
@@ -248,17 +255,20 @@ def exercises_list_with_menu():
         print("")
         exercises_list_menu()
         choice = input("> ").strip()
-        if int(choice) in range(1, 100) and len(exercises) >= int(choice):
+        if check_string(choice):
+            if choice.lower() == 'a':
+                create_exercise()
+                continue
+            elif choice.lower() == 'r':
+                return
+            elif choice.lower() == 'x':
+                exit_program()
+            else:
+                print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+        elif len(exercises) >= int(choice) and int(choice) in range(1, 100):
             choice = int(choice)
             exercise = exercises[choice - 1]
             selected_exercise(exercise)
-        elif choice.lower() == 'a':
-            create_exercise()
-            continue
-        elif choice.lower() == 'r':
-            return
-        elif choice.lower() == 'x':
-            exit_program()
         else:
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
     return
@@ -288,38 +298,37 @@ def selected_exercise(exercise):
         if choice.lower() == 'e':
             edit_exercise(exercise)
             continue
-        elif re.compile(r'(?i)^d$').match(choice):
-            # PICK BACK UP HERE LATER - NEED TO INTRODUCE UPDATED STRING_CHECK METHOD WITH RANGE
-            decision = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
-            if re.compile(r'(?i)^y$').match(decision):
+        elif choice.lower() == 'd':
+            confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
+            if confirmation.lower() == 'y':
                 print("")
                 print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
                 print("")
                 delete_exercise([exercise])
-            elif re.compile(r'(?i)^n$').match(decision):
+            elif confirmation.lower() == 'n':
                 continue
             else:
                 print("")
                 print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
             return
-        elif re.compile(r'(?i)^v$').match(choice):
+        elif choice.lower() == 'v':
             routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
             print("")
             print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
             print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
             print("")
-            decision = input(f'Would you like to edit {routine.title}? Y/N ')
-            if re.compile(r'(?i)^y$').match(decision):
+            confirmation = input(f'Would you like to edit {routine.title}? Y/N ')
+            if confirmation.lower() == 'y':
                 edit_work_routine(routine, exercise)
-            elif re.compile(r'(?i)^n$').match(decision):
+            elif confirmation.lower() == 'n':
                 continue
             else:
                 print("")
                 print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
                 print("")
-        elif re.compile(r'(?i)^r$').match(choice):
+        elif choice.lower() == 'r':
             return
-        elif re.compile(r'(?i)^x$').match(choice):
+        elif choice.lower() == 'x':
             exit_program()
         else:
             print("")

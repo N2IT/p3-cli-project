@@ -16,7 +16,7 @@ def clear_screen():
 def exit_program():
     user = User.get_all()
     confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
-    if re.compile(r'(?i)^y$').match(confirmation):
+    if confirmation.lower() == 'y':
         clear_screen()
         print("")
         print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI {user[0].name.upper()}!\u001b[0m")
@@ -41,7 +41,7 @@ def exit_program():
         print("")
         User.delete(user[0])
         exit()
-    elif re.compile(r'(?i)^n$').match(confirmation):
+    elif confirmation.lower() == 'n':
         return
     else:
         print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
@@ -49,7 +49,7 @@ def exit_program():
         print("**************************")
         print("")
     
-def create_workout_routine(exercise=None):
+def create_workout_routine():
     title = input(f'Enter the name of the new workout routine: ')
     equipment = input(f'Enter the equipment of the new routine: ')
     try:
@@ -59,14 +59,6 @@ def create_workout_routine(exercise=None):
         print("")
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
-    if exercise:
-        print("")
-        exercise.w_routine_id = routine.id
-        exercise.update()
-        print("")
-        print(f'Exercise {exercise.title} is now associated to your new routine, {routine.title}.')
-        print(f'\u001b[36;1mYou are still editing exercise {exercise.title}:\u001b[0m')
-        edit_exercise(exercise)
     return
 
 def edit_work_routine(routine, exercise_path=None):
@@ -107,7 +99,8 @@ def delete_workout_routine(routine):
 
 def create_exercise(routine=None):
     print("")
-    print("You have opted to create a new exercise.")
+    print("\u001b[36;1mYou have opted to create a new exercise.\u001b[0m")
+    print("")
     title = input('Enter a title for your exercise: ')
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
@@ -124,6 +117,7 @@ def create_exercise(routine=None):
         print("")
         w_routine_id = input('Enter the routine you wish to apply this exercise: ')
     try:
+        breakpoint()
         new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
         print("")
         print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
