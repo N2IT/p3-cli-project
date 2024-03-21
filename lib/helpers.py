@@ -13,6 +13,12 @@ def clear_screen():
     else:
         os.system('clear')
 
+def validate_integer_input(input_value):
+        try:
+           return int(input_value)
+        except ValueError:
+            raise ValueError("Invalid input: the value must be an integer.")
+
 def check_string(str):
     flag_string = False
     for i in str:
@@ -26,7 +32,7 @@ def exit_program():
     if confirmation.lower() == 'y':
         clear_screen()
         print("")
-        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI {user[0].name.upper()}!\u001b[0m")
+        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI!\u001b[0m")
         print("")
         print("**************************")
         print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
@@ -112,44 +118,81 @@ def create_exercise(routine=None):
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    if any([title, description, reps, sets]):
-        from cli import check_string
-        if routine:
-            w_routine_id = routine.id
-        else:
-            print("")
-            print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
-            WorkoutRoutine.get_all()
-            routines = WorkoutRoutine.all
-            for i, routine in enumerate(routines.values(), start=1):
-                print(f'{i}.', routine.title)
-            print("")
-            w_routine_id = input('Enter the routine you wish to apply this exercise: ')
-        if check_string(reps):
-            print(f'\u001b[41mReps must be a numerical value. Please try again.\u001b[0m')
-            create_exercise()
-        if check_string(sets):
-            print(f'\u001b[41mSets must be a numerical value. Please try again.\u001b[0m')
-            create_exercise()
-        if check_string(w_routine_id):
-            print(f'\u001b[41mPlease enter a numerical value to match one of the routines above and try again.\u001b[0m')
-            create_exercise()
-        else:
-            try:
-                breakpoint()
-                new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
-                print("")
-                print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
-                print("")
-            except Exception as exc:
-                print("")
-                print("\u001b[41mError creating exercise:\u001b[0m ", exc)
-                print("")
+    # breakpoint()
+    if routine:
+        w_routine_id = routine.id
     else:
         print("")
-        print(f'\u001b[41mYou did not enter an values. Please try again\u001b[0m')
+        print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
+        routines = WorkoutRoutine.get_all()
+        for i, routine in enumerate(routines, start=1):
+            print(f'{i}.', routine.title)
         print("")
-        create_exercise()
+        w_routine_id = input('Enter the routine you wish to apply this exercise: ')
+        w_routine_id = validate_integer_input(w_routine_id)
+        if w_routine_id > 0:
+            print('right on')
+            if w_routine_id <= len(routines):
+                print('lets get it')
+                w_routine_id = routines[int(w_routine_id) - 1].id
+            else:
+                print('your number is too high')
+        else:
+            print('your number is too low')
+    try:
+        new_exercise = Exercise.create(title, description, reps, sets, w_routine_id)
+        print("")
+        print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
+        print("")
+    except Exception as exc:
+        print("")
+        print("\u001b[41mError creating exercise:\u001b[0m ", exc)
+        print("")
+    return
+    
+
+
+
+    
+    # if any([title, description, reps, sets]):
+    #     # breakpoint()
+    #     from cli import check_string
+    #     if routine:
+    #         w_routine_id = routine.id
+    #     else:
+    #         print("")
+    #         print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
+    #         WorkoutRoutine.get_all()
+    #         routines = WorkoutRoutine.all
+    #         for i, routine in enumerate(routines.values(), start=1):
+    #             print(f'{i}.', routine.title)
+    #         print("")
+    #         w_routine_id = input('Enter the routine you wish to apply this exercise: ')
+    #     if check_string(reps):
+    #         print(f'\u001b[41mReps must be a numerical value. Please try again.\u001b[0m')
+    #         create_exercise()
+    #     if check_string(sets):
+    #         print(f'\u001b[41mSets must be a numerical value. Please try again.\u001b[0m')
+    #         create_exercise()
+    #     if check_string(w_routine_id):
+    #         print(f'\u001b[41mPlease enter a numerical value to match one of the routines above and try again.\u001b[0m')
+    #         create_exercise()
+    #     else:
+    #         try:
+    #             # breakpoint()
+    #             new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+    #             print("")
+    #             print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
+    #             print("")
+    #         except Exception as exc:
+    #             print("")
+    #             print("\u001b[41mError creating exercise:\u001b[0m ", exc)
+    #             print("")
+    # else:
+    #     print("")
+    #     print(f'\u001b[41mYou did not enter an values. Please try again\u001b[0m')
+    #     print("")
+    #     create_exercise()
 
 def edit_exercise(exercise, routine_path=None):
     from cli import selected_exercise
@@ -166,37 +209,35 @@ def edit_exercise(exercise, routine_path=None):
         print(f'{i}.', routine.title)
     print("")
     w_routine_id = input('Assign your exercise to a new routine: ')
-    if any([title, description, reps, sets, w_routine_id]):
-        try:
-            exercise.title = title if title else exercise.title
-            exercise.description = description if description else exercise.description
-            if reps:
-                if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(reps):
-                    exercise.reps = int(reps)
-                else:
-                    print("")
-                    print('\u001b[41mReps value must be numerical.\u001b[0m')
-                    return
-            else:
-                exercise.reps = exercise.reps
-            if sets:
-                if re.compile(r'^\b(100|[0-9]{1,2})\b$').match(sets):
-                    exercise.sets = int(sets)
-                else:
-                    print("")
-                    print('\u001b[41mSets value must be numerical.\u001b[0m')
-                    return
-            else:
-                exercise.sets = exercise.sets
+    try:
+        exercise.title = title if title else exercise.title
+        exercise.description = description if description else exercise.description
+        if check_string(reps):
+            print("")
+            print(f'\u001b[41mReps value must be numerical. {reps} will not be updated.\u001b[0m')
+            reps = ""
+        else:
+            exercise.reps = int(reps) if reps else exercise.reps
+        if check_string(sets):
+            print("")
+            print(f'\u001b[41mSets value must be numerical. {sets} will not be updated.\u001b[0m')
+            sets = ""
+        else:
+            exercise.sets = int(sets) if sets else exercise.sets
+        if check_string(w_routine_id):
+            print(f'\u001b[41m{w_routine_id} is not a valid option and will not be updated.')
+            w_routine_id = ""
+        else:
             if w_routine_id:
-                if re.compile(r'^(?:[1-9]|[1-9]\d|100)$').match(w_routine_id) and len(routines) >= int(w_routine_id):
-                    routines = WorkoutRoutine.get_all()
-                    exercise.w_routine_id = routines[int(w_routine_id) - 1].id
+                if len(routines) >= int(w_routine_id):
+                        routines = WorkoutRoutine.get_all()
+                        exercise.w_routine_id = routines[int(w_routine_id) - 1].id
                 else:
-                    print('\u001b[41mThe routine number you selected is invalid. Please try again.\u001b[0m')   
+                    print(f'\u001b[41mThe routine number you selected is invalid. Please try again.\u001b[0m')   
                     return
             else:
                 exercise.w_routine_id == exercise.w_routine_id
+        if any([title, description, reps, sets, w_routine_id]):
             print("")
             print(f'\u001b[32;1mThe following has been updated:\u001b[0m')
             print("")
@@ -217,12 +258,13 @@ def edit_exercise(exercise, routine_path=None):
                 selected_exercise(exercise)
             else:
                 return
-        except Exception as exc:
-                    print("\u001b[41mError updating exercise:\u001b[0m ", exc)
-    else:
-        print("")
-        print("\u001b[32;1mNo updates were made.\u001b[0m")
-        selected_exercise(exercise)
+        else:
+            print("")
+            print("\u001b[32;1mNo updates were made.\u001b[0m")
+            selected_exercise(exercise)
+    except Exception as exc:
+        print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+    
     
 def delete_exercise(e):
     for exercise in e:

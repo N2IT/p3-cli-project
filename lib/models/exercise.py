@@ -22,7 +22,6 @@ class Exercise:
             f" Workout Routine ID: {self.w_routine_id}>"
         )
 
-
     @property
     def title(self):
         return self._title
@@ -59,10 +58,12 @@ class Exercise:
 
     @reps.setter
     def reps(self, reps):
-        if not isinstance(reps, int):
-            raise Exception("Reps should be of type Integer.")
-        else:
-            self._reps = reps
+        from helpers import validate_integer_input
+        try:
+            valid_reps = validate_integer_input(reps)
+            self._reps = valid_reps
+        except ValueError:
+            raise Exception("Invalid input for reps. Reps must be an integer.")
 
     @property
     def sets(self):
@@ -70,10 +71,12 @@ class Exercise:
 
     @sets.setter
     def sets(self, sets):
-        if not isinstance(sets, int):
-            raise Exception("Sets should be of type Integer.")
-        else:
-            self._sets = sets
+        from helpers import validate_integer_input
+        try:
+            valid_sets = validate_integer_input(sets)
+            self._sets = valid_sets
+        except ValueError:
+            raise Exception("Invalid input for sets. Sets must be an integer.")
 
     @property
     def w_routine_id(self):
@@ -81,14 +84,16 @@ class Exercise:
 
     @w_routine_id.setter
     def w_routine_id(self, w_routine_id):
-        if not isinstance(w_routine_id, int):
-            raise ValueError(
-                "w_routine_id must be of type Integer."
-            )
-        else:
-            self._w_routine_id = w_routine_id
+        from helpers import validate_integer_input
+        try:
+            valid_w_routine_id = validate_integer_input(w_routine_id)
+        except ValueError:
+            raise Exception("Invalid input for routine. Routine must be an integer.")
+        if not WorkoutRoutine.find_by_id(valid_w_routine_id):
+            raise ValueError("Invalid routine number")
+        self._w_routine_id = valid_w_routine_id
+        
             
-
     @classmethod
     def create_table(cls):
         """Creating a new table to persist the attributes of the Exercise instances """

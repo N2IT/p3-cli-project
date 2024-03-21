@@ -18,19 +18,19 @@ from helpers import (
 
 
 
-def login():
-    clear_screen()
-    name = input("Please enter your name: ")
-    try:
-        user = User.create(name)
-        main(user)
-    except Exception as exc:
-        print("\u001b[41mError creating user:\u001b[0m ", exc)
+# def login():
+#     clear_screen()
+#     name = input("Please enter your name: ")
+#     try:
+#         user = User.create(name)
+#         main(user)
+#     except Exception as exc:
+#         print("\u001b[41mError creating user:\u001b[0m ", exc)
     
-def main(user):
+def main(user=None):
     clear_screen()
     print("")
-    print(f"\u001b[36;1mWELCOME TO THE FITNESS CLI {user.name.upper()}!\u001b[0m")
+    print(f"\u001b[36;1mWELCOME TO THE FITNESS CLI!\u001b[0m")
     print("")
     print("")
     print("**************************")
@@ -345,4 +345,4 @@ def selected_exercise_menu():
     print("**************************")
 
 if __name__ == "__main__":
-    login()
+    main()
