@@ -85,10 +85,12 @@ class Exercise:
     @w_routine_id.setter
     def w_routine_id(self, w_routine_id):
         from helpers import validate_integer_input
+        if w_routine_id == 'Invalid routine number':
+            raise ValueError("Invalid routine number")
         try:
             valid_w_routine_id = validate_integer_input(w_routine_id)
         except ValueError:
-            raise Exception("Invalid input for routine. Routine must be an integer.")
+            raise Exception("Invalid input for routine number. Please try again.")
         if not WorkoutRoutine.find_by_id(valid_w_routine_id):
             raise ValueError("Invalid routine number")
         self._w_routine_id = valid_w_routine_id
