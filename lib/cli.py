@@ -5,6 +5,7 @@ from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 from helpers import (
+    check_string,
     clear_screen,
     exit_program,
     create_workout_routine,
@@ -15,12 +16,7 @@ from helpers import (
     delete_exercise
 )
 
-def check_string(str):
-    flag_string = False
-    for i in str:
-        if i in "abcdefghijklmnopqrstuvwxyz" or i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-            flag_string = True
-    return flag_string
+
 
 def login():
     clear_screen()

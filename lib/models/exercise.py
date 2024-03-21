@@ -81,12 +81,13 @@ class Exercise:
 
     @w_routine_id.setter
     def w_routine_id(self, w_routine_id):
-        if type(w_routine_id) is int and WorkoutRoutine.find_by_id(w_routine_id):
+        if not isinstance(w_routine_id, int):
+            raise ValueError(
+                "w_routine_id must be of type Integer."
+            )
+        else:
             self._w_routine_id = w_routine_id
-        # else:
-        #     raise ValueError(
-        #         "w_routine_id must reference a workout routine in the database"
-        #     )
+            
 
     @classmethod
     def create_table(cls):

@@ -3,7 +3,7 @@ import os
 import re
 from models.user import User
 from models.workout_routine import WorkoutRoutine
-from models.exercise import Exercise 
+from models.exercise import Exercise
 
 def clear_screen():
     # For Windows
@@ -12,6 +12,13 @@ def clear_screen():
     # For Linux and Mac
     else:
         os.system('clear')
+
+def check_string(str):
+    flag_string = False
+    for i in str:
+        if i in "abcdefghijklmnopqrstuvwxyz" or i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            flag_string = True
+    return flag_string
 
 def exit_program():
     user = User.get_all()
@@ -105,28 +112,44 @@ def create_exercise(routine=None):
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    if routine:
-        w_routine_id = routine.id
+    if any([title, description, reps, sets]):
+        from cli import check_string
+        if routine:
+            w_routine_id = routine.id
+        else:
+            print("")
+            print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
+            WorkoutRoutine.get_all()
+            routines = WorkoutRoutine.all
+            for i, routine in enumerate(routines.values(), start=1):
+                print(f'{i}.', routine.title)
+            print("")
+            w_routine_id = input('Enter the routine you wish to apply this exercise: ')
+        if check_string(reps):
+            print(f'\u001b[41mReps must be a numerical value. Please try again.\u001b[0m')
+            create_exercise()
+        if check_string(sets):
+            print(f'\u001b[41mSets must be a numerical value. Please try again.\u001b[0m')
+            create_exercise()
+        if check_string(w_routine_id):
+            print(f'\u001b[41mPlease enter a numerical value to match one of the routines above and try again.\u001b[0m')
+            create_exercise()
+        else:
+            try:
+                breakpoint()
+                new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
+                print("")
+                print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
+                print("")
+            except Exception as exc:
+                print("")
+                print("\u001b[41mError creating exercise:\u001b[0m ", exc)
+                print("")
     else:
         print("")
-        print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
-        WorkoutRoutine.get_all()
-        routines = WorkoutRoutine.all
-        for i, routine in enumerate(routines.values(), start=1):
-            print(f'{i}.', routine.title)
+        print(f'\u001b[41mYou did not enter an values. Please try again\u001b[0m')
         print("")
-        w_routine_id = input('Enter the routine you wish to apply this exercise: ')
-    try:
-        breakpoint()
-        new_exercise = Exercise.create(title, description, int(reps), int(sets), int(w_routine_id))
-        print("")
-        print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
-        print("")
-    except Exception as exc:
-        print("")
-        print("\u001b[41mError creating exercise:\u001b[0m ", exc)
-        print("")
-    print("")
+        create_exercise()
 
 def edit_exercise(exercise, routine_path=None):
     from cli import selected_exercise
