@@ -26,6 +26,11 @@ def check_string(str):
             flag_string = True
     return flag_string
 
+def print_invalid_choice(choice):
+    print("")
+    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    print("")
+
 def print_exercises_list():
     print("")
     print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
@@ -69,11 +74,6 @@ def routine_number_selected_from_menu(choice):
         selected_routine(routine)
     else:
         print_invalid_choice(choice)
-
-def print_invalid_choice(choice):
-    print("")
-    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
-    print("")
 
 def print_selected_exercise(exercise):
     exercise = exercise.find_by_id(exercise.id)
@@ -128,41 +128,54 @@ def routine_menu_option_d(routine):
         print("")
         routine_menu_option_d(routine)
 
-def exit_program():
-    user = User.get_all()
-    confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
-    if confirmation.lower() == 'y':
-        clear_screen()
-        print("")
-        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI!\u001b[0m")
-        print("")
-        print("**************************")
-        print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
-        print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
-        print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \  /    \  \/|    |   |   |")
-        print(" |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |")
-        print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
-        print("     \/                          \/        \/        \/        \/          \/        \/    ")
-        print("")
-        print("")
-        print("\u001b[1m”Don’t count the days, make the days count.”\u001b[0m —Muhammad Ali")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        print("")
-        User.delete(user[0])
-        exit()
-    elif confirmation.lower() == 'n':
-        return
+def print_selected_routine(routine):
+    print("")
+    print(f"\u001b[36;1mHere are {routine.title}'s details.\u001b[0m")
+    print("")
+    print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
+    if routine.exercises():
+        print("Exercises:")
+        for i, exercise in enumerate(routine.exercises(), start=1):
+            print(f'     {i}.', exercise.title)
     else:
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("There are currently 0 exercises associated to this routine.")
+
+def cut_solo_exercise_from_routine(routine)
+    terminate_exercise = routine.exercises()[0]
+    confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
+    if confirmation.lower() == 'y':
+        delete_exercise([terminate_exercise])
+    elif confirmation.lower() == 'n':
         print("")
         print("**************************")
-        print("")
+        print(f'You have opted not to delete {terminate_exercise.title}.')
+        print("**************************")
+    else:
+        print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
+        cut_single_exercise_from_routine(routine)
+
+def cut_selected_exercise_from_routine(routine):
+    selection = input(f'Which exercise do you wish to delete? ')
+    selection = validate_integer_input(selection):
+        if len(routine.exercises()) >= selection):
+            confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+            selection = selection - 1
+            terminate_exercise = routine.exercises()[selection]
+            if confirmation.lower() == 'y':
+                print("")
+                print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                delete_exercise([terminate_exercise])
+            elif confirmation.lower() == 'n':
+                print("")
+                print("**************************")
+                print(f'You have opted not to delete {terminate_exercise.title}.')
+                print("**************************")
+            else:
+                print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
+                cut_selection_exercise_from_routine(routine)
+        else:
+            print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
+            cut_selection_exercise_from_routine(routine)
     
 def create_workout_routine():
     title = input(f'Enter the name of the new workout routine: ')
@@ -312,4 +325,40 @@ def edit_exercise(exercise, routine_path=None):
 def delete_exercise(e):
     for exercise in e:
         Exercise.delete(exercise)
+
+def exit_program():
+    user = User.get_all()
+    confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")
+    if confirmation.lower() == 'y':
+        clear_screen()
+        print("")
+        print(f"\u001b[36;1mHope you enjoyed using FITNESS CLI!\u001b[0m")
+        print("")
+        print("**************************")
+        print("___________._____________________  ___________ _________ _________ _________ .____    .___ ")
+        print("\_   _____/|   \__    ___/\      \ \_   _____//   _____//   _____/ \_   ___ \|    |   |   |")
+        print(" |    __)  |   | |    |   /   |   \ |    __)_ \_____  \ \_____  \  /    \  \/|    |   |   |")
+        print(" |     \   |   | |    |  /    |    \|        \/        \/        \ \     \___|    |___|   |")
+        print(" \___  /   |___| |____|  \____|__  /_______  /_______  /_______  /  \______  /_______ \___|")
+        print("     \/                          \/        \/        \/        \/          \/        \/    ")
+        print("")
+        print("")
+        print("\u001b[1m”Don’t count the days, make the days count.”\u001b[0m —Muhammad Ali")
+        print("")
+        print("")
+        print("")
+        print("")
+        print("")
+        print("")
+        print("")
+        print("")
+        User.delete(user[0])
+        exit()
+    elif confirmation.lower() == 'n':
+        return
+    else:
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("")
+        print("**************************")
+        print("")
     

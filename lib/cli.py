@@ -16,8 +16,11 @@ from helpers import (
     print_selected_exercise,
     exercise_menu_option_d,
     exercise_menu_option_v,
+    print_selected_routine,
     routine_menu_option_d,
     routine_number_selected_from_menu,
+    cut_solo_exercise_from_routine,
+    cut_selected_exercise_from_routine,
     clear_screen,
     exit_program,
     create_workout_routine,
@@ -143,18 +146,46 @@ def selected_routine_menu(routine):
     print("")
     print("**************************")
 
+def cut_solo_exercise_from_routine(routine)
+    terminate_exercise = routine.exercises()[0]
+    confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
+    if confirmation.lower() == 'y':
+        delete_exercise([terminate_exercise])
+    elif confirmation.lower() == 'n':
+        print("")
+        print("**************************")
+        print(f'You have opted not to delete {terminate_exercise.title}.')
+        print("**************************")
+    else:
+        print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
+        cut_single_exercise_from_routine(routine)
+
+def cut_selection_exercise_from_routine(routine):
+    selection = input(f'Which exercise do you wish to delete? ')
+    selection = validate_integer_input(selection):
+        if len(routine.exercises()) >= selection):
+            confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+            selection = selection - 1
+            terminate_exercise = routine.exercises()[selection]
+            if confirmation.lower() == 'y':
+                print("")
+                print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                delete_exercise([terminate_exercise])
+            elif confirmation.lower() == 'n':
+                print("")
+                print("**************************")
+                print(f'You have opted not to delete {terminate_exercise.title}.')
+                print("**************************")
+            else:
+                print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
+                cut_selection_exercise_from_routine(routine)
+        else:
+            print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
+            cut_selection_exercise_from_routine(routine)
+
 def selected_routine(routine):
     while True:
-        print("")
-        print(f"\u001b[36;1mHere are {routine.title}'s details.\u001b[0m")
-        print("")
-        print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
-        if routine.exercises():
-            print("Exercises:")
-            for i, exercise in enumerate(routine.exercises(), start=1):
-                print(f'     {i}.', exercise.title)
-        else:
-            print("There are currently 0 exercises associated to this routine.")
+        print_selected_routine(routine)
         selected_routine_menu(routine)
         choice = input("> ")
         if choice.lower() =='e':
@@ -167,40 +198,9 @@ def selected_routine(routine):
             create_exercise(routine)
         elif choice.lower() == 'c':
             if len(routine.exercises()) == 1:
-                terminate_exercise = routine.exercises()[0]
-                confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
-                if confirmation.lower() == 'y':
-                    delete_exercise([terminate_exercise])
-                elif confirmation.lower() == 'n':
-                    print("")
-                    print("**************************")
-                    print(f'You have opted not to delete {terminate_exercise.title}.')
-                    print("**************************")
-                else:
-                    print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
+                cut_single_exercise_from_routine(routine)
             else:
-                selection = input(f'Which exercise do you wish to delete? ')
-                if check_string(selection):
-                    print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
-                else:
-                    if int(selection) in range(1, 100) and len(routine.exercises()) >= int(selection):
-                        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
-                        breakpoint()
-                        selection = int(selection) - 1
-                        terminate_exercise = routine.exercises()[selection]
-                        if confirmation.lower() == 'y':
-                            print("")
-                            print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
-                            delete_exercise([terminate_exercise])
-                        elif confirmation.lower() == 'n':
-                            print("")
-                            print("**************************")
-                            print(f'You have opted not to delete {terminate_exercise.title}.')
-                            print("**************************")
-                        else:
-                            print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
-                    else:
-                        print('\u001b[41mYou will need to enter a numerical value that matches the exercise ID you wish to remove.\u001b[0m')
+                cut_selected_exercise_from_routine(routine)
         elif choice.lower() == 'z':
             if len(routine.exercises()) == 1:
                 exercise_to_edit = routine.exercises()[0]
