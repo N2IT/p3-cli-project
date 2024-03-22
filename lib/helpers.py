@@ -118,7 +118,6 @@ def create_exercise(routine=None):
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    # breakpoint()
     if routine:
         w_routine_id = routine.id
     else:
@@ -131,7 +130,6 @@ def create_exercise(routine=None):
         w_routine_id = input('Enter the routine you wish to apply this exercise: ')
         w_routine_id = validate_integer_input(w_routine_id)
         error = "Invalid routine number"
-        breakpoint()
         w_routine_id = routines[w_routine_id - 1].id if 0 < w_routine_id <= len(routines) else error
     try:
         new_exercise = Exercise.create(title, description, reps, sets, w_routine_id)
@@ -144,7 +142,6 @@ def create_exercise(routine=None):
         print("")
     return
     
-
 def edit_exercise(exercise, routine_path=None):
     from cli import selected_exercise
     print("")
@@ -160,12 +157,24 @@ def edit_exercise(exercise, routine_path=None):
         print(f'{i}.', routine.title)
     print("")
     w_routine_id = input('Assign your exercise to a new routine: ')
+    error = "Invalid routine number"
+    if w_routine_id:
+        w_routine_id = validate_integer_input(w_routine_id)
+        if 0 < w_routine_id <= len(routines):
+            w_routine_id = routines[w_routine_id - 1].id
+        else:
+            print(error)
+    else:
+        exercise.w_routine_id = exercise.w_routine_id
+    
+    # w_routine_id = routines[w_routine_id - 1].id if 0 < w_routine_id <= len(routines) else error
     try:
         exercise.title = title if title else exercise.title
         exercise.description = description if description else exercise.description
         exercise.reps = reps if reps else exercise.reps
         exercise.sets = sets if sets else exercise.sets
-        exercise.w_routine_id = routines[int(w_routine_id) - 1].id if w_routine_id and 0 < w_routine_id >= len(routines) else execise.w_routine_id
+        breakpoint()
+        exercise.w_routine_id = w_routine_id if w_routine_id else exercise.w_routine_id
         # else:
         #     if w_routine_id:
         #         if len(routines) >= int(w_routine_id):
