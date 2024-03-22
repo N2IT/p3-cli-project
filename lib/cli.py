@@ -21,6 +21,9 @@ from helpers import (
     routine_number_selected_from_menu,
     cut_solo_exercise_from_routine,
     cut_selected_exercise_from_routine,
+    edit_solo_exercise_from_routine,
+    edit_selected_exercise_from_routine,
+    exercise_number_validation,
     clear_screen,
     exit_program,
     create_workout_routine,
@@ -146,7 +149,7 @@ def selected_routine_menu(routine):
     print("")
     print("**************************")
 
-
+        
 def selected_routine(routine):
     while True:
         print_selected_routine(routine)
@@ -167,27 +170,15 @@ def selected_routine(routine):
                 cut_selected_exercise_from_routine(routine)
         elif choice.lower() == 'z':
             if len(routine.exercises()) == 1:
-                exercise_to_edit = routine.exercises()[0]
-                print("")
-                print(f'\u001b[36;1mNow editing {exercise_to_edit.title}\u001b[0m')
-                edit_exercise(exercise_to_edit)
+                edit_solo_exercise_from_routine(routine)
             else:
-                selection = input(f'Which exercise do you wish to edit? ')
-                if check_string(selection):
-                    print('\u001b[41mYou will need to enter a numerical value that matches the exercise you wish to edit.\u001b[0m')
-                else: 
-                    if int(selection) in range(1, 100) and len(routine.exercises()) >= int(selection):
-                        selection = int(selection) - 1
-                        exercise_to_edit = routine.exercises()[selection]
-                        edit_exercise(exercise_to_edit, routine)
-                    else:
-                        print('\u001b[41mYou will need to enter a numerical value that matches the exercise number you wish to edit.\u001b[0m')
+                edit_selected_exercise_from_routine(routine)
         elif choice.lower() == 'r':
             return
         elif choice.lower() == 'x':
             exit_program()
         else:
-            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+            print_invalid_choice(choice)
     return
 
 

@@ -28,7 +28,7 @@ def check_string(str):
 
 def print_invalid_choice(choice):
     print("")
-    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    print(f'\u001b[41m{choice} is not a valid option.\u001b[0m')
     print("")
 
 def print_exercises_list():
@@ -154,14 +154,14 @@ def cut_solo_exercise_from_routine(routine):
         print_invalid_choice(confirmation)
         cut_solo_exercise_from_routine(routine)
 
-def exercise_number_to_cut_from_routine(routine, selection):
+def exercise_number_validation(routine, selection):
+    breakpoint()
     selection = validate_integer_input(selection)
     if 1 <= selection <= len(routine.exercises()):
         exercise = routine.exercises()[selection - 1]
         return exercise
     else:
         print_invalid_choice(selection)
-        cut_selected_exercise_from_routine(routine)
 
 def cut_selected_exercise_from_routine(routine):
     # breakpoint()
@@ -170,23 +170,25 @@ def cut_selected_exercise_from_routine(routine):
         print_invalid_choice(selection)
         return
     else:
-        terminate_exercise = exercise_number_to_cut_from_routine(routine, selection)
-        confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
-        if confirmation.lower() == 'y':
-            print("")
-            print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
-            delete_exercise([terminate_exercise])
-        elif confirmation.lower() == 'n':
-            print("")
-            print("**************************")
-            print(f'You have opted not to delete {terminate_exercise.title}.')
-            print("**************************")
-            return
+        terminate_exercise = exercise_number_validation(routine, selection)
+        if terminate_exercise:
+            confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
+            if confirmation.lower() == 'y':
+                print("")
+                print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                delete_exercise([terminate_exercise])
+            elif confirmation.lower() == 'n':
+                print("")
+                print("**************************")
+                print(f'You have opted not to delete {terminate_exercise.title}.')
+                print("**************************")
+                return
+            else:
+                print_invalid_choice(confirmation)
+                return
         else:
-            print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
             return
 
-    
 def create_workout_routine():
     title = input(f'Enter the name of the new workout routine: ')
     equipment = input(f'Enter the equipment of the new routine: ')
@@ -194,7 +196,6 @@ def create_workout_routine():
         routine = WorkoutRoutine.create(title, equipment)
         print("")
         print(f'\u001b[32;1mSuccess! {routine.title} has been created!\u001b[0m')
-        print("")
     except Exception as exc:
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
     return
@@ -228,7 +229,6 @@ def edit_work_routine(routine, exercise_path=None):
         print("")
         print("\u001b[32;1mNo updates were made.\u001b[0m")
         selected_routine(routine)
-
 
 def delete_workout_routine(routine):
     print("")
@@ -281,6 +281,23 @@ def validate_w_routine_id(w_routine_id):
     else:
         return None
 
+def edit_solo_exercise_from_routine(routine):
+    exercise_to_edit = routine.exercises()[0]
+    print("")
+    print(f'\u001b[36;1mNow editing {exercise_to_edit.title}\u001b[0m')
+    edit_exercise(exercise_to_edit)
+
+def edit_selected_exercise_from_routine(routine):
+    selection = input(f'Which exercise do you wish to edit? ')
+    if check_string(selection):
+        print_invalid_choice(selection)
+        return
+    else: 
+        exercise_to_edit = exercise_number_validation(routine, selection)
+        if exercise_to_edit:
+            edit_exercise(exercise_to_edit, routine)
+        else:
+            return
 
 def edit_exercise(exercise, routine_path=None):
     from cli import selected_exercise
