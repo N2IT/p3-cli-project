@@ -31,11 +31,26 @@ def print_invalid_choice(choice):
     print(f'\u001b[41m{choice} is not a valid option.\u001b[0m')
     print("")
 
+def validate_w_routine_id(w_routine_id):
+    error = "Invalid routine number"
+    routines = return_routines()
+    if w_routine_id:
+        w_routine_id = validate_integer_input(w_routine_id)
+        if 0 < w_routine_id <= len(routines):
+            w_routine_id = routines[w_routine_id - 1].id
+            return w_routine_id
+        else:
+            return error
+    else:
+        return None
+
 def print_exercises_list():
+    breakpoint()
     print("")
     print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
     print("")
     exercises = Exercise.get_all()
+    
     for i, exercise in enumerate(exercises, start = 1):
         print(f'{i}.', exercise.title)
     print("")
@@ -244,14 +259,18 @@ def create_exercise(routine_path=None):
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
     if routine_path:
-        w_routine_id = routine.id
+        w_routine_id = routine_path.id
     else:
         print("")
         print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
         print_routines_list()
         print("")
         w_routine_id = input('Enter the routine you wish to apply this exercise: ')
-        w_routine_id = validate_w_routine_id(w_routine_id)
+        if check_string(w_routine_id):
+            print_invalid_choice(w_routine_id)
+            return
+        else:
+            w_routine_id = validate_w_routine_id(w_routine_id)
     if any([title, description, reps, sets, w_routine_id]):
         try:
             new_exercise = Exercise.create(title, description, reps, sets, w_routine_id)
@@ -267,19 +286,7 @@ def create_exercise(routine_path=None):
         print('You did not enter any values. Please try again.')
         create_exercise()
     return
-    
-def validate_w_routine_id(w_routine_id):
-    error = "Invalid routine number"
-    routines = return_routines()
-    if w_routine_id:
-        w_routine_id = validate_integer_input(w_routine_id)
-        if 0 < w_routine_id <= len(routines):
-            w_routine_id = routines[w_routine_id - 1].id
-            return w_routine_id
-        else:
-            return error
-    else:
-        return None
+
 
 def edit_solo_exercise_from_routine(routine):
     exercise_to_edit = routine.exercises()[0]

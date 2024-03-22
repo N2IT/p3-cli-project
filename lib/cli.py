@@ -182,7 +182,7 @@ def selected_routine(routine):
     return
 
 
-## LIST OF ROUTINES AND RELATED MENU ##
+## LIST OF EXERCISES AND RELATED MENU ##
 
 def exercises_list_menu():
     print("**************************")
