@@ -146,42 +146,6 @@ def selected_routine_menu(routine):
     print("")
     print("**************************")
 
-def cut_solo_exercise_from_routine(routine)
-    terminate_exercise = routine.exercises()[0]
-    confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
-    if confirmation.lower() == 'y':
-        delete_exercise([terminate_exercise])
-    elif confirmation.lower() == 'n':
-        print("")
-        print("**************************")
-        print(f'You have opted not to delete {terminate_exercise.title}.')
-        print("**************************")
-    else:
-        print(f'\u001b[41m{confirmation} is not a valid exercise option. Please try again.\u001b[0m')
-        cut_single_exercise_from_routine(routine)
-
-def cut_selection_exercise_from_routine(routine):
-    selection = input(f'Which exercise do you wish to delete? ')
-    selection = validate_integer_input(selection):
-        if len(routine.exercises()) >= selection):
-            confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
-            selection = selection - 1
-            terminate_exercise = routine.exercises()[selection]
-            if confirmation.lower() == 'y':
-                print("")
-                print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
-                delete_exercise([terminate_exercise])
-            elif confirmation.lower() == 'n':
-                print("")
-                print("**************************")
-                print(f'You have opted not to delete {terminate_exercise.title}.')
-                print("**************************")
-            else:
-                print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
-                cut_selection_exercise_from_routine(routine)
-        else:
-            print(f'\u001b[41m{selection} is not a valid option. Please try again.\u001b[0m')
-            cut_selection_exercise_from_routine(routine)
 
 def selected_routine(routine):
     while True:
@@ -198,7 +162,7 @@ def selected_routine(routine):
             create_exercise(routine)
         elif choice.lower() == 'c':
             if len(routine.exercises()) == 1:
-                cut_single_exercise_from_routine(routine)
+                cut_solo_exercise_from_routine(routine)
             else:
                 cut_selected_exercise_from_routine(routine)
         elif choice.lower() == 'z':
