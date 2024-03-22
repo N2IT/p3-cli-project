@@ -16,8 +16,6 @@ from helpers import (
     delete_exercise
 )
 
-
-
 def login():
     clear_screen()
     name = input("Please enter your name: ")
@@ -79,6 +77,21 @@ def menu():
     print("")
     print("**************************")
 
+
+
+## LIST OF ROUTINES AND RELATED MENU ##
+
+def routines_menu():
+        print("**************************")
+        print("")
+        print(" >>  Enter the workout routine number to view its details")
+        print("     OR        ")
+        print(" >>  Type A or a to add a new Workout Routine")
+        print(" >>  Type R or r to return to the previous menu")
+        print(" >>  Type X or x to exit program")
+        print("")
+        print("**************************")
+
 def routines_list_with_menu():
     print("")
     print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
@@ -110,17 +123,24 @@ def routines_list_with_menu():
             print("")
 
 
-def routines_menu():
-        print("**************************")
-        print("")
-        print(" >>  Enter the workout routine number to view its details")
-        print("     OR        ")
-        print(" >>  Type A or a to add a new Workout Routine")
-        print(" >>  Type R or r to return to the previous menu")
-        print(" >>  Type X or x to exit program")
-        print("")
-        print("**************************")
 
+## SELECTED ROUTINE AND RELATED MENU ##
+
+def selected_routine_menu(routine):
+    print("**************************")
+    print("")
+    print(" >>  Type E or e to edit this workout routine")
+    print(" >>  Type D or d to delete this workout routine")
+    print(" >>  Type A or a to add a new exercise to workout routine")
+    if routine.exercises():
+        print(" >>  Type C or c to cut an exercise from this routine")
+        print(" >>  Type Z or z to edit an exercise from this routine")
+    print("     OR        ")
+    print(" >>  Type R or r to return to the previous menu")
+    # print(" >>  Type M to go back to main menu")
+    print(" >>  Type X or x to exit program")
+    print("")
+    print("**************************")
 
 def selected_routine(routine):
     while True:
@@ -223,22 +243,19 @@ def selected_routine(routine):
     return
 
 
-def selected_routine_menu(routine):
+## LIST OF ROUTINES AND RELATED MENU ##
+
+def exercises_list_menu():
     print("**************************")
     print("")
-    print(" >>  Type E or e to edit this workout routine")
-    print(" >>  Type D or d to delete this workout routine")
-    print(" >>  Type A or a to add a new exercise to workout routine")
-    if routine.exercises():
-        print(" >>  Type C or c to cut an exercise from this routine")
-        print(" >>  Type Z or z to edit an exercise from this routine")
+    print(" >>  Enter the exercise number to view its details")
+    # print(" >>  Enter the exercise Name to view its details")
     print("     OR        ")
+    print(" >>  Type A or a to add a new exercise")
     print(" >>  Type R or r to return to the previous menu")
-    # print(" >>  Type M to go back to main menu")
     print(" >>  Type X or x to exit program")
     print("")
     print("**************************")
-
 
 def exercises_list_with_menu():
     while True:
@@ -269,69 +286,8 @@ def exercises_list_with_menu():
             print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
     return
 
-def exercises_list_menu():
-    print("**************************")
-    print("")
-    print(" >>  Enter the exercise number to view its details")
-    # print(" >>  Enter the exercise Name to view its details")
-    print("     OR        ")
-    print(" >>  Type A or a to add a new exercise")
-    print(" >>  Type R or r to return to the previous menu")
-    print(" >>  Type X or x to exit program")
-    print("")
-    print("**************************")
+## SELECTED ROUTINE AND RELATED MENU ##
 
-def selected_exercise(exercise):
-    while True:
-        print("")
-        print(f'\u001b[36;1mYou are editing exercise {exercise.title}:\u001b[0m')
-        print("")
-        print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
-        print("")
-        routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
-        selected_exercise_menu()
-        choice = input("> ")
-        if choice.lower() == 'e':
-            edit_exercise(exercise)
-            continue
-        elif choice.lower() == 'd':
-            confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
-            if confirmation.lower() == 'y':
-                print("")
-                print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
-                print("")
-                delete_exercise([exercise])
-            elif confirmation.lower() == 'n':
-                continue
-            else:
-                print("")
-                print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
-            return
-        elif choice.lower() == 'v':
-            routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
-            print("")
-            print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
-            print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
-            print("")
-            confirmation = input(f'Would you like to edit {routine.title}? Y/N ')
-            if confirmation.lower() == 'y':
-                edit_work_routine(routine, exercise)
-            elif confirmation.lower() == 'n':
-                continue
-            else:
-                print("")
-                print(f'\u001b[41m{decision} is not a valid option. Please try again.\u001b[0m')
-                print("")
-        elif choice.lower() == 'r':
-            return
-        elif choice.lower() == 'x':
-            exit_program()
-        else:
-            print("")
-            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
-            print("")
-    return
-        
 def selected_exercise_menu():
     print("**************************")
     print("")
@@ -344,5 +300,71 @@ def selected_exercise_menu():
     print("")
     print("**************************")
 
+def print_selected_exercise(exercise):
+    print("")
+    print(f'\u001b[36;1mYou are editing exercise {exercise.title}:\u001b[0m')
+    print("")
+    print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
+    print("")
+
+def exercise_menu_option_d(exercise):
+    confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
+    if confirmation.lower() == 'y':
+        print("")
+        print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
+        print("")
+        delete_exercise([exercise])
+    elif confirmation.lower() == 'n':
+        None
+    else:
+        print("")
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        exercise_menu_option_d(exercise)
+
+def exercise_menu_option_v(routine, exercise):
+    routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
+    print("")
+    print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
+    print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
+    print("")
+    confirmation = input(f'Would you like to edit {routine.title}? Y/N ')
+    if confirmation.lower() == 'y':
+        edit_work_routine(routine, exercise)
+    elif confirmation.lower() == 'n':
+        None
+    else:
+        print("")
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("")
+        return
+
+def print_invalid_choice(choice):
+    print("")
+    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    print("")
+
+def selected_exercise(exercise):
+    while True:
+        print_selected_exercise(exercise)
+        routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
+        selected_exercise_menu()
+        choice = input("> ")
+        if choice.lower() == 'e':
+            edit_exercise(exercise)
+            continue
+        elif choice.lower() == 'd':
+            exercise_menu_option_d(exercise)
+            return
+        elif choice.lower() == 'v':
+            exercise_menu_option_v(routine, exercise)
+        elif choice.lower() == 'r':
+            return
+        elif choice.lower() == 'x':
+            exit_program()
+        else:
+            print_invalid_choice(choice)
+    return
+        
+        
 if __name__ == "__main__":
     login()
