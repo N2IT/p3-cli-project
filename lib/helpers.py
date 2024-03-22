@@ -26,6 +26,72 @@ def check_string(str):
             flag_string = True
     return flag_string
 
+def print_exercises_list():
+    print("")
+    print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
+    print("")
+    exercises = Exercise.get_all()
+    for i, exercise in enumerate(exercises, start = 1):
+        print(f'{i}.', exercise.title)
+    print("")
+    
+def return_exercises():
+    exercises = Exercise.get_all()
+    return exercises
+
+def exercise_number_selected_from_menu(choice):
+    from cli import selected_exercise
+    choice = validate_integer_input(choice)
+    if 1 <= choice <= len(return_exercises()):
+        exercise = return_exercises()[choice - 1]
+        selected_exercise(exercise)
+    else:
+        print_invalid_choice(choice)
+
+def print_invalid_choice(choice):
+    print("")
+    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+    print("")
+
+def print_selected_exercise(exercise):
+    print("")
+    print(f'\u001b[36;1mYou are editing exercise {exercise.title}:\u001b[0m')
+    print("")
+    print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
+    print("")
+
+def exercise_menu_option_d(exercise):
+    confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
+    if confirmation.lower() == 'y':
+        print("")
+        print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
+        print("")
+        delete_exercise([exercise])
+    elif confirmation.lower() == 'n':
+        None
+    else:
+        print("")
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("")
+        exercise_menu_option_d(exercise)
+
+def exercise_menu_option_v(routine, exercise):
+    routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
+    print("")
+    print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
+    print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
+    print("")
+    confirmation = input(f'Would you like to edit {routine.title}? Y/N ')
+    if confirmation.lower() == 'y':
+        edit_work_routine(routine, exercise)
+    elif confirmation.lower() == 'n':
+        None
+    else:
+        print("")
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("")
+        return
+
 def exit_program():
     user = User.get_all()
     confirmation = input("\u001b[43mAre you sure you wish to exit?\u001b[0m Y/N ")

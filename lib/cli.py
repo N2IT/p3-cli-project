@@ -5,7 +5,15 @@ from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 from helpers import (
+    print_invalid_choice,
+    validate_integer_input,
     check_string,
+    print_exercises_list,
+    return_exercises,
+    exercise_number_selected_from_menu,
+    print_selected_exercise,
+    exercise_menu_option_d,
+    exercise_menu_option_v,
     clear_screen,
     exit_program,
     create_workout_routine,
@@ -62,7 +70,7 @@ def main(user=None):
         elif choice.lower() == 'x':
             exit_program()
         else:
-            print(f'\u001b[41m{choice} is not valid. Please choose from the options below.\u001b[0m')
+            print_invalid_choice(choice)
     return
 
 def menu():
@@ -257,15 +265,11 @@ def exercises_list_menu():
     print("")
     print("**************************")
 
+
 def exercises_list_with_menu():
     while True:
-        print("")
-        print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
-        print("")
-        exercises = Exercise.get_all()
-        for i, exercise in enumerate(exercises, start = 1):
-            print(f'{i}.', exercise.title)
-        print("")
+        print_exercises_list()
+        return_exercises()
         exercises_list_menu()
         choice = input("> ").strip()
         if check_string(choice):
@@ -277,13 +281,9 @@ def exercises_list_with_menu():
             elif choice.lower() == 'x':
                 exit_program()
             else:
-                print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
-        elif len(exercises) >= int(choice) and int(choice) in range(1, 100):
-            choice = int(choice)
-            exercise = exercises[choice - 1]
-            selected_exercise(exercise)
-        else:
-            print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
+                print_invalid_choice(choice)
+        else: 
+            exercise_number_selected_from_menu(choice)
     return
 
 ## SELECTED ROUTINE AND RELATED MENU ##
@@ -300,48 +300,6 @@ def selected_exercise_menu():
     print("")
     print("**************************")
 
-def print_selected_exercise(exercise):
-    print("")
-    print(f'\u001b[36;1mYou are editing exercise {exercise.title}:\u001b[0m')
-    print("")
-    print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
-    print("")
-
-def exercise_menu_option_d(exercise):
-    confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
-    if confirmation.lower() == 'y':
-        print("")
-        print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
-        print("")
-        delete_exercise([exercise])
-    elif confirmation.lower() == 'n':
-        None
-    else:
-        print("")
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-        exercise_menu_option_d(exercise)
-
-def exercise_menu_option_v(routine, exercise):
-    routine = WorkoutRoutine.find_by_id(exercise.w_routine_id)
-    print("")
-    print(f'\u001b[36;1mHere are the details of the routine associated to this exercise:\u001b[0m')
-    print(f'Routine Title: {routine.title}, Routine Equipment: {routine.equipment}')
-    print("")
-    confirmation = input(f'Would you like to edit {routine.title}? Y/N ')
-    if confirmation.lower() == 'y':
-        edit_work_routine(routine, exercise)
-    elif confirmation.lower() == 'n':
-        None
-    else:
-        print("")
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-        print("")
-        return
-
-def print_invalid_choice(choice):
-    print("")
-    print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
-    print("")
 
 def selected_exercise(exercise):
     while True:
@@ -365,6 +323,6 @@ def selected_exercise(exercise):
             print_invalid_choice(choice)
     return
         
-        
+
 if __name__ == "__main__":
     login()
