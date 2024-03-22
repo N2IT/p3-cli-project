@@ -11,9 +11,13 @@ from helpers import (
     print_exercises_list,
     return_exercises,
     exercise_number_selected_from_menu,
+    print_routines_list,
+    return_routines,
     print_selected_exercise,
     exercise_menu_option_d,
     exercise_menu_option_v,
+    routine_menu_option_d,
+    routine_number_selected_from_menu,
     clear_screen,
     exit_program,
     create_workout_routine,
@@ -101,14 +105,8 @@ def routines_menu():
         print("**************************")
 
 def routines_list_with_menu():
-    print("")
-    print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
-    print("")
     while True:
-        routines = WorkoutRoutine.get_all()
-        for i, routine in enumerate(routines, start=1):
-            print(f'{i}.', routine.title)
-        print("")
+        print_routines_list()
         routines_menu()
         choice = input("> ").strip()
         if check_string(choice):
@@ -120,15 +118,10 @@ def routines_list_with_menu():
             elif choice.lower() == 'x':
                 exit_program()
             else:
-                print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
-                print("")
-        elif len(routines) >= int(choice) and int(choice) in range(1, 100):
-            choice = int(choice)
-            routine = routines[choice - 1]
-            selected_routine(routine)
+                print_invalid_choice(choice)
         else:
-            print(f'\u001b[41m{choice} is not valid. Please choose again.\u001b[0m')
-            print("")
+            routine_number_selected_from_menu(choice)
+    return
 
 
 
@@ -168,24 +161,7 @@ def selected_routine(routine):
             edit_work_routine(routine)
             return
         elif choice.lower() =='d':
-            confirmation = input("\u001b[43mDeleting this routine will delete all associated exercises.\u001b[0m\nDo you wish to continue? Y/N ")
-            if confirmation.lower() =='y':
-                delete_exercise(routine.exercises())
-                delete_workout_routine(routine)
-                return
-            elif confirmation.lower() =='n':
-                print("")
-                print("**************************")
-                print(f"\u001b[32;1mYou have opted not to delete routine {routine.id}.\u001b[0m")
-                print("**************************")
-                print("")
-                continue
-            else:
-                print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-                print("")
-                print("**************************")
-                print("")
-                selected_routine(id)
+            routine_menu_option_d(routine)
             return
         elif choice.lower() =='a':
             create_exercise(routine)
@@ -309,7 +285,6 @@ def selected_exercise(exercise):
         choice = input("> ")
         if choice.lower() == 'e':
             edit_exercise(exercise)
-            continue
         elif choice.lower() == 'd':
             exercise_menu_option_d(exercise)
             return

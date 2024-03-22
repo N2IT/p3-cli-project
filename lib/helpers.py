@@ -39,6 +39,19 @@ def return_exercises():
     exercises = Exercise.get_all()
     return exercises
 
+def print_routines_list():
+    print("")
+    print("\u001b[36;1mHere are all workout routines currently on record.\u001b[0m")
+    print("")
+    routines = WorkoutRoutine.get_all()
+    for i, routine in enumerate(routines, start=1):
+        print(f'{i}.', routine.title)
+    print("")
+
+def return_routines():
+    routines = WorkoutRoutine.get_all()
+    return routines
+
 def exercise_number_selected_from_menu(choice):
     from cli import selected_exercise
     choice = validate_integer_input(choice)
@@ -48,12 +61,22 @@ def exercise_number_selected_from_menu(choice):
     else:
         print_invalid_choice(choice)
 
+def routine_number_selected_from_menu(choice):
+    from cli import selected_routine
+    choice = validate_integer_input(choice)
+    if 1 <= choice <= len(return_routines()):
+        routine = return_routines()[choice - 1]
+        selected_routine(routine)
+    else:
+        print_invalid_choice(choice)
+
 def print_invalid_choice(choice):
     print("")
     print(f'\u001b[41m{choice} is not a valid option. Please try again.\u001b[0m')
     print("")
 
 def print_selected_exercise(exercise):
+    exercise = exercise.find_by_id(exercise.id)
     print("")
     print(f'\u001b[36;1mYou are editing exercise {exercise.title}:\u001b[0m')
     print("")
@@ -91,6 +114,19 @@ def exercise_menu_option_v(routine, exercise):
         print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
         print("")
         return
+
+def routine_menu_option_d(routine):
+    confirmation = input(f'\u001b[43mAre you sure you want to delete {routine.title}?\u001b[0m Y/N ')
+    if confirmation.lower() == 'y':
+        print("")
+        delete_workout_routine(routine)
+    elif confirmation.lower() == 'n':
+        None
+    else:
+        print("")
+        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
+        print("")
+        routine_menu_option_d(routine)
 
 def exit_program():
     user = User.get_all()
@@ -176,7 +212,7 @@ def delete_workout_routine(routine):
     print(f'\u001b[32;1mRoutine {routine.title} and all associated exercises have been deleted.\u001b[0m')
     WorkoutRoutine.delete(routine)
 
-def create_exercise(routine=None):
+def create_exercise(routine_path=None):
     print("")
     print("\u001b[36;1mYou have opted to create a new exercise.\u001b[0m")
     print("")
@@ -184,32 +220,34 @@ def create_exercise(routine=None):
     description = input('Enter a description of your exercise: ')
     reps = input('Enter the target number of reps for your exercise: ')
     sets = input('Enter the target number of sets for your exercise: ')
-    if routine:
+    if routine_path:
         w_routine_id = routine.id
     else:
         print("")
         print(f'\u001b[36;1mYou will need to assign this exercise to a routine.\u001b[0m')
-        routines = WorkoutRoutine.get_all()
-        for i, routine in enumerate(routines, start=1):
-            print(f'{i}.', routine.title)
+        print_routines_list()
         print("")
         w_routine_id = input('Enter the routine you wish to apply this exercise: ')
-        w_routine_id = validate_integer_input(w_routine_id)
-        error = "Invalid routine number"
-        w_routine_id = routines[w_routine_id - 1].id if 0 < w_routine_id <= len(routines) else error
-    try:
-        new_exercise = Exercise.create(title, description, reps, sets, w_routine_id)
+        w_routine_id = validate_w_routine_id(w_routine_id)
+    if any([title, description, reps, sets, w_routine_id]):
+        try:
+            new_exercise = Exercise.create(title, description, reps, sets, w_routine_id)
+            print("")
+            print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
+            print("")
+        except Exception as exc:
+            print("")
+            print("\u001b[41mError creating exercise:\u001b[0m ", exc)
+            print("")
+    else:
         print("")
-        print(f'\u001b[32;1mSuccess! Your new exercise, {new_exercise.title} has been created!\u001b[0m')
-        print("")
-    except Exception as exc:
-        print("")
-        print("\u001b[41mError creating exercise:\u001b[0m ", exc)
-        print("")
+        print('You did not enter any values. Please try again.')
+        create_exercise()
     return
     
 def validate_w_routine_id(w_routine_id):
     error = "Invalid routine number"
+    routines = return_routines()
     if w_routine_id:
         w_routine_id = validate_integer_input(w_routine_id)
         if 0 < w_routine_id <= len(routines):
@@ -231,11 +269,9 @@ def edit_exercise(exercise, routine_path=None):
     reps = input('Enter a new number of reps for this exercise: ')
     sets = input('Enter a new number of sets for this exercise: ')
     print("")
-    routines = WorkoutRoutine.get_all()
-    for i, routine in enumerate(routines, start=1):
-        print(f'{i}.', routine.title)
-    print("")
+    print_routines_list()
     w_routine_id = input('Assign your exercise to a new routine: ')
+    print("")
     try:
         exercise.title = title if title else exercise.title
         exercise.description = description if description else exercise.description
@@ -247,17 +283,18 @@ def edit_exercise(exercise, routine_path=None):
             print(f'\u001b[32;1mThe following has been updated:\u001b[0m')
             print("")
             if title:
-                print(f'Exercise Title: {title}')
+                print(f'Exercise Title: {exercise.title}')
             if description:
-                print(f'Exercise Description: {description}')
+                print(f'Exercise Description: {exercise.description}')
             if reps:
-                print(f'Exercise Reps: {reps}')
+                print(f'Exercise Reps: {exercise.reps}')
             if sets:
-                print(f'Exercise Sets: {sets}')
+                print(f'Exercise Sets: {exercise.sets}')
             if w_routine_id:
-                print(f'Exercise Workout Routine: {w_routine_id}')
+                print(f'Exercise Workout Routine: {exercise.w_routine_id}')
             print("")
             exercise.update()
+            breakpoint()
             if routine_path:
                 print("")
                 selected_exercise(exercise)
@@ -269,6 +306,7 @@ def edit_exercise(exercise, routine_path=None):
             return
     except Exception as exc:
         print("\u001b[41mError updating exercise:\u001b[0m ", exc)
+        return
     return
     
 def delete_exercise(e):
