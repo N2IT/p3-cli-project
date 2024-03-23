@@ -16,10 +16,10 @@ def clear_screen():
         os.system('clear')
 
 def validate_integer_input(input_value):
-        try:
-           return int(input_value)
-        except ValueError:
-            raise ValueError("Invalid input: the value must be an integer.")
+    try:
+        return int(input_value)
+    except ValueError:
+        raise ValueError("Invalid input: the value must be an integer.")
 
 def validate_w_routine_id(w_routine_id):
     error = "Invalid routine number"
@@ -46,10 +46,15 @@ def print_invalid_choice(choice):
     print(f'\u001b[41m{choice} is not a valid option.\u001b[0m')
     print("")
 
-def confirmation_to_delete(title):
-    print("")
-    print(f'\u001b[32;1m{title} has been deleted.\u001b[0m')
-    print("")
+def confirmation_to_delete(title, routine = None):
+    if routine:
+        print("")
+        print(f'\u001b[32;1m{title} has been deleted from routine {routine.title}.\u001b[0m')
+        print("")
+    else:
+        print("")
+        print(f'\u001b[32;1m{title} has been deleted.\u001b[0m')
+        print("")
 
 def declining_to_delete(title):
     print("")
@@ -118,12 +123,10 @@ def cut_solo_exercise_from_routine(routine):
     terminate_exercise = routine.exercises()[0]
     confirmation = input(f'\u001b[43mAre you sure you want to delete {terminate_exercise.title}?\u001b[0m Y/N ')
     if confirmation.lower() == 'y':
+        confirmation_to_delete(terminate.exercise.title)
         delete_exercise([terminate_exercise])
     elif confirmation.lower() == 'n':
-        print("")
-        print("**************************")
-        print(f'You have opted not to delete {terminate_exercise.title}.')
-        print("**************************")
+        declining_to_delete(terminate_exercise.title)
     else:
         print_invalid_choice(confirmation)
         cut_solo_exercise_from_routine(routine)
@@ -138,14 +141,10 @@ def cut_selected_exercise_from_routine(routine):
         if terminate_exercise:
             confirmation = input(f'\u001b[43mAre you sure you want to delete exercise {selection}?\u001b[0m Y/N ')
             if confirmation.lower() == 'y':
-                print("")
-                print(f'\u001b[32;1m{terminate_exercise.title} has been deleted from routine {routine.title}\u001b[0m')
+                confirmation_to_delete(terminate_exercise.title, routine)
                 delete_exercise([terminate_exercise])
             elif confirmation.lower() == 'n':
-                print("")
-                print("**************************")
-                print(f'You have opted not to delete {terminate_exercise.title}.')
-                print("**************************")
+                declining_to_delete(terminate_exercise.title)
                 return
             else:
                 print_invalid_choice(confirmation)

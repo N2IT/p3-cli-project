@@ -92,7 +92,7 @@ class Exercise:
         except ValueError:
             raise Exception("Invalid input for routine number. Please try again.")
         if not WorkoutRoutine.find_by_id(valid_w_routine_id):
-            raise ValueError("Invalid routine number, SERIOUSLY?")
+            raise ValueError("Invalid routine number")
         self._w_routine_id = valid_w_routine_id
         
             

@@ -122,6 +122,8 @@ def routines_list_with_menu():
                 exit_program()
             else:
                 print_invalid_choice(choice)
+        elif choice == "":
+            print_invalid_choice(choice)
         else:
             number_selected_from_menu(choice, routines)
     return
@@ -210,6 +212,8 @@ def exercises_list_with_menu():
                 exit_program()
             else:
                 print_invalid_choice(choice)
+        elif choice == "":
+            print_invalid_choice(choice)
         else: 
             number_selected_from_menu(choice)
     return
