@@ -106,7 +106,12 @@ def exercise_menu_option_d(exercise):
         print("")
         delete_exercise([exercise])
     elif confirmation.lower() == 'n':
-        None
+        from cli import selected_exercise
+        print("")
+        print("**************************")
+        print(f'You have opted not to delete {exercise.title}.')
+        print("**************************")
+        selected_exercise(exercise)
     else:
         print("")
         print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
