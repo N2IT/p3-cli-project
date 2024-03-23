@@ -10,7 +10,7 @@ from helpers import (
     check_string,
     print_exercises_list,
     return_exercises,
-    exercise_number_selected_from_menu,
+    number_selected_from_menu,
     print_routines_list,
     return_routines,
     print_selected_exercise,
@@ -18,7 +18,6 @@ from helpers import (
     exercise_menu_option_v,
     print_selected_routine,
     routine_menu_option_d,
-    routine_number_selected_from_menu,
     cut_solo_exercise_from_routine,
     cut_selected_exercise_from_routine,
     edit_solo_exercise_from_routine,
@@ -114,6 +113,7 @@ def routines_list_with_menu():
     while True:
         print_routines_list()
         routines_menu()
+        routines = return_routines()
         choice = input("> ").strip()
         if check_string(choice):
             if choice.lower() =='r':
@@ -126,7 +126,7 @@ def routines_list_with_menu():
             else:
                 print_invalid_choice(choice)
         else:
-            routine_number_selected_from_menu(choice)
+            number_selected_from_menu(choice, routines)
     return
 
 
@@ -214,7 +214,7 @@ def exercises_list_with_menu():
             else:
                 print_invalid_choice(choice)
         else: 
-            exercise_number_selected_from_menu(choice)
+            number_selected_from_menu(choice)
     return
 
 ## SELECTED ROUTINE AND RELATED MENU ##

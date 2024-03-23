@@ -5,6 +5,8 @@ from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise
 
+
+### ###  METHODS USED THROUGHOUT  ### ###
 def clear_screen():
     # For Windows
     if os.name == 'nt':
@@ -72,23 +74,22 @@ def return_routines():
     routines = WorkoutRoutine.get_all()
     return routines
 
-def exercise_number_selected_from_menu(choice):
-    from cli import selected_exercise
+def number_selected_from_menu(choice, routines = None):
     choice = validate_integer_input(choice)
-    if 1 <= choice <= len(return_exercises()):
-        exercise = return_exercises()[choice - 1]
-        selected_exercise(exercise)
+    if routines:
+        from cli import selected_routine
+        if 1 <= choice <= len(return_routines()):
+            routine = return_routines()[choice - 1]
+            selected_routine(routine)
+        else:
+            print_invalid_choice(choice)
     else:
-        print_invalid_choice(choice)
-
-def routine_number_selected_from_menu(choice):
-    from cli import selected_routine
-    choice = validate_integer_input(choice)
-    if 1 <= choice <= len(return_routines()):
-        routine = return_routines()[choice - 1]
-        selected_routine(routine)
-    else:
-        print_invalid_choice(choice)
+        from cli import selected_exercise
+        if 1 <= choice <= len(return_exercises()):
+            exercise = return_exercises()[choice - 1]
+            selected_exercise(exercise)
+        else:
+            print_invalid_choice(choice)
 
 def print_selected_exercise(exercise):
     exercise = exercise.find_by_id(exercise.id)
