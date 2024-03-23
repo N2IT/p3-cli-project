@@ -99,19 +99,26 @@ def print_selected_exercise(exercise):
     print(f'Exercise Title: {exercise.title}\nExercise Description: {exercise.description}\nTarget Reps: {exercise.reps}\nTarget Sets: {exercise.sets}')
     print("")
 
+def confirmation_to_delete(title):
+    print("")
+    print(f'\u001b[32;1m{title} has been deleted.\u001b[0m')
+    print("")
+
+def declining_to_delete(title):
+    print("")
+    print("**************************")
+    print(f'You have opted not to delete {title}.')
+    print("**************************")
+
+
 def exercise_menu_option_d(exercise):
     confirmation = input(f'\u001b[43mAre you sure you want to delete {exercise.title}?\u001b[0m Y/N ')
     if confirmation.lower() == 'y':
-        print("")
-        print(f'\u001b[32;1m{exercise.title} has been deleted.\u001b[0m')
-        print("")
+        confirmation_to_delete(exercise.title)
         delete_exercise([exercise])
     elif confirmation.lower() == 'n':
         from cli import selected_exercise
-        print("")
-        print("**************************")
-        print(f'You have opted not to delete {exercise.title}.')
-        print("**************************")
+        declining_to_delete(exercise.title)
         selected_exercise(exercise)
     else:
         print("")
