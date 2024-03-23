@@ -6,7 +6,6 @@ from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 
 from helpers import (
     print_invalid_choice,
-    validate_integer_input,
     check_string,
     print_exercises_list,
     return_exercises,
@@ -27,10 +26,8 @@ from helpers import (
     exit_program,
     create_workout_routine,
     edit_work_routine,
-    delete_workout_routine,
     edit_exercise,
     create_exercise,
-    delete_exercise
 )
 
 def login():
