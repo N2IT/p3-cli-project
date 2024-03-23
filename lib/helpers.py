@@ -59,7 +59,7 @@ def confirmation_to_delete(title, routine = None):
 def declining_to_delete(title):
     print("")
     print("**************************")
-    print(f'You have opted not to delete {title}.')
+    print(f'\u001b[32;1mYou have opted not to delete {title}.\u001b[0m')
     print("**************************")
 
 def number_selected_from_menu(choice, routines = None):
@@ -102,9 +102,7 @@ def routine_menu_option_d(routine):
     elif confirmation.lower() == 'n':
         None
     else:
-        print("")
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-        print("")
+        print_invalid_choice(confirmation)
         routine_menu_option_d(routine)
 
 def print_selected_routine(routine):
@@ -133,7 +131,10 @@ def cut_solo_exercise_from_routine(routine):
 
 def cut_selected_exercise_from_routine(routine):
     selection = input(f'Which exercise do you wish to delete? ')
-    if check_string(selection):
+    if selection == "":
+        print_invalid_choice(selection)
+        cut_selected_exercise_from_routine(routine)
+    elif check_string(selection):
         print_invalid_choice(selection)
         return
     else:
@@ -206,7 +207,10 @@ def edit_solo_exercise_from_routine(routine):
 
 def edit_selected_exercise_from_routine(routine):
     selection = input(f'Which exercise do you wish to edit? ')
-    if check_string(selection):
+    if selection == "":
+        print_invalid_choice(selection)
+        edit_selected_exercise_from_routine(routine)
+    elif check_string(selection):
         print_invalid_choice(selection)
         return
     else: 
@@ -267,9 +271,7 @@ def exercise_menu_option_v(routine, exercise):
     elif confirmation.lower() == 'n':
         None
     else:
-        print("")
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-        print("")
+        print_invalid_choice(confirmation)
         return
 
 def exercise_number_validation(routine, selection):
@@ -401,8 +403,6 @@ def exit_program():
     elif confirmation.lower() == 'n':
         return
     else:
-        print(f'\u001b[41m{confirmation} is not a valid option. Please try again.\u001b[0m')
-        print("")
-        print("**************************")
-        print("")
+       print_invalid_choice(confirmation)
+       exit_program()
     
