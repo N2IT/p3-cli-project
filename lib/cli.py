@@ -1,6 +1,4 @@
 # lib/cli.py
-import re
-import time
 from models.user import User
 from models.workout_routine import WorkoutRoutine
 from models.exercise import Exercise 

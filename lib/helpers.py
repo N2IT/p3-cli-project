@@ -79,6 +79,7 @@ def number_selected_from_menu(choice, routines = None):
         else:
             print_invalid_choice(choice)
 
+
 ### ###  ROUTINE MENU ACTION HELPERS  ### ###
 
 def print_routines_list():
@@ -164,7 +165,7 @@ def create_workout_routine():
         print("\u001b[41mError creating workout routine:\u001b[0m ", exc)
     return
 
-def edit_work_routine(routine, exercise_path=None):
+def edit_work_routine(routine, exercise_path = None):
     from cli import selected_routine
     print("")
     print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")
@@ -282,7 +283,7 @@ def exercise_number_validation(routine, selection):
     else:
         print_invalid_choice(selection)
 
-def create_exercise(routine_path=None):
+def create_exercise(routine_path = None):
     print("")
     print("\u001b[36;1mYou have opted to create a new exercise.\u001b[0m")
     print("")
@@ -319,7 +320,7 @@ def create_exercise(routine_path=None):
         create_exercise()
     return
 
-def edit_exercise(exercise, routine_path=None):
+def edit_exercise(exercise, routine_path = None):
     from cli import selected_exercise
     print("")
     print("\u001b[36;1mLeave the input blank if you do not wish make a change:\u001b[0m")

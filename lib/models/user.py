@@ -1,6 +1,5 @@
 from models.__init__ import CURSOR, CONN
 
-
 class User:
 
     def __init__(self, name):
