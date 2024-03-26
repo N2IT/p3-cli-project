@@ -61,3 +61,5 @@ e2_wr6 = Exercise.create("Dynamic Stretching","Stretch muscles for both upper an
 
 
 # ipdb.set_trace()
+
+
