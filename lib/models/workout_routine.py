@@ -132,6 +132,30 @@ class WorkoutRoutine:
         return [cls.instance_from_db(row) for row in rows]
 
     @classmethod
+    def find_with_equipment(cls):
+        """Return a list containing a WorkoutRoutine objects where equipment does not equal 'None' """
+        sql = """
+            SELECT *
+            FROM workout_routines
+            WHERE equipment != 'None'
+        """
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
+    def find_without_equipment(cls):
+        """Return a list containing a WorkoutRoutine objects where equipment does equal 'None' """
+        sql = """
+            SELECT *
+            FROM workout_routines
+            WHERE equipment = 'None'
+        """
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
     def find_by_id(cls, id):
         """Return WorkoutRoutine object corresponding to the table row mathcing the specific id number"""
         sql = """
