@@ -60,4 +60,4 @@ e2_wr6 = Exercise.create("Dynamic Stretching","Stretch muscles for both upper an
 # e7 = Exercise.create('Bench press', 'go big or go home', 15, 3, 4)
 
 
-ipdb.set_trace()
+# ipdb.set_trace()
