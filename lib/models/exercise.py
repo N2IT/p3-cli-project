@@ -192,6 +192,19 @@ class Exercise:
         return [cls.instance_from_db(row) for row in rows]
 
     @classmethod
+    def find_by_title_length(cls, length):
+        """Return exercise object with a length(title) equal to or greater than 'length' characters """
+        sql = """
+            SELECT *
+            FROM exercises
+            WHERE length(title) >= ?
+        """
+
+        rows = CURSOR.execute(sql, (length,)).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
     def find_by_id(cls, id):
         """Return a Exercise object corresponding to the table row matching the specified primary key"""
         sql = """
