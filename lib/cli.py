@@ -31,11 +31,15 @@ from helpers import (
 def login():
     clear_screen()
     name = input("Please enter your name: ")
-    try:
-        user = User.create(name)
-        main(user)
-    except Exception as exc:
-        print("\u001b[41mError creating user:\u001b[0m ", exc)
+    if name != "":
+        try:
+            user = User.create(name)
+            main(user)
+        except Exception as exc:
+            print("\u001b[41mError creating user:\u001b[0m ", exc)
+    else:
+        print('Name must contain one or more characters.')
+        login()
     
 def main(user=None):
     clear_screen()
