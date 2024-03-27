@@ -165,7 +165,6 @@ class Exercise:
     @classmethod
     def instance_from_db(cls, row):
         """Return an Exercise objec having the attribute values from the table row."""
-
         exercise = cls.all.get(row[0])
         if exercise:
             exercise.title = row[1]
