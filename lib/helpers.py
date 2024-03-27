@@ -96,7 +96,6 @@ def return_routines():
     return routines
 
 def routine_menu_option_d(routine):
-    breakpoint()
     confirmation = input(f'\u001b[43mAre you sure you want to delete {routine.title} and all associated exercises?\u001b[0m Y/N ')
     if confirmation.lower() == 'y':
         print("")
@@ -227,7 +226,6 @@ def edit_selected_exercise_from_routine(routine):
 ### ###  EXERCISE MENU ACTION HELPERS  ### ###
 
 def print_exercises_list():
-    # breakpoint()
     print("")
     print("\u001b[36;1mHere are all exercises currently on record.\u001b[0m")
     print("")
@@ -373,7 +371,6 @@ def edit_exercise(exercise, routine_path = None):
     return
     
 def delete_exercise(e):
-    breakpoint()
     for exercise in e:
         Exercise.delete(exercise)
 

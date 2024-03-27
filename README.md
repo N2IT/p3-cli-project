@@ -33,7 +33,7 @@ cd p3-cli-project
 Ensure you have Python installed on your system. This application is developed with Python 3. Ensure your Python version is compatible by checking with python --version or python3 --version.
 
 # Seed the database (optional)
-python lib/debug.py
+python lib/seed_data.py
 
 # Run the application
 python lib/cli.py
